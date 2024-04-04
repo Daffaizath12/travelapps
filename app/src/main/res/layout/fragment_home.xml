@@ -1,17 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- res/layout/fragment_home.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/backgroud"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- Elemen-elemen UI atau tata letak yang diinginkan untuk FragmentHome -->
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- Background Image -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="268dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/banneratas" />
+
+    </LinearLayout>
+
+    <!-- CardView Container -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <!-- CardView di atas ImageView -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="90dp"
+            android:background="@drawable/card_border"
+            app:cardCornerRadius="20dp"
+            android:outlineAmbientShadowColor="@color/black"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <EditText
+                    android:id="@+id/editTextAsal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Asal" />
+
+                <EditText
+                    android:id="@+id/editTextTujuan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/editTextAsal"
+                    android:layout_marginTop="8dp"
+                    android:hint="Tujuan" />
+
+                <Button
+                    android:id="@+id/buttonCekSekarang"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cek Sekarang"
+                    android:layout_below="@id/editTextTujuan"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="@color/btn"/>
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Selamat Datang di Halaman Utama!"
-        android:textSize="18sp"
-        android:layout_centerInParent="true" />
-
-    <!-- Tambahkan elemen-elemen lainnya sesuai kebutuhan -->
+        android:layout_marginTop="320dp"
+        android:orientation="horizontal"/>
 
 </RelativeLayout>

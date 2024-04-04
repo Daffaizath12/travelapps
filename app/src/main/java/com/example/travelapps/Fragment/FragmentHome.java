@@ -3,12 +3,19 @@ package com.example.travelapps.Fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.travelapps.Adapter.InfoAdapter;
 import com.example.travelapps.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +32,10 @@ public class FragmentHome extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private RecyclerView recyclerView;
+    private InfoAdapter adapter;
+    private List<Integer> itemList;
 
     public FragmentHome() {
         // Required empty public constructor
@@ -51,6 +62,10 @@ public class FragmentHome extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        itemList = new ArrayList<>();
+        itemList.add(R.drawable.banneratas);
+        itemList.add(R.drawable.banner);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -61,6 +76,33 @@ public class FragmentHome extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        recyclerView = view.findViewById(R.id.recyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new InfoAdapter(getContext(), itemList);
+        recyclerView.setAdapter(adapter);
+        startAutoScroll();
+        return view;
+    }
+
+    private void startAutoScroll() {
+        final int scrollSpeed = 10000; // Durasi antara setiap perpindahan item (dalam milidetik)
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int currentPosition = layoutManager.findFirstVisibleItemPosition();
+                int nextPosition = currentPosition + 1;
+                if (nextPosition >= adapter.getItemCount()) {
+                    nextPosition = 0;
+                }
+                recyclerView.smoothScrollToPosition(nextPosition);
+                handler.postDelayed(this, scrollSpeed);
+            }
+        };
+        handler.postDelayed(runnable, scrollSpeed);
     }
 }

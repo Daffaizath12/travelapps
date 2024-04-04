@@ -1,22 +1,236 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="16dp"
-    android:background="#3498db"
-    tools:context=".Fragment.FragmentSettings">
+    android:layout_height="match_parent"
+    android:background="@drawable/backgroud">
 
-    <TextView
-        android:id="@+id/textViewTitleHome"
-        android:layout_width="wrap_content"
+    <!-- Profile Image and Name Section -->
+    <RelativeLayout
+        android:id="@+id/profileSection"
+        android:layout_width="match_parent"
+        android:layout_height="158dp"
+        android:background="@drawable/backgroud"
+        android:padding="16dp">
+
+        <!-- Profile Image (Circular) -->
+        <TextView
+            android:id="@+id/profileImage"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/circular_background"
+            android:gravity="center"
+            android:text="JD"
+            android:textColor="@color/white"
+            android:textSize="32sp" />
+
+
+        <!-- User Name -->
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@id/profileImage"
+            android:text="John Doe"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <!-- Profile Icon Button -->
+        <ImageButton
+            android:id="@+id/profileButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_arrow_right" />
+
+    </RelativeLayout>
+
+    <!-- Menu Items Section -->
+    <LinearLayout
+        android:id="@+id/menuSection"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pengaturan"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="#ffffff"/>
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/profileSection"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <!-- Add other UI elements as needed -->
+        <!-- Menu Item: Change Password -->
+        <LinearLayout
+            android:id="@+id/ganti_password"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onClick="onChangePasswordClicked"
+            android:orientation="horizontal">
 
-</LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_change_password" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_gravity="center"
+                android:text="Ganti Kata Sandi"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="end">
+
+                <!-- Icon Arrow to the right -->
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:foregroundGravity="right"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_arrow_right" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Menu Item: Transaction History -->
+        <LinearLayout
+            android:id="@+id/riwayat_transaksi"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:onClick="onTransactionHistoryClicked">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_transaction_history"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Riwayat Transaksi"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:layout_marginStart="16dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="end">
+
+                <!-- Icon Arrow to the right -->
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:foregroundGravity="right"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_arrow_right" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Menu Item: About TravelApps -->
+        <LinearLayout
+            android:id="@+id/about"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:onClick="onAboutTravelAppsClicked">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_about"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Tentang TravelApps"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:layout_marginStart="16dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="end">
+
+                <!-- Icon Arrow to the right -->
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:foregroundGravity="right"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_arrow_right" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Menu Item: Logout -->
+        <LinearLayout
+            android:id="@+id/logout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:onClick="onLogoutClicked">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_logout"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Keluar"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:layout_marginStart="16dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="end">
+
+                <!-- Icon Arrow to the right -->
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:foregroundGravity="right"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_arrow_right" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
