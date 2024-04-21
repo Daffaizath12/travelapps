@@ -1,5 +1,6 @@
 package com.example.travelapps.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,9 +11,11 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.travelapps.Adapter.InfoAdapter;
 import com.example.travelapps.R;
+import com.example.travelapps.TiketActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +87,17 @@ public class FragmentHome extends Fragment {
         adapter = new InfoAdapter(getContext(), itemList);
         recyclerView.setAdapter(adapter);
         startAutoScroll();
+
+        Button pesanSekarangButton = view.findViewById(R.id.buttonPesanSekarang);
+        pesanSekarangButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Ketika tombol ditekan, buat Intent untuk memulai TiketActivity
+                Intent intent = new Intent(getActivity(), TiketActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
 

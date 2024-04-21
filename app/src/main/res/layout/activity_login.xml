@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,31 +7,43 @@
     android:orientation="vertical"
     tools:context=".LoginActivity">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="185dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="5dp"
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
 
-        app:srcCompat="@drawable/logo" />
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="142dp"
+            android:layout_height="132dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logo"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
-        android:fontFamily="@font/poppinsextra"
-        android:gravity="center"
-        android:text="Selamat Datang !"
-        android:textColor="@color/btn"
-        android:textSize="35sp" />
+        <!-- Selamat Datang -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/logo"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/poppinsextra"
+            android:text="Selamat Datang !"
+            android:textColor="@color/btn"
+            android:textSize="35sp" />
 
+    </RelativeLayout>
+
+    <!-- Form Login -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="35dp">
 
+        <!-- Input Email -->
         <EditText
             android:id="@+id/editTextUsername"
             android:layout_width="match_parent"
@@ -40,10 +51,10 @@
             android:fontFamily="@font/poppinsregular"
             android:background="@drawable/email"
             android:hint="Email"
-            android:paddingLeft="8dp"
-            android:paddingTop="5dp"
-            android:textSize="14dp" />
+            android:padding="8dp"
+            android:textSize="14sp" />
 
+        <!-- Input Password -->
         <EditText
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
@@ -52,10 +63,10 @@
             android:fontFamily="@font/poppinsregular"
             android:background="@drawable/password"
             android:hint="Password"
-            android:paddingLeft="8dp"
-            android:paddingTop="5dp"
-            android:textSize="14dp" />
+            android:padding="8dp"
+            android:textSize="14sp" />
 
+        <!-- Tombol Masuk -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonLogin"
             style="@android:style/Widget.Button"
@@ -67,10 +78,11 @@
             android:fontFamily="@font/poppinssemibold"
             android:textColor="@color/main" />
 
+        <!-- Daftar -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:orientation="horizontal"
