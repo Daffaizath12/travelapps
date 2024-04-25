@@ -13,16 +13,20 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.travelapps.Model.Kota;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ApiServices {
-    private static String HOST = "http://localhost/ProjectTA/api/";
+    private static String HOST = "http://192.168.0.117/ProjectTA/api/";
 
     public interface LoginResponseListener {
         void onSuccess(String message);
@@ -31,6 +35,11 @@ public class ApiServices {
 
     public interface RegisterResponseListener {
         void onSuccess(String message);
+        void onError(String message);
+    }
+
+    public interface KotaResponseListener {
+        void onSuccess(List<Kota> kotaList);
         void onError(String message);
     }
 
@@ -157,5 +166,59 @@ public class ApiServices {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
     }
+
+    public static void showKota(Context context, final KotaResponseListener listener) {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, HOST + "getcity.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String message = jsonObject.getString("message");
+                            if (message.equals("success")) {
+                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                Log.e("response", response);
+                                List<Kota> kotaList = new ArrayList<>();
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject jsonArrayJSONObject = jsonArray.getJSONObject(i);
+                                    String id = jsonArrayJSONObject.getString("id_kota");
+                                    String nama = jsonArrayJSONObject.getString("nama_kota");
+
+                                    Kota kota = new Kota(id, nama);
+
+                                    kotaList.add(kota);
+
+                                }
+                                listener.onSuccess(kotaList);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse != null && error.networkResponse.data != null) {
+                            try {
+                                String responseBody = new String(error.networkResponse.data, "utf-8");
+                                JSONObject jsonObject = new JSONObject(responseBody);
+                                String message = jsonObject.getString("message");
+                                listener.onError(message);
+                            } catch (JSONException | UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                                listener.onError("Gagal mendapatkan data kota: " + e.getMessage());
+                            }
+                        } else {
+                            listener.onError("Gagal mendapatkan data kota: network response is null");
+                        }
+                    }
+                }) {
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
+
 
 }

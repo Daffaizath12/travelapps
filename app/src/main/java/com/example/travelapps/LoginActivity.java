@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,8 @@ import com.example.travelapps.Services.ApiServices;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     EditText etEmail, etPassword;
+    TextView tvDaftar;
+    Button btnLogin;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,11 +27,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         etEmail = findViewById(R.id.et_email);
         etPassword = findViewById(R.id.et_password);
+        tvDaftar = findViewById(R.id.tx_daftar);
+        btnLogin = findViewById(R.id.buttonLogin);
+        tvDaftar.setOnClickListener(this);
+        btnLogin.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.buttonLogin) {
+        if (v == btnLogin) {
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
             if (email.isEmpty()) {
@@ -55,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 });
             }
-        } else if (v.getId() == R.id.tx_daftar){
+        } else if (v == tvDaftar){
             Intent i = new Intent(this, DaftarActivity.class);
             startActivity(i);
         }

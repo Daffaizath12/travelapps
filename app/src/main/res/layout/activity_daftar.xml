@@ -24,6 +24,7 @@
             android:scaleType="fitCenter"
             android:src="@drawable/logo" />
         <TextView
+            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/logo"
@@ -43,7 +44,7 @@
             android:textColor="@color/btn"
             android:layout_marginBottom="8dp"/>
         <EditText
-            android:id="@+id/editTextUsername"
+            android:id="@+id/et_email"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:paddingStart="8dp"
@@ -140,14 +141,14 @@
             android:inputType="textPassword"
             android:textSize="12sp" />
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonLogin"
+            android:id="@+id/buttonRegister"
             style="@android:style/Widget.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@drawable/button_shape"
             android:fontFamily="@font/poppinssemibold"
-            android:text="Masuk"
+            android:text="Daftar"
             android:textColor="@color/main" />
         <LinearLayout
             android:layout_width="match_parent"
@@ -165,17 +166,17 @@
                 android:gravity="end"
                 android:fontFamily="@font/poppinsregular"
                 android:textSize="12sp"
-                android:text="Belum Memiliki Akun?"
+                android:text="Sudah Memiliki Akun?"
                 android:textColor="@color/btn" />
 
             <TextView
-                android:id="@+id/register_btn"
+                android:id="@+id/tx_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/poppinssemibold"
-                android:text=" Daftar"
+                android:text=" Login"
                 android:textColor="@color/btn"
                 android:textSize="13sp" />
         </LinearLayout>

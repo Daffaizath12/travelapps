@@ -1,20 +1,32 @@
 package com.example.travelapps.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.travelapps.Adapter.InfoAdapter;
+import com.example.travelapps.KotaActivity;
+import com.example.travelapps.Model.Kota;
 import com.example.travelapps.R;
+import com.example.travelapps.Services.ApiServices;
 import com.example.travelapps.TiketActivity;
 
 import java.util.ArrayList;
@@ -75,19 +87,62 @@ public class FragmentHome extends Fragment {
         }
     }
 
+    Spinner spinner;
+    List<Kota> city = new ArrayList<>();
+    String selectedId = null;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        recyclerView = view.findViewById(R.id.recyclerView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        adapter = new InfoAdapter(getContext(), itemList);
-        recyclerView.setAdapter(adapter);
-        startAutoScroll();
+//        recyclerView = view.findViewById(R.id.recyclerView);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+//        recyclerView.setLayoutManager(layoutManager);
+//        adapter = new InfoAdapter(getContext(), itemList);
+//        recyclerView.setAdapter(adapter);
+//        startAutoScroll();
+        spinner = view.findViewById(R.id.spinner);
+        ApiServices.showKota(getContext(), new ApiServices.KotaResponseListener() {
+            @Override
+            public void onSuccess(List<Kota> kotaList) {
+                List<String> nama = new ArrayList<>();
+                for (Kota kota : kotaList) {
+                    nama.add(kota.getNama());
+                }
+                city.clear();
+                city.addAll(kotaList);
+                SpinnerAdapter spinnerAdapter = new SpinnerAdapter(getContext(), city);
+                spinner.setAdapter(spinnerAdapter);
+                spinnerAdapter.notifyDataSetChanged();
+                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        Kota selected = (Kota) parent.getItemAtPosition(position);
+                        String selectedName = selected.getNama();
 
+                        for (Kota kota : kotaList) {
+                            if (kota.getNama().equals(selectedName)) {
+                                selectedId = kota.getId();
+                                break;
+                            }
+                        }
+                        Log.e("Kota id" , selectedId);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String message) {
+                Log.e("Error kota", message);
+            }
+        });
         Button pesanSekarangButton = view.findViewById(R.id.buttonPesanSekarang);
         pesanSekarangButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +155,7 @@ public class FragmentHome extends Fragment {
 
         return view;
     }
+
 
     private void startAutoScroll() {
         final int scrollSpeed = 10000; // Durasi antara setiap perpindahan item (dalam milidetik)
@@ -119,4 +175,37 @@ public class FragmentHome extends Fragment {
         };
         handler.postDelayed(runnable, scrollSpeed);
     }
+
+    public static class SpinnerAdapter extends ArrayAdapter<Kota> {
+
+        private LayoutInflater inflater;
+        private List<Kota> kotaList;
+
+        public SpinnerAdapter(Context context, List<Kota> kotaList) {
+            super(context, 0, kotaList);
+            this.kotaList = kotaList;
+            inflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
+        }
+
+        private View getCustomView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.item_kota, parent, false);
+            }
+
+            TextView textView = convertView.findViewById(R.id.nama_kota);
+            textView.setText(kotaList.get(position).getNama());
+            return convertView;
+        }
+    }
+
 }
