@@ -13,6 +13,13 @@
         android:theme="@style/Theme.Travelapps"
         tools:targetApi="31">
         <activity
+            android:name=".DaftarActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".TambahLokasiJemput"
             android:exported="false">
             <meta-data
