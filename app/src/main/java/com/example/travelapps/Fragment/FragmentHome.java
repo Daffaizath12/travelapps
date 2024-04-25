@@ -1,7 +1,11 @@
 package com.example.travelapps.Fragment;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -11,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -29,8 +36,11 @@ import com.example.travelapps.R;
 import com.example.travelapps.Services.ApiServices;
 import com.example.travelapps.TiketActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -87,10 +97,9 @@ public class FragmentHome extends Fragment {
         }
     }
 
-    Spinner spinner;
-    List<Kota> city = new ArrayList<>();
-    String selectedId = null;
+    EditText etPenumpang;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -103,46 +112,9 @@ public class FragmentHome extends Fragment {
 //        adapter = new InfoAdapter(getContext(), itemList);
 //        recyclerView.setAdapter(adapter);
 //        startAutoScroll();
-        spinner = view.findViewById(R.id.spinner);
-        ApiServices.showKota(getContext(), new ApiServices.KotaResponseListener() {
-            @Override
-            public void onSuccess(List<Kota> kotaList) {
-                List<String> nama = new ArrayList<>();
-                for (Kota kota : kotaList) {
-                    nama.add(kota.getNama());
-                }
-                city.clear();
-                city.addAll(kotaList);
-                SpinnerAdapter spinnerAdapter = new SpinnerAdapter(getContext(), city);
-                spinner.setAdapter(spinnerAdapter);
-                spinnerAdapter.notifyDataSetChanged();
-                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        Kota selected = (Kota) parent.getItemAtPosition(position);
-                        String selectedName = selected.getNama();
+        etPenumpang = view.findViewById(R.id.etPenumpang);
+        etPenumpang.setFilters(new InputFilter[]{new InputFilterMinMax("1", "10")});
 
-                        for (Kota kota : kotaList) {
-                            if (kota.getNama().equals(selectedName)) {
-                                selectedId = kota.getId();
-                                break;
-                            }
-                        }
-                        Log.e("Kota id" , selectedId);
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onError(String message) {
-                Log.e("Error kota", message);
-            }
-        });
         Button pesanSekarangButton = view.findViewById(R.id.buttonPesanSekarang);
         pesanSekarangButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,7 +127,6 @@ public class FragmentHome extends Fragment {
 
         return view;
     }
-
 
     private void startAutoScroll() {
         final int scrollSpeed = 10000; // Durasi antara setiap perpindahan item (dalam milidetik)
@@ -176,36 +147,33 @@ public class FragmentHome extends Fragment {
         handler.postDelayed(runnable, scrollSpeed);
     }
 
-    public static class SpinnerAdapter extends ArrayAdapter<Kota> {
+    public class InputFilterMinMax implements InputFilter {
+        private int min, max;
 
-        private LayoutInflater inflater;
-        private List<Kota> kotaList;
+        public InputFilterMinMax(int min, int max) {
+            this.min = min;
+            this.max = max;
+        }
 
-        public SpinnerAdapter(Context context, List<Kota> kotaList) {
-            super(context, 0, kotaList);
-            this.kotaList = kotaList;
-            inflater = LayoutInflater.from(context);
+        public InputFilterMinMax(String min, String max) {
+            this.min = Integer.parseInt(min);
+            this.max = Integer.parseInt(max);
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            return getCustomView(position, convertView, parent);
-        }
-
-        @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent) {
-            return getCustomView(position, convertView, parent);
-        }
-
-        private View getCustomView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                convertView = inflater.inflate(R.layout.item_kota, parent, false);
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            try {
+                int input = Integer.parseInt(dest.toString() + source.toString());
+                if (isInRange(min, max, input)) {
+                    return null;
+                }
+            } catch (NumberFormatException ignored) {
             }
+            return "";
+        }
 
-            TextView textView = convertView.findViewById(R.id.nama_kota);
-            textView.setText(kotaList.get(position).getNama());
-            return convertView;
+        private boolean isInRange(int a, int b, int c) {
+            return b > a ? c >= a && c <= b : c >= b && c <= a;
         }
     }
-
 }

@@ -2,6 +2,7 @@ package com.example.travelapps;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -22,6 +23,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences preferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
+        boolean isLogin = preferences.getBoolean("isLogin", false);
+
+        if (isLogin) {
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 

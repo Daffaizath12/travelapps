@@ -61,20 +61,18 @@
                     android:textSize="12sp"
                     android:textColor="@color/btn"
                     android:layout_marginBottom="8dp"/>
-                <FrameLayout
+                <EditText
+                    android:id="@+id/etAsal"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:padding="8dp"
-                    android:background="@drawable/custom_et">
-
-                    <Spinner
-                        android:id="@+id/spinner"
-                        android:layout_gravity="center"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:spinnerMode="dropdown"
-                        style=""/>
-                </FrameLayout>
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/custom_et"
+                    android:fontFamily="@font/poppinsregular"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:paddingStart="10dp"
+                    android:inputType="text"
+                    android:hint="Asal anda" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -86,30 +84,9 @@
                     android:textSize="12sp"
                     android:textColor="@color/btn"
                     android:layout_marginTop="8dp"/>
-                <EditText
-                    android:id="@+id/editTextTujuan"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/custom_et"
-                    android:fontFamily="@font/poppinsregular"
-                    android:textColor="@color/black"
-                    android:textSize="12sp"
-                    android:paddingStart="10dp"
-                    android:hint="Tujuan Anda" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tanggal Pergi"
-                    android:layout_marginStart="5dp"
-                    android:layout_gravity="start"
-                    android:fontFamily="@font/poppinsregular"
-                    android:textSize="12sp"
-                    android:textColor="@color/btn"
-                    android:layout_marginTop="16dp"/>
                 <EditText
-                    android:id="@+id/etTanggal"
+                    android:id="@+id/etTujuan"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="10dp"
@@ -118,9 +95,9 @@
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     android:paddingStart="10dp"
-                    android:paddingRight="10dp"
-                    android:drawableRight="@drawable/ic_baseline_date_range_24"
-                    android:hint="Tanggal pergi" />
+                    android:inputType="text"
+                    android:hint="Tujuan perjalanan" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -141,17 +118,17 @@
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     android:paddingStart="10dp"
-                    android:hint="Tanggal pergi" />
+                    android:inputType="number"
+                    android:hint="Jumlah Penumpang" />
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/buttonPesanSekarang"
                     android:layout_width="match_parent"
                     style="@android:style/Widget.Button"
                     android:layout_height="wrap_content"
                     android:text="CARI TIKET SEKARANG"
-                    android:textColor="@color/main"
+                    android:textColor="@color/white"
                     android:fontFamily="@font/poppinsbold"
                     android:textSize="14sp"
-                    android:layout_below="@id/editTextTujuan"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="30dp"
                     android:background="@drawable/button_shape" />
@@ -163,7 +140,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="80dp">
 
             <TextView
                 android:layout_width="match_parent"
