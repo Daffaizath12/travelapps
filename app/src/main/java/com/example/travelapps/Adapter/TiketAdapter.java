@@ -44,7 +44,7 @@ public class TiketAdapter extends RecyclerView.Adapter<TiketAdapter.TiketViewHol
     }
 
     class TiketViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView dateTextView, asalTextView, tujuanTextView, waktuTextView, hargaTextView;
+        TextView dateTextView, asalTextView, tujuanTextView, waktuTextView, hargaTextView, statusTextView;
 
         TiketViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -54,19 +54,21 @@ public class TiketAdapter extends RecyclerView.Adapter<TiketAdapter.TiketViewHol
             tujuanTextView = itemView.findViewById(R.id.Tujuan);
             waktuTextView = itemView.findViewById(R.id.waktu);
             hargaTextView = itemView.findViewById(R.id.harga);
+            statusTextView = itemView.findViewById(R.id.status);
         }
 
         void bind(TiketData tiket) {
-            dateTextView.setText(tiket.getDate());
+            dateTextView.setText(tiket.getTanggal());
             asalTextView.setText(tiket.getAsal());
             tujuanTextView.setText(tiket.getTujuan());
             waktuTextView.setText(tiket.getWaktu());
-            hargaTextView.setText(tiket.getHarga());
+            String hargaString = String.format("Rp %.2f", tiket.getHarga());
+            hargaTextView.setText(hargaString);
+            statusTextView.setText(tiket.getStatus());
         }
 
         @Override
         public void onClick(View v) {
-            // Ketika card diklik, buat Intent untuk membuka PesanActivity
             Intent intent = new Intent(context, PesanActivity.class);
             context.startActivity(intent);
         }

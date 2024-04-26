@@ -14,6 +14,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.travelapps.Model.Kota;
+import com.example.travelapps.Model.Perjalanan;
+import com.example.travelapps.Model.TiketData;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,8 +40,8 @@ public class ApiServices {
         void onError(String message);
     }
 
-    public interface KotaResponseListener {
-        void onSuccess(List<Kota> kotaList);
+    public interface PerjalananResponseListener {
+        void onSuccess(List<TiketData> tiketData);
         void onError(String message);
     }
 
@@ -167,8 +169,8 @@ public class ApiServices {
         requestQueue.add(stringRequest);
     }
 
-    public static void showKota(Context context, final KotaResponseListener listener) {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, HOST + "getcity.php",
+    public static void showPerjalanan(Context context,String kotaAsal, String kotaTujuan, final PerjalananResponseListener listener) {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, HOST + "schedule.php?kota_asal=$kotaAsal&kota_tujuan=$kotaTujuan",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -178,18 +180,23 @@ public class ApiServices {
                             if (message.equals("success")) {
                                 JSONArray jsonArray = jsonObject.getJSONArray("data");
                                 Log.e("response", response);
-                                List<Kota> kotaList = new ArrayList<>();
+                                List<TiketData> tiketDataList = new ArrayList<>();
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject jsonArrayJSONObject = jsonArray.getJSONObject(i);
-                                    String id = jsonArrayJSONObject.getString("id_kota");
-                                    String nama = jsonArrayJSONObject.getString("nama_kota");
+                                    String id = jsonArrayJSONObject.getString("id_perjalanan");
+                                    String asal = jsonArrayJSONObject.getString("kota_asal");
+                                    String tujuan = jsonArrayJSONObject.getString("kota_tujuan");
+                                    String tanggal = jsonArrayJSONObject.getString("tanggal");
+                                    String waktu = jsonArrayJSONObject.getString("waktu_keberangkatan");
+                                    Double harga = jsonArrayJSONObject.getDouble("harga");
+                                    String status = jsonArrayJSONObject.getString("status");
 
-                                    Kota kota = new Kota(id, nama);
+                                    TiketData tiketData = new TiketData(id, asal, tujuan,tanggal, waktu, harga, status);
 
-                                    kotaList.add(kota);
+                                    tiketDataList.add(tiketData);
 
                                 }
-                                listener.onSuccess(kotaList);
+                                listener.onSuccess(tiketDataList);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -207,10 +214,10 @@ public class ApiServices {
                                 listener.onError(message);
                             } catch (JSONException | UnsupportedEncodingException e) {
                                 e.printStackTrace();
-                                listener.onError("Gagal mendapatkan data kota: " + e.getMessage());
+                                listener.onError("Gagal mendapatkan data perjalanan: " + e.getMessage());
                             }
                         } else {
-                            listener.onError("Gagal mendapatkan data kota: network response is null");
+                            listener.onError("Gagal mendapatkan data perjalanan: network response is null");
                         }
                     }
                 }) {
@@ -219,6 +226,5 @@ public class ApiServices {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
     }
-
 
 }

@@ -1,19 +1,19 @@
 package com.example.travelapps.Model;
 
-public class TiketData {
+import java.io.Serializable;
+
+public class Perjalanan implements Serializable {
     private String id;
     private String asal;
     private String tujuan;
-    private String tanggal;
     private String waktu;
     private double harga;
     private String status;
 
-    public TiketData(String id, String asal, String tujuan, String tanggal, String waktu, double harga, String status) {
+    public Perjalanan(String id, String asal, String tujuan, String waktu, double harga, String status) {
         this.id = id;
         this.asal = asal;
         this.tujuan = tujuan;
-        this.tanggal = tanggal;
         this.waktu = waktu;
         this.harga = harga;
         this.status = status;
@@ -31,15 +31,11 @@ public class TiketData {
         return tujuan;
     }
 
-    public String getTanggal() {
-        return tanggal;
-    }
-
     public String getWaktu() {
         return waktu;
     }
 
-    public double getHarga() {
+    public Double getHarga() {
         return harga;
     }
 
@@ -47,4 +43,3 @@ public class TiketData {
         return status;
     }
 }
-

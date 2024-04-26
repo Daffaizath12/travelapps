@@ -1,15 +1,9 @@
 package com.example.travelapps.Fragment;
 
 import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,30 +11,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Handler;
 import android.text.InputFilter;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.example.travelapps.Adapter.InfoAdapter;
-import com.example.travelapps.KotaActivity;
-import com.example.travelapps.Model.Kota;
 import com.example.travelapps.R;
-import com.example.travelapps.Services.ApiServices;
 import com.example.travelapps.TiketActivity;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -97,31 +79,47 @@ public class FragmentHome extends Fragment {
         }
     }
 
-    EditText etPenumpang;
-
+    EditText etPenumpang, etAsal, etTujuan;
+    Button btnPesan;
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
 //        recyclerView = view.findViewById(R.id.recyclerView);
 //        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 //        recyclerView.setLayoutManager(layoutManager);
 //        adapter = new InfoAdapter(getContext(), itemList);
 //        recyclerView.setAdapter(adapter);
 //        startAutoScroll();
+        etAsal = view.findViewById(R.id.etAsal);
+        etTujuan = view.findViewById(R.id.etTujuan);
         etPenumpang = view.findViewById(R.id.etPenumpang);
         etPenumpang.setFilters(new InputFilter[]{new InputFilterMinMax("1", "10")});
 
-        Button pesanSekarangButton = view.findViewById(R.id.buttonPesanSekarang);
-        pesanSekarangButton.setOnClickListener(new View.OnClickListener() {
+        btnPesan = view.findViewById(R.id.buttonPesanSekarang);
+        btnPesan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Ketika tombol ditekan, buat Intent untuk memulai TiketActivity
-                Intent intent = new Intent(getActivity(), TiketActivity.class);
-                startActivity(intent);
+                String asal = etAsal.getText().toString().trim();
+                String tujuan = etTujuan.getText().toString().trim();
+                String penumpang = etPenumpang.getText().toString().trim();
+
+                if (asal.isEmpty()) {
+                    etAsal.setError("Silahkan isi asal kota anda");
+                } else if (tujuan.isEmpty()){
+                    etTujuan.setError("Silakan isi tujuan kota anda");
+                } else if (asal.equals(tujuan)) {
+                    etTujuan.setError("Tujuan tidak boleh sama dengan asal");
+                } else if (penumpang.isEmpty()) {
+                    etPenumpang.setError("Silakan isi jumlah penumpang");
+                } else {
+                    Intent intent = new Intent(getActivity(), TiketActivity.class);
+                    intent.putExtra("asal", asal);
+                    intent.putExtra("tujuan", tujuan);
+                    intent.putExtra("penumpang", penumpang);
+                    startActivity(intent);
+                }
             }
         });
 
