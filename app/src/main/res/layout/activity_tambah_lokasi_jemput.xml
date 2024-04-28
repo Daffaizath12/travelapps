@@ -124,7 +124,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:text="Detail Penumpang"
+                android:text="Detail Pesanan"
                 android:fontFamily="@font/poppinsbold"
                 android:textColor="@color/black"
                 android:layout_marginLeft="20dp"
@@ -137,8 +137,7 @@
                 android:layout_margin="8dp"
                 android:layout_weight="1"
                 android:layout_below="@+id/detailpemesanan"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="10dp">
+                app:cardCornerRadius="20dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -146,19 +145,9 @@
                     android:padding="16dp">
 
                     <TextView
-                        android:id="@+id/penumpang"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:text="Penumpang"
-                        android:fontFamily="@font/poppinsregular"
-                        android:textColor="@color/black"
-                        android:textSize="12sp" />
-                    <TextView
                         android:id="@+id/txtpenumpang"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/penumpang"
                         android:layout_alignParentStart="true"
                         android:text="DAFFA IZAAZ AGUNG THEOLA"
                         android:fontFamily="@font/poppinsbold"
@@ -171,6 +160,7 @@
                         android:layout_below="@+id/txtpenumpang">
 
                         <LinearLayout
+                            android:id="@+id/jumlah"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
@@ -179,19 +169,56 @@
                                 android:layout_height="wrap_content"
                                 android:layout_below="@+id/penumpang"
                                 android:layout_alignParentStart="true"
-                                android:text="KTP - "
+                                android:text="Jumlah pesanan - "
                                 android:fontFamily="@font/poppinsregular"
                                 android:textColor="@color/black"
                                 android:textSize="12sp" />
 
                             <TextView
-                                android:id="@+id/txtNIK"
+                                android:id="@+id/txtJumlahPenumpang"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="2145326634754754"
+                                android:text="2"
                                 android:fontFamily="@font/poppinsregular"
                                 android:textColor="@color/black"
                                 android:textSize="12sp"/>
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_below="@+id/jumlah"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/penumpang"
+                                android:layout_alignParentStart="true"
+                                android:text="Total Harga = "
+                                android:fontFamily="@font/poppinsregular"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Rp. "
+                                    android:fontFamily="@font/poppinsregular"
+                                    android:textColor="@color/black"
+                                    android:textSize="12sp"/>
+                                <TextView
+                                    android:id="@+id/tvTotal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="200000"
+                                    android:fontFamily="@font/poppinsregular"
+                                    android:textColor="@color/black"
+                                    android:textSize="12sp"/>
+                            </LinearLayout>
+
 
                         </LinearLayout>
 
@@ -220,7 +247,7 @@
                 android:layout_weight="1"
                 android:layout_below="@+id/TambahkanLokasiJemput"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="10dp">
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -229,7 +256,7 @@
                     android:padding="16dp">
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/buttonLogin"
+                        android:id="@+id/btnCurrentLoc"
                         style="@android:style/Widget.Button"
                         android:layout_width="0dp"
                         android:layout_weight="1"
@@ -266,9 +293,10 @@
                 android:layout_marginLeft="20dp"
                 android:textSize="12sp" />
             <EditText
-                android:id="@+id/et_email"
+                android:id="@+id/et_alamat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textAlignment="textStart"
                 android:paddingStart="8dp"
                 android:layout_below="@+id/alamat"
                 android:textColor="@color/black"
@@ -277,10 +305,18 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="10dp"
                 android:padding="8dp"
-                android:lines="10"
-                android:minLines="5"
-                android:maxLines="15"
+                android:lines="4"
+                android:maxLines="5"
                 android:textSize="12sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/et_alamat"
+                android:layout_marginLeft="20dp"
+                android:textSize="11sp"
+                android:fontFamily="@font/poppinsregular"
+                android:layout_marginTop="5dp"
+                android:text="NOTE : Sebagai bagian dari layanan kami, sopir kami akan menghubungi Anda melalui telepon sebelum waktu keberangkatan untuk konfirmasi penjemputan."/>
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/bayarsekarang"
                 style="@android:style/Widget.Button"
@@ -289,7 +325,7 @@
                 android:background="@drawable/button_shape"
                 android:text="BAYAR SEKARANG"
                 android:fontFamily="@font/poppinssemibold"
-                android:textColor="@color/main"
+                android:textColor="@color/white"
                 android:layout_alignParentBottom="true"/>
 
         </RelativeLayout>

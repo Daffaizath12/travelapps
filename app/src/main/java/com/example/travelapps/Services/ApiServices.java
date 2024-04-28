@@ -246,16 +246,17 @@ public class ApiServices {
     }
 
     public static void getUserData(Context context, String token, final UserResponseListener listener) {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, HOST + "getuserbyid.php?" + token,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, HOST + "getuserbyid.php?token=" + token,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            Log.e("user", response);
                             JSONObject jsonObject = new JSONObject(response);
                             String message = jsonObject.getString("message");
                             if (message.equals("success")){
                                 JSONObject userObj = jsonObject.getJSONObject("user");
-                                String id = userObj.getString("id");
+                                String id = userObj.getString("id_user");
                                 String nama = userObj.getString("nama_lengkap");
                                 String notelp = userObj.getString("notelp");
                                 String alamat = userObj.getString("alamat");

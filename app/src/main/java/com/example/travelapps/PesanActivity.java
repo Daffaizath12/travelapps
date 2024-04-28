@@ -33,6 +33,7 @@ public class PesanActivity extends AppCompatActivity {
     String emailUser = "";
     String alamatUser = "";
     String notelpUser = "";
+    String tanggalFormatted = "";
 
     TextView tvDate, tvAsal, tvWaktu, tvTujuan, tvNamaUser, tvEmailUser, tvNotelpUser, tvPenumpang;
 
@@ -95,7 +96,7 @@ public class PesanActivity extends AppCompatActivity {
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy");
 
-            String tanggalFormatted = sdf.format(tanggal);
+            tanggalFormatted = sdf.format(tanggal);
 
             tvDate.setText(tanggalFormatted);
             tvAsal.setText(asal);
@@ -110,6 +111,15 @@ public class PesanActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PesanActivity.this, TambahLokasiJemput.class);
+                intent.putExtra("id_perjalanan", id);
+                intent.putExtra("asal", asal);
+                intent.putExtra("waktu", waktu);
+                intent.putExtra("tanggal", tanggalFormatted);
+                intent.putExtra("tujuan", tujuan);
+                intent.putExtra("harga", harga);
+                intent.putExtra("id_user", idUser);
+                intent.putExtra("nama_user", namaUser);
+                intent.putExtra("penumpang", penumpang);
                 startActivity(intent);
             }
         });
