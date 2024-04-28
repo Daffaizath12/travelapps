@@ -16,13 +16,18 @@ import com.android.volley.toolbox.Volley;
 import com.example.travelapps.Model.Kota;
 import com.example.travelapps.Model.Perjalanan;
 import com.example.travelapps.Model.TiketData;
+import com.example.travelapps.Model.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +47,11 @@ public class ApiServices {
 
     public interface PerjalananResponseListener {
         void onSuccess(List<TiketData> tiketData);
+        void onError(String message);
+    }
+
+    public interface UserResponseListener {
+        void onSuccess(User user);
         void onError(String message);
     }
 
@@ -170,7 +180,8 @@ public class ApiServices {
     }
 
     public static void showPerjalanan(Context context,String kotaAsal, String kotaTujuan, final PerjalananResponseListener listener) {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, HOST + "schedule.php?kota_asal=$kotaAsal&kota_tujuan=$kotaTujuan",
+        String url = HOST + "schedule.php?kota_asal=" + kotaAsal + "&kota_tujuan=" + kotaTujuan ;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -180,6 +191,7 @@ public class ApiServices {
                             if (message.equals("success")) {
                                 JSONArray jsonArray = jsonObject.getJSONArray("data");
                                 Log.e("response", response);
+                                Log.e("url", url);
                                 List<TiketData> tiketDataList = new ArrayList<>();
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject jsonArrayJSONObject = jsonArray.getJSONObject(i);
@@ -190,11 +202,17 @@ public class ApiServices {
                                     String waktu = jsonArrayJSONObject.getString("waktu_keberangkatan");
                                     Double harga = jsonArrayJSONObject.getDouble("harga");
                                     String status = jsonArrayJSONObject.getString("status");
-
-                                    TiketData tiketData = new TiketData(id, asal, tujuan,tanggal, waktu, harga, status);
+                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                    Date ntanggal;
+                                    try {
+                                        ntanggal = sdf.parse(tanggal);
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                        continue;
+                                    }
+                                    TiketData tiketData = new TiketData(id, asal, tujuan,ntanggal, waktu, harga, status);
 
                                     tiketDataList.add(tiketData);
-
                                 }
                                 listener.onSuccess(tiketDataList);
                             }
@@ -227,4 +245,52 @@ public class ApiServices {
         requestQueue.add(stringRequest);
     }
 
+    public static void getUserData(Context context, String token, final UserResponseListener listener) {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, HOST + "getuserbyid.php?" + token,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String message = jsonObject.getString("message");
+                            if (message.equals("success")){
+                                JSONObject userObj = jsonObject.getJSONObject("user");
+                                String id = userObj.getString("id");
+                                String nama = userObj.getString("nama_lengkap");
+                                String notelp = userObj.getString("notelp");
+                                String alamat = userObj.getString("alamat");
+                                String email = userObj.getString("email");
+                                String longitude = userObj.getString("longitude");
+                                String latitude = userObj.getString("latitude");
+                                User user = new User(id, nama,notelp,email,alamat,latitude, longitude);
+                                listener.onSuccess(user);
+                            }
+                        } catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse != null && error.networkResponse.data != null) {
+                            try {
+                                String responseBody = new String(error.networkResponse.data, "utf-8");
+                                JSONObject jsonObject = new JSONObject(responseBody);
+                                String message = jsonObject.getString("message");
+                                listener.onError(message);
+                            } catch (JSONException | UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                                listener.onError("Gagal mendapatkan data user: " + e.getMessage());
+                            }
+                        } else {
+                            listener.onError("Gagal mendapatkan data user: network response is null");
+                        }
+                    }
+                }) {
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
 }

@@ -127,7 +127,8 @@
                 android:text="Detail Penumpang"
                 android:fontFamily="@font/poppinsbold"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:layout_marginLeft="20dp"
+                android:textSize="12sp" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardpenumpang"
@@ -208,7 +209,8 @@
                 android:fontFamily="@font/poppinsbold"
                 android:layout_below="@+id/cardpenumpang"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:layout_marginLeft="20dp"
+                android:textSize="12sp" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardlokasi"
@@ -220,32 +222,65 @@
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     android:padding="16dp">
 
-                    <Button
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/buttonLogin"
+                        style="@android:style/Widget.Button"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="45dp"
+                        android:background="@drawable/button_shape"
+                        android:fontFamily="@font/poppinssemibold"
                         android:text="Lokasi Terkini"
+                        android:textSize="12sp"
+                        android:layout_marginRight="10dp"
+                        android:textColor="@color/main" />
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/maps"
+                        style="@android:style/Widget.Button"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="45dp"
+                        android:background="@drawable/button_shape"
                         android:fontFamily="@font/poppinssemibold"
-                        android:textSize="10dp"
-                        android:backgroundTint="@color/btn"/>
-
-                    <Button
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
                         android:text="Dari Maps"
-                        android:fontFamily="@font/poppinssemibold"
-                        android:textSize="10dp"
-                        android:backgroundTint="@color/btn"/>
+                        android:textSize="12sp"
+                        android:textColor="@color/main" />
 
-                </RelativeLayout>
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
-
+            <TextView
+                android:id="@+id/alamat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:text="Tambah Detail Alamat Tujuan"
+                android:fontFamily="@font/poppinsbold"
+                android:layout_below="@+id/cardlokasi"
+                android:textColor="@color/black"
+                android:layout_marginLeft="20dp"
+                android:textSize="12sp" />
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="8dp"
+                android:layout_below="@+id/alamat"
+                android:textColor="@color/black"
+                android:background="@drawable/custom_et"
+                android:fontFamily="@font/poppinsregular"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:padding="8dp"
+                android:lines="10"
+                android:minLines="5"
+                android:maxLines="15"
+                android:textSize="12sp" />
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/bayarsekarang"
                 style="@android:style/Widget.Button"

@@ -4,31 +4,111 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
+
+import com.example.travelapps.Model.TiketData;
+import com.example.travelapps.Model.User;
+import com.example.travelapps.Services.ApiServices;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class PesanActivity extends AppCompatActivity {
+
+    TiketData tiketData;
+    String id = "";
+    String asal = "";
+    String tujuan = "";
+    Date tanggal;
+    String waktu = "";
+    String harga = "";
+    String penumpang = "";
+    String idUser = "";
+    String namaUser = "";
+    String emailUser = "";
+    String alamatUser = "";
+    String notelpUser = "";
+
+    TextView tvDate, tvAsal, tvWaktu, tvTujuan, tvNamaUser, tvEmailUser, tvNotelpUser, tvPenumpang;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pesan);
 
+        SharedPreferences preferences = PesanActivity.this.getSharedPreferences("myPrefs", MODE_PRIVATE);
+        String token = preferences.getString("token", "");
+
         ImageButton backButton = findViewById(R.id.backtotiket);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Kode untuk kembali ke aktivitas sebelumnya
                 onBackPressed();
             }
         });
+
+        ApiServices.getUserData(this, token, new ApiServices.UserResponseListener() {
+            @Override
+            public void onSuccess(User user) {
+                idUser = user.getId();
+                namaUser = user.getNama();
+                notelpUser = user.getNotelp();
+                emailUser = user.getEmail();
+                alamatUser = user.getAlamat();
+
+                tvNamaUser.setText(namaUser);
+                tvNotelpUser.setText(notelpUser);
+                tvEmailUser.setText(emailUser);
+            }
+
+            @Override
+            public void onError(String message) {
+                Log.e("Error", "Gagal mendapatkan data user");
+            }
+        });
+
+        tvDate = findViewById(R.id.date);
+        tvAsal = findViewById(R.id.asal);
+        tvWaktu = findViewById(R.id.waktu);
+        tvTujuan = findViewById(R.id.Tujuan);
+        tvPenumpang = findViewById(R.id.txtPenumpang);
+        tvNamaUser = findViewById(R.id.txtNama);
+        tvEmailUser = findViewById(R.id.txtEmail);
+        tvNotelpUser = findViewById(R.id.txtNoTelp);
+
+        Intent intent = getIntent();
+        if (intent.getExtras() != null){
+            tiketData = (TiketData) intent.getSerializableExtra("tiket_data");
+            id = tiketData.getId();
+            asal = tiketData.getAsal();
+            tujuan = tiketData.getTujuan();
+            tanggal = tiketData.getTanggal();
+            waktu = tiketData.getWaktu();
+            String hargaString = String.format("Rp %.2f", tiketData.getHarga());
+            harga = hargaString;
+            penumpang = intent.getStringExtra("penumpang");
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy");
+
+            String tanggalFormatted = sdf.format(tanggal);
+
+            tvDate.setText(tanggalFormatted);
+            tvAsal.setText(asal);
+            tvWaktu.setText(waktu);
+            tvTujuan.setText(tujuan);
+            tvPenumpang.setText(penumpang);
+
+        }
 
         AppCompatButton selanjutnyaButton = findViewById(R.id.selanjutnyapilihkursi);
         selanjutnyaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Membuat dan memulai intent ke PilihKursiActivity
                 Intent intent = new Intent(PesanActivity.this, TambahLokasiJemput.class);
                 startActivity(intent);
             }

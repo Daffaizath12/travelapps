@@ -13,7 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.travelapps.Model.TiketData;
 import com.example.travelapps.PesanActivity;
 import com.example.travelapps.R;
+import com.example.travelapps.TiketActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class TiketAdapter extends RecyclerView.Adapter<TiketAdapter.TiketViewHolder> {
@@ -36,19 +40,31 @@ public class TiketAdapter extends RecyclerView.Adapter<TiketAdapter.TiketViewHol
     public void onBindViewHolder(@NonNull TiketViewHolder holder, int position) {
         TiketData tiket = tiketList.get(position);
         holder.bind(tiket);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (context instanceof TiketActivity) {
+                    String penumpang = ((TiketActivity) context).getPenumpang();
+                    Intent intent = new Intent(context, PesanActivity.class);
+                    intent.putExtra("tiket_data", tiket);
+                    intent.putExtra("penumpang", penumpang);
+                    context.startActivity(intent);
+                }
+            }
+        });
     }
+
 
     @Override
     public int getItemCount() {
         return tiketList.size();
     }
 
-    class TiketViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class TiketViewHolder extends RecyclerView.ViewHolder {
         TextView dateTextView, asalTextView, tujuanTextView, waktuTextView, hargaTextView, statusTextView;
 
         TiketViewHolder(@NonNull View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
             dateTextView = itemView.findViewById(R.id.date);
             asalTextView = itemView.findViewById(R.id.asal);
             tujuanTextView = itemView.findViewById(R.id.Tujuan);
@@ -58,19 +74,19 @@ public class TiketAdapter extends RecyclerView.Adapter<TiketAdapter.TiketViewHol
         }
 
         void bind(TiketData tiket) {
-            dateTextView.setText(tiket.getTanggal());
+            SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy");
+
+            // Mengonversi objek Date menjadi string tanggal dengan format yang diinginkan
+            String tanggalFormatted = sdf.format(tiket.getTanggal());
+
+            // Mengatur teks untuk setiap TextView dengan data dari objek TiketData
+            dateTextView.setText(tanggalFormatted);
             asalTextView.setText(tiket.getAsal());
             tujuanTextView.setText(tiket.getTujuan());
             waktuTextView.setText(tiket.getWaktu());
             String hargaString = String.format("Rp %.2f", tiket.getHarga());
             hargaTextView.setText(hargaString);
             statusTextView.setText(tiket.getStatus());
-        }
-
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(context, PesanActivity.class);
-            context.startActivity(intent);
         }
     }
 }

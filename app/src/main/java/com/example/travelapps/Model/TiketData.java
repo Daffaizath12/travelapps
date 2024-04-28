@@ -1,15 +1,18 @@
 package com.example.travelapps.Model;
 
-public class TiketData {
+import java.io.Serializable;
+import java.util.Date;
+
+public class TiketData implements Serializable {
     private String id;
     private String asal;
     private String tujuan;
-    private String tanggal;
+    private Date tanggal;
     private String waktu;
     private double harga;
     private String status;
 
-    public TiketData(String id, String asal, String tujuan, String tanggal, String waktu, double harga, String status) {
+    public TiketData(String id, String asal, String tujuan, Date tanggal, String waktu, double harga, String status) {
         this.id = id;
         this.asal = asal;
         this.tujuan = tujuan;
@@ -31,7 +34,7 @@ public class TiketData {
         return tujuan;
     }
 
-    public String getTanggal() {
+    public Date getTanggal() {
         return tanggal;
     }
 

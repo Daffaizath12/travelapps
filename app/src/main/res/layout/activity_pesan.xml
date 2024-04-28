@@ -203,116 +203,136 @@
                         android:fontFamily="@font/poppinsbold"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
-
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:id="@+id/detailpenumpang"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/cardpemesanan"
-                android:text="Detail Penumpang"
-                android:fontFamily="@font/poppinsbold"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/ubahpenumpang"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@+id/cardpemesanan"
-                android:paddingEnd="10dp"
-                android:text="Ubah"
-                android:fontFamily="@font/poppinssemibold"
-                android:textColor="@color/btn"
-                android:textSize="14sp" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardpenumpang"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:layout_below="@+id/detailpenumpang"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="10dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp">
-
-                    <!-- Teks penumpang -->
                     <TextView
-                        android:id="@+id/penumpang"
+                        android:id="@+id/jpenumpang"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
-                        android:text="Penumpang"
+                        android:layout_below="@+id/txtNoTelp"
+                        android:text="Jumlah Penumpang"
                         android:fontFamily="@font/poppinsregular"
                         android:textColor="@color/black"
                         android:textSize="12sp" />
-
-                    <!-- Nama penumpang -->
                     <TextView
-                        android:id="@+id/txtpenumpang"
+                        android:id="@+id/txtPenumpang"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/penumpang"
+                        android:layout_below="@+id/jpenumpang"
                         android:layout_alignParentStart="true"
-                        android:text="DAFFA IZAAZ AGUNG THEOLA"
+                        android:text="1"
                         android:fontFamily="@font/poppinsbold"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
-                    <!-- RelativeLayout untuk informasi penumpang -->
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/txtpenumpang">
-
-                        <!-- LinearLayout untuk informasi KTP -->
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_below="@+id/penumpang"
-                                android:layout_alignParentStart="true"
-                                android:text="KTP - "
-                                android:fontFamily="@font/poppinsregular"
-                                android:textColor="@color/black"
-                                android:textSize="12sp" />
-
-                            <TextView
-                                android:id="@+id/txtNIK"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="2145326634754754"
-                                android:fontFamily="@font/poppinsregular"
-                                android:textColor="@color/black"
-                                android:textSize="12sp"/>
-                        </LinearLayout>
-                    </RelativeLayout>
-
-                    <!-- Tambahkan ImageView untuk ikon edit -->
-                    <ImageView
-                        android:id="@+id/EditPenumpang"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentEnd="true"
-                        android:src="@drawable/ic_edit"
-                        android:contentDescription="Edit Penumpang"
-                        app:tint="@color/btn" />
-
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
+
+<!--            <TextView-->
+<!--                android:id="@+id/detailpenumpang"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_alignParentStart="true"-->
+<!--                android:layout_below="@+id/cardpemesanan"-->
+<!--                android:text="Detail Penumpang"-->
+<!--                android:fontFamily="@font/poppinsbold"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="16sp" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/ubahpenumpang"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_alignParentEnd="true"-->
+<!--                android:layout_below="@+id/cardpemesanan"-->
+<!--                android:paddingEnd="10dp"-->
+<!--                android:text="Ubah"-->
+<!--                android:fontFamily="@font/poppinssemibold"-->
+<!--                android:textColor="@color/btn"-->
+<!--                android:textSize="14sp" />-->
+
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:id="@+id/cardpenumpang"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="8dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_below="@+id/detailpenumpang"-->
+<!--                app:cardCornerRadius="20dp"-->
+<!--                app:cardElevation="10dp">-->
+
+<!--                <RelativeLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:padding="16dp">-->
+
+<!--                    &lt;!&ndash; Teks penumpang &ndash;&gt;-->
+<!--                    <TextView-->
+<!--                        android:id="@+id/penumpang"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_alignParentStart="true"-->
+<!--                        android:text="Penumpang"-->
+<!--                        android:fontFamily="@font/poppinsregular"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="12sp" />-->
+
+<!--                    &lt;!&ndash; Nama penumpang &ndash;&gt;-->
+<!--                    <TextView-->
+<!--                        android:id="@+id/txtpenumpang"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_below="@+id/penumpang"-->
+<!--                        android:layout_alignParentStart="true"-->
+<!--                        android:text="DAFFA IZAAZ AGUNG THEOLA"-->
+<!--                        android:fontFamily="@font/poppinsbold"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="14sp" />-->
+
+<!--                    &lt;!&ndash; RelativeLayout untuk informasi penumpang &ndash;&gt;-->
+<!--                    <RelativeLayout-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_below="@+id/txtpenumpang">-->
+
+<!--                        &lt;!&ndash; LinearLayout untuk informasi KTP &ndash;&gt;-->
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content">-->
+
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_below="@+id/penumpang"-->
+<!--                                android:layout_alignParentStart="true"-->
+<!--                                android:text="KTP - "-->
+<!--                                android:fontFamily="@font/poppinsregular"-->
+<!--                                android:textColor="@color/black"-->
+<!--                                android:textSize="12sp" />-->
+
+<!--                            <TextView-->
+<!--                                android:id="@+id/txtNIK"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="2145326634754754"-->
+<!--                                android:fontFamily="@font/poppinsregular"-->
+<!--                                android:textColor="@color/black"-->
+<!--                                android:textSize="12sp"/>-->
+<!--                        </LinearLayout>-->
+<!--                    </RelativeLayout>-->
+
+<!--                    &lt;!&ndash; Tambahkan ImageView untuk ikon edit &ndash;&gt;-->
+<!--                    <ImageView-->
+<!--                        android:id="@+id/EditPenumpang"-->
+<!--                        android:layout_width="20dp"-->
+<!--                        android:layout_height="20dp"-->
+<!--                        android:layout_centerVertical="true"-->
+<!--                        android:layout_alignParentEnd="true"-->
+<!--                        android:src="@drawable/ic_edit"-->
+<!--                        android:contentDescription="Edit Penumpang"-->
+<!--                        app:tint="@color/btn" />-->
+
+<!--                </RelativeLayout>-->
+<!--            </androidx.cardview.widget.CardView>-->
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/selanjutnyapilihkursi"
