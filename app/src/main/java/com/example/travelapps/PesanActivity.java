@@ -27,6 +27,8 @@ public class PesanActivity extends AppCompatActivity {
     Date tanggal;
     String waktu = "";
     String harga = "";
+    String status = "";
+    Double hargaDouble;
     String penumpang = "";
     String idUser = "";
     String namaUser = "";
@@ -90,6 +92,7 @@ public class PesanActivity extends AppCompatActivity {
             tujuan = tiketData.getTujuan();
             tanggal = tiketData.getTanggal();
             waktu = tiketData.getWaktu();
+            hargaDouble = tiketData.getHarga();
             String hargaString = String.format("Rp %.2f", tiketData.getHarga());
             harga = hargaString;
             penumpang = intent.getStringExtra("penumpang");
@@ -103,26 +106,26 @@ public class PesanActivity extends AppCompatActivity {
             tvWaktu.setText(waktu);
             tvTujuan.setText(tujuan);
             tvPenumpang.setText(penumpang);
+            AppCompatButton selanjutnyaButton = findViewById(R.id.selanjutnyapilihkursi);
+
+            selanjutnyaButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(PesanActivity.this, PaymentMidtransActivity.class);
+                    TiketData tiketData = new TiketData(id, asal, tujuan, tanggal,waktu, hargaDouble, status);
+                    intent.putExtra("tiket", tiketData);
+                    intent.putExtra("id_user", idUser);
+                    intent.putExtra("nama_user", namaUser);
+                    intent.putExtra("email_user", emailUser);
+                    intent.putExtra("telp_user", notelpUser);
+                    intent.putExtra("alamat_user", alamatUser);
+                    intent.putExtra("penumpang", penumpang);
+                    startActivity(intent);
+                }
+            });
 
         }
 
-        AppCompatButton selanjutnyaButton = findViewById(R.id.selanjutnyapilihkursi);
-        selanjutnyaButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PesanActivity.this, TambahLokasiJemput.class);
-                intent.putExtra("id_perjalanan", id);
-                intent.putExtra("asal", asal);
-                intent.putExtra("waktu", waktu);
-                intent.putExtra("tanggal", tanggalFormatted);
-                intent.putExtra("tujuan", tujuan);
-                intent.putExtra("harga", harga);
-                intent.putExtra("id_user", idUser);
-                intent.putExtra("nama_user", namaUser);
-                intent.putExtra("penumpang", penumpang);
-                startActivity(intent);
-            }
-        });
 
 
     }

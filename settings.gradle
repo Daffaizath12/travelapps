@@ -10,6 +10,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        jcenter()
+        maven { url = uri("https://jitpack.io") }
+        maven { url "https://dl.bintray.com/pt-midtrans/maven" }
+
     }
 }
 rootProject.name = "travelapps"
