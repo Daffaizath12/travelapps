@@ -26,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.travelapps.Model.TiketData;
-import com.example.travelapps.Services.GetMidtransToken;
 import com.midtrans.sdk.corekit.api.model.Expiry;
 import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback;
 import com.midtrans.sdk.corekit.core.MidtransSDK;

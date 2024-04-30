@@ -22,4 +22,10 @@
             android:textColor="#ffffff"/>
     </FrameLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:padding="15dp"
+        android:layout_height="match_parent"/>
+
 </LinearLayout>

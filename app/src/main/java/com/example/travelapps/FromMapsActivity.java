@@ -2,18 +2,22 @@ package com.example.travelapps;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.travelapps.Services.ApiServices;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,6 +40,7 @@ public class FromMapsActivity extends AppCompatActivity implements OnMapReadyCal
     Location currentLocation;
     TextView tvAlamat;
     SearchView searchView;
+    AppCompatButton btnSimpan;
     String locationSearch = "";
     FusedLocationProviderClient fusedLocationProviderClient;
     LatLng newlatLng;
@@ -43,7 +48,8 @@ public class FromMapsActivity extends AppCompatActivity implements OnMapReadyCal
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_from_maps);
-
+        SharedPreferences preferences = FromMapsActivity.this.getSharedPreferences("myPrefs", MODE_PRIVATE);
+        String token = preferences.getString("token", "");
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
 
@@ -78,7 +84,24 @@ public class FromMapsActivity extends AppCompatActivity implements OnMapReadyCal
                 return false;
             }
         });
+        btnSimpan = findViewById(R.id.btnSimpan);
+        btnSimpan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ApiServices.addLatlong(FromMapsActivity.this, token, currentLocation.getLatitude(), currentLocation.getLongitude(), new ApiServices.AddLatlongResponseListener() {
+                    @Override
+                    public void onSuccess(String message) {
+                        onBackPressed();
+                        Toast.makeText(FromMapsActivity.this, "Berhasil menyimpan lokasi penjemputan", Toast.LENGTH_SHORT).show();
+                    }
 
+                    @Override
+                    public void onError(String message) {
+                        Toast.makeText(FromMapsActivity.this, "Error " + message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 
 

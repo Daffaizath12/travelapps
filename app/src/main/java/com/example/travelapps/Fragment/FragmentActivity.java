@@ -1,14 +1,28 @@
 package com.example.travelapps.Fragment;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.travelapps.Adapter.PemesananAdapter;
+import com.example.travelapps.Model.Pemesanan;
+import com.example.travelapps.Model.User;
+import com.example.travelapps.PesanActivity;
 import com.example.travelapps.R;
+import com.example.travelapps.Services.ApiServices;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,13 +70,44 @@ public class FragmentActivity extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
+    RecyclerView recyclerView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_activity, container, false);
+        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        SharedPreferences preferences = getActivity().getSharedPreferences("myPrefs", MODE_PRIVATE);
+        String token = preferences.getString("token", "");
+        ApiServices.getUserData(getContext(), token, new ApiServices.UserResponseListener() {
+            @Override
+            public void onSuccess(User user) {
+                String idUser = user.getId();
+                ApiServices.showPemesanan(getContext(), idUser, new ApiServices.ShowPemesananResponseListener() {
+                    @Override
+                    public void onSuccess(List<Pemesanan.PemesananData> pemesananDataList) {
+                        displayPemesanan(pemesananDataList);
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String message) {
+                Log.e("Error", "Gagal mendapatkan data user");
+            }
+        });
 
         return view;
+    }
+    private void displayPemesanan(List<Pemesanan.PemesananData> pemesananDataList) {
+        PemesananAdapter adapter = new PemesananAdapter(pemesananDataList);
+        recyclerView.setAdapter(adapter);
     }
 }

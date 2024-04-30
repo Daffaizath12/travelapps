@@ -8,13 +8,17 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.os.LocaleListCompat;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.travelapps.Model.TiketData;
+import com.example.travelapps.Services.ApiServices;
 import com.midtrans.sdk.corekit.core.PaymentMethod;
 import com.midtrans.sdk.uikit.api.model.Address;
 import com.midtrans.sdk.uikit.api.model.Authentication;
@@ -30,6 +34,7 @@ import com.midtrans.sdk.uikit.api.model.TransactionResult;
 import com.midtrans.sdk.uikit.external.UiKitApi;
 import com.midtrans.sdk.uikit.internal.util.UiKitConstants;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,6 +64,7 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
     String penumpang = "";
     double hargaDouble;
     double totalHarga;
+    String idOrder = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +88,11 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
             Intent i = new Intent(PaymentMidtransActivity.this, FromMapsActivity.class);
             startActivity(i);
         } else {
+            if (etAlamatTujuan.getText().toString().trim().isEmpty()) {
+                etAlamatTujuan.setText("silahkan isi detail alamat tujuan");
+            } else {
             startPayment();
+            }
         }
     }
 
@@ -160,30 +170,73 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
                             case UiKitConstants.STATUS_SUCCESS:
                                 Toast.makeText(this, "Transaction Finished. ID: " +
                                         transactionResult.getTransactionId(), Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(PaymentMidtransActivity.this, HomeActivity.class);
+                                startActivity(intent);
+                                finish();
+                                ApiServices.status(PaymentMidtransActivity.this, idOrder, "Berhasil", new ApiServices.AddLatlongResponseListener() {
+                                    @Override
+                                    public void onSuccess(String message) {
+                                        Log.e("status", message);
+                                    }
+
+                                    @Override
+                                    public void onError(String message) {
+                                        Log.e("status", message);
+                                    }
+                                });
                                 break;
                             case UiKitConstants.STATUS_PENDING:
                                 Toast.makeText(this, "Transaction Pending. ID: " +
                                         transactionResult.getTransactionId(), Toast.LENGTH_LONG).show();
+                                Intent i = new Intent(PaymentMidtransActivity.this, HomeActivity.class);
+                                startActivity(i);
+                                finish();
                                 break;
                             case UiKitConstants.STATUS_FAILED:
                                 Toast.makeText(this, "Transaction Failed. ID: " +
                                         transactionResult.getTransactionId(), Toast.LENGTH_LONG).show();
+                                Intent intent1 = new Intent(PaymentMidtransActivity.this, HomeActivity.class);
+                                startActivity(intent1);
+                                finish();
+                                ApiServices.status(PaymentMidtransActivity.this, idOrder, "Gagal", new ApiServices.AddLatlongResponseListener() {
+                                    @Override
+                                    public void onSuccess(String message) {
+                                        Log.e("status", message);
+                                    }
+
+                                    @Override
+                                    public void onError(String message) {
+                                        Log.e("status", message);
+                                    }
+                                });
                                 break;
                             case UiKitConstants.STATUS_CANCELED:
                                 Toast.makeText(this, "Transaction Cancelled", Toast.LENGTH_LONG).show();
+                                Intent intent2 = new Intent(PaymentMidtransActivity.this, HomeActivity.class);
+                                startActivity(intent2);
+                                finish();
                                 break;
                             case UiKitConstants.STATUS_INVALID:
                                 Toast.makeText(this, "Transaction Invalid. ID: " +
                                         transactionResult.getTransactionId(), Toast.LENGTH_LONG).show();
+                                Intent intent3 = new Intent(PaymentMidtransActivity.this, HomeActivity.class);
+                                startActivity(intent3);
+                                finish();
                                 break;
                             default:
                                 Toast.makeText(this, "Transaction ID: " +
                                         transactionResult.getTransactionId() + ". Message: " +
                                         transactionResult.getStatus(), Toast.LENGTH_LONG).show();
+                                Intent intent4 = new Intent(PaymentMidtransActivity.this, HomeActivity.class);
+                                startActivity(intent4);
+                                finish();
                                 break;
                         }
                     } else {
                         Toast.makeText(this, "Transaction Invalid", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(PaymentMidtransActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
                 }
             }
@@ -224,7 +277,7 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
     private SnapTransactionDetail initTransactionDetails() {
         String orderId = "PETTA-Express-";
         return new SnapTransactionDetail(
-                orderId + UUID.randomUUID().toString(),
+                idOrder,
                 totalHarga, "IDR"
         );
     }
@@ -253,29 +306,74 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
        Expiry expiry = new Expiry(currentTimeString, Expiry.Companion.getUNIT_HOUR(), 1);
        return expiry;
     }
+    private String getAddressFromLocation(double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<android.location.Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses != null && addresses.size() > 0) {
+                android.location.Address address = addresses.get(0);
+                String addressLine = address.getAddressLine(0);
+                return addressLine;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     private void startPayment(){
-        UiKitApi.Companion.getDefaultInstance().startPaymentUiFlow(
-                PaymentMidtransActivity.this,
-                launcher,
-                initTransactionDetails(),
-                initCustomerDetails(),
-                initItemDetails(),
-                initCreditCard(),
-                idUser,
-                null,
-                null,
-                null,
-                initExpiry(),
-                PaymentMethod.BANK_TRANSFER_MANDIRI,
-                Arrays.asList(PaymentType.CREDIT_CARD, PaymentType.BANK_TRANSFER, PaymentType.GOPAY, PaymentType.SHOPEEPAY, PaymentType.UOB_EZPAY),
-                null,
-                null,
-                null,
-                null,
-                "Cash1",
-                "Debit2",
-                "Credit3"
-        );
+        idOrder = "PETTA-Express-" + UUID.randomUUID().toString();
+        SharedPreferences preferences = PaymentMidtransActivity.this.getSharedPreferences("myPrefs", MODE_PRIVATE);
+        String token = preferences.getString("token", "");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String tanggalFormatted = sdf.format(tanggal);
+        ApiServices.checkLatlong(PaymentMidtransActivity.this, token, new ApiServices.CheckLatlongResponseListener() {
+            @Override
+            public void onResult(boolean success, double latitude, double longitude) {
+                String alamatJemput = getAddressFromLocation(latitude, longitude);
+                String alamatTujuan = etAlamatTujuan.getText().toString().trim();
+                        ApiServices.pemesanan(PaymentMidtransActivity.this, idUser, idPerjalanan, idOrder, alamatJemput, alamatTujuan, waktu, "Menunggu", tanggalFormatted, String.valueOf(totalHarga), new ApiServices.PemesananResponseListener() {
+                            @Override
+                            public void onSuccess(String message) {
+                                UiKitApi.Companion.getDefaultInstance().startPaymentUiFlow(
+                                        PaymentMidtransActivity.this,
+                                        launcher,
+                                        initTransactionDetails(),
+                                        initCustomerDetails(),
+                                        initItemDetails(),
+                                        initCreditCard(),
+                                        idUser,
+                                        null,
+                                        null,
+                                        null,
+                                        initExpiry(),
+                                        PaymentMethod.BANK_TRANSFER_MANDIRI,
+                                        Arrays.asList(PaymentType.CREDIT_CARD, PaymentType.BANK_TRANSFER, PaymentType.GOPAY, PaymentType.SHOPEEPAY, PaymentType.UOB_EZPAY),
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        "Cash1",
+                                        "Debit2",
+                                        "Credit3"
+                                );
+                            }
+
+                            @Override
+                            public void onError(String message) {
+                                Toast.makeText(PaymentMidtransActivity.this, "Gagal melakukan pemesanan" + message, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+            }
+
+            @Override
+            public void onError(String message) {
+                Log.e("Error", "Gagal mendapatkan alamat, " + message);
+            }
+        });
+
+
     }
+
 }
