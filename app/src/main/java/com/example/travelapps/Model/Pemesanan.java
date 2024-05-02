@@ -1,15 +1,19 @@
 package com.example.travelapps.Model;
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.List;
 
 public interface Pemesanan {
     void onSuccess(List<PemesananData> pemesananDataList);
     void onError(String message);
 
-    class PemesananData {
+    class PemesananData implements Serializable {
         private String idPemesanan;
         private String idUser;
         private String idPerjalanan;
+        private String qty;
         private String orderId;
         private String alamatJemput;
         private String alamatTujuan;
@@ -23,10 +27,11 @@ public interface Pemesanan {
         private String tanggal;
         private String waktuKeberangkatan;
 
-        public PemesananData(String idPemesanan, String idUser, String idPerjalanan, String orderId, String alamatJemput, String alamatTujuan, String waktuJemput, String status, String tanggalPesan, String tanggalBerangkat, String harga, String kotaAsal, String kotaTujuan, String tanggal, String waktuKeberangkatan) {
+        public PemesananData(String idPemesanan, String idUser, String idPerjalanan, String qty, String orderId, String alamatJemput, String alamatTujuan, String waktuJemput, String status, String tanggalPesan, String tanggalBerangkat, String harga, String kotaAsal, String kotaTujuan, String tanggal, String waktuKeberangkatan) {
             this.idPemesanan = idPemesanan;
             this.idUser = idUser;
             this.idPerjalanan = idPerjalanan;
+            this.qty = qty;
             this.orderId = orderId;
             this.alamatJemput = alamatJemput;
             this.alamatTujuan = alamatTujuan;
@@ -56,6 +61,9 @@ public interface Pemesanan {
 
         public String getOrderId() {
             return orderId;
+        }
+        public String getQty() {
+            return qty;
         }
 
         public String getAlamatJemput() {

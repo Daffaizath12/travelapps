@@ -1,5 +1,7 @@
 package com.example.travelapps.Adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,16 +10,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.travelapps.DetailPemesananActivity;
 import com.example.travelapps.Model.Pemesanan;
+import com.example.travelapps.PesanActivity;
 import com.example.travelapps.R;
+import com.example.travelapps.TiketActivity;
 
 import java.util.List;
 
 public class PemesananAdapter extends RecyclerView.Adapter<PemesananAdapter.PemesananViewHolder> {
 
     private List<Pemesanan.PemesananData> pemesananList;
+    private Context context;
 
-    public PemesananAdapter(List<Pemesanan.PemesananData> pemesananList) {
+
+    public PemesananAdapter(Context context, List<Pemesanan.PemesananData> pemesananList) {
+        this.context = context;
         this.pemesananList = pemesananList;
     }
 
@@ -32,6 +40,14 @@ public class PemesananAdapter extends RecyclerView.Adapter<PemesananAdapter.Peme
     public void onBindViewHolder(@NonNull PemesananViewHolder holder, int position) {
         Pemesanan.PemesananData pemesanan = pemesananList.get(position);
         holder.bind(pemesanan);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, DetailPemesananActivity.class);
+                intent.putExtra("pemesananData", pemesanan);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

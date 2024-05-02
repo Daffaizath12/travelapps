@@ -215,6 +215,18 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
                                 Intent intent2 = new Intent(PaymentMidtransActivity.this, HomeActivity.class);
                                 startActivity(intent2);
                                 finish();
+                                ApiServices.status(PaymentMidtransActivity.this, idOrder, "Gagal", new ApiServices.AddLatlongResponseListener() {
+                                    @Override
+                                    public void onSuccess(String message) {
+                                        Log.e("statuspesan", "cancel");
+                                    }
+
+                                    @Override
+                                    public void onError(String message) {
+                                        Log.e("statuspesan", message);
+
+                                    }
+                                });
                                 break;
                             case UiKitConstants.STATUS_INVALID:
                                 Toast.makeText(this, "Transaction Invalid. ID: " +
@@ -332,7 +344,7 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
             public void onResult(boolean success, double latitude, double longitude) {
                 String alamatJemput = getAddressFromLocation(latitude, longitude);
                 String alamatTujuan = etAlamatTujuan.getText().toString().trim();
-                        ApiServices.pemesanan(PaymentMidtransActivity.this, idUser, idPerjalanan, idOrder, alamatJemput, alamatTujuan, waktu, "Menunggu", tanggalFormatted, String.valueOf(totalHarga), new ApiServices.PemesananResponseListener() {
+                        ApiServices.pemesanan(PaymentMidtransActivity.this, idUser, idPerjalanan, penumpang, idOrder, alamatJemput, alamatTujuan, waktu, "Menunggu", tanggalFormatted, String.valueOf(totalHarga), new ApiServices.PemesananResponseListener() {
                             @Override
                             public void onSuccess(String message) {
                                 UiKitApi.Companion.getDefaultInstance().startPaymentUiFlow(
@@ -347,7 +359,7 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
                                         null,
                                         null,
                                         initExpiry(),
-                                        PaymentMethod.BANK_TRANSFER_MANDIRI,
+                                        PaymentMethod.BANK_TRANSFER,
                                         Arrays.asList(PaymentType.CREDIT_CARD, PaymentType.BANK_TRANSFER, PaymentType.GOPAY, PaymentType.SHOPEEPAY, PaymentType.UOB_EZPAY),
                                         null,
                                         null,

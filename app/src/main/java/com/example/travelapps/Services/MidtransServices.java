@@ -93,29 +93,20 @@ public class MidtransServices {
                             String statusCode = response.getString("status_code");
                             String statusMessage = response.getString("status_message");
                             String transactionId = response.getString("transaction_id");
-                            String maskedCard = response.getString("masked_card");
                             String orderId = response.getString("order_id");
                             String paymentType = response.getString("payment_type");
                             String transactionTime = response.getString("transaction_time");
                             String transactionStatus = response.getString("transaction_status");
                             String fraudStatus = response.getString("fraud_status");
-                            String approvalCode = response.getString("approval_code");
-                            String signatureKey = response.getString("signature_key");
-                            String bank = response.getString("bank");
                             String grossAmount = response.getString("gross_amount");
-                            String channelResponseCode = response.getString("channel_response_code");
-                            String channelResponseMessage = response.getString("channel_response_message");
-                            String cardType = response.getString("card_type");
-                            String paymentOptionType = response.getString("payment_option_type");
-                            String shopeepayReferenceNumber = response.optString("shopeepay_reference_number", "");
-                            String referenceId = response.optString("reference_id", "");
+                            String approvalCode = response.optString("approval_code", "");
+                            String bank = response.optString("bank", "");
 
                             TransactionModel transactionModel = new TransactionModel(
-                                    statusCode, statusMessage, transactionId, maskedCard, orderId,
+                                    statusCode, statusMessage, transactionId, null, orderId,
                                     paymentType, transactionTime, transactionStatus, fraudStatus,
-                                    approvalCode, signatureKey, bank, grossAmount, channelResponseCode,
-                                    channelResponseMessage, cardType, paymentOptionType,
-                                    shopeepayReferenceNumber, referenceId
+                                    approvalCode, null, bank, grossAmount, null,
+                                    null, null, null, null,null
                             );
 
                             listener.onSuccess(transactionModel);

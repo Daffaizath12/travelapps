@@ -394,7 +394,7 @@ public class ApiServices {
         requestQueue.add(stringRequest);
     }
 
-    public static void pemesanan(Context context, String id_user, String id_perjalanan, String order_id, String alamat_jemput, String alamat_tujuan, String waktu_jemput,String status, String tglBerangkat, String harga , PemesananResponseListener listener) {
+    public static void pemesanan(Context context, String id_user, String id_perjalanan, String qty, String order_id, String alamat_jemput, String alamat_tujuan, String waktu_jemput,String status, String tglBerangkat, String harga , PemesananResponseListener listener) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST + "pesanan.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -449,6 +449,7 @@ public class ApiServices {
                 params.put("alamat_tujuan", alamat_tujuan);
                 params.put("waktu_jemput", waktu_jemput);
                 params.put("status", status);
+                params.put("qty", qty);
                 params.put("tanggal_berangkat", tglBerangkat);
                 params.put("harga", harga);
                 return params;
@@ -498,7 +499,7 @@ public class ApiServices {
     }
 
     public static void showPemesanan(Context context, String idUser, ShowPemesananResponseListener listener) {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, HOST + "show_pemesanan.php?id_user=" + idUser, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, HOST + "showpemesanan.php?id_user=" + idUser, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.e("Response", response);
@@ -511,23 +512,23 @@ public class ApiServices {
                         for (int i = 0; i < dataArray.length(); i++) {
                             JSONObject dataObject = dataArray.getJSONObject(i);
                             // Parse each pemesanan data
-                            Pemesanan.PemesananData pemesananData = new Pemesanan.PemesananData(
-                                    dataObject.getString("id_pemesanan"),
-                                    dataObject.getString("id_user"),
-                                    dataObject.getString("id_perjalanan"),
-                                    dataObject.getString("order_id"),
-                                    dataObject.getString("alamat_jemput"),
-                                    dataObject.getString("alamat_tujuan"),
-                                    dataObject.getString("waktu_jemput"),
-                                    dataObject.getString("status"),
-                                    dataObject.getString("tanggal_pesan"),
-                                    dataObject.getString("tanggal_berangkat"),
-                                    dataObject.getString("harga"),
-                                    dataObject.getString("kota_asal"),
-                                    dataObject.getString("kota_tujuan"),
-                                    dataObject.getString("tanggal"),
-                                    dataObject.getString("waktu_keberangkatan")
-                            );
+                                   String id =  dataObject.getString("id_pemesanan");
+                                   String idUser =  dataObject.getString("id_user");
+                                   String idPerjalanan =  dataObject.getString("id_perjalanan");
+                                   String qty =  dataObject.getString("qty");
+                                   String orderId =  dataObject.getString("order_id");
+                                   String alamat_jemput =  dataObject.getString("alamat_jemput");
+                                   String alamatTujuan = dataObject.getString("alamat_tujuan");
+                                    String waktu_jemput = dataObject.getString("waktu_jemput");
+                                    String status = dataObject.getString("pemesanan_status");
+                                    String tanggalPesan =  dataObject.getString("tanggal_pesan");
+                                    String tanggalBerangkat =  dataObject.getString("tanggal_berangkat");
+                                    String harga = dataObject.getString("harga");
+                                    String kotaAsal =   dataObject.getString("kota_asal");
+                                    String kotaTujuan =    dataObject.getString("kota_tujuan");
+                                    String tanggal =    dataObject.getString("tanggal");
+                                    String waktuKeberangkatan =    dataObject.getString("waktu_keberangkatan");
+                                    Pemesanan.PemesananData pemesananData = new Pemesanan.PemesananData(id, idUser, idPerjalanan,qty, orderId, alamat_jemput, alamatTujuan, waktu_jemput, status, tanggalPesan, tanggalBerangkat, harga, kotaAsal, kotaTujuan, tanggal, waktuKeberangkatan);
                             pemesananDataList.add(pemesananData);
                         }
                         listener.onSuccess(pemesananDataList);

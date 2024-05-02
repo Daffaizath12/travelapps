@@ -71,24 +71,26 @@ public class FragmentActivity extends Fragment {
         }
     }
     RecyclerView recyclerView;
+    PemesananAdapter adapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_activity, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        SharedPreferences preferences = getActivity().getSharedPreferences("myPrefs", MODE_PRIVATE);
+        SharedPreferences preferences = requireActivity().getSharedPreferences("myPrefs", MODE_PRIVATE);
         String token = preferences.getString("token", "");
-        ApiServices.getUserData(getContext(), token, new ApiServices.UserResponseListener() {
+        ApiServices.getUserData(requireContext(), token, new ApiServices.UserResponseListener() {
             @Override
             public void onSuccess(User user) {
                 String idUser = user.getId();
-                ApiServices.showPemesanan(getContext(), idUser, new ApiServices.ShowPemesananResponseListener() {
+                ApiServices.showPemesanan(requireContext(), idUser, new ApiServices.ShowPemesananResponseListener() {
                     @Override
                     public void onSuccess(List<Pemesanan.PemesananData> pemesananDataList) {
-                        displayPemesanan(pemesananDataList);
+                        adapter = new PemesananAdapter(requireContext(), pemesananDataList);
+                        recyclerView.setAdapter(adapter);
                     }
 
                     @Override
@@ -105,9 +107,5 @@ public class FragmentActivity extends Fragment {
         });
 
         return view;
-    }
-    private void displayPemesanan(List<Pemesanan.PemesananData> pemesananDataList) {
-        PemesananAdapter adapter = new PemesananAdapter(pemesananDataList);
-        recyclerView.setAdapter(adapter);
     }
 }
