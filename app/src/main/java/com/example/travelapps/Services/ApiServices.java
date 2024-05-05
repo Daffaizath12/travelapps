@@ -36,6 +36,10 @@ import java.util.Map;
 public class ApiServices {
     private static String HOST = "http://192.168.0.117/ProjectTA/api/";
 
+    public static String getHOST() {
+        return HOST;
+    }
+
     public interface LoginResponseListener {
         void onSuccess(String message);
         void onError(String message);
@@ -221,6 +225,7 @@ public class ApiServices {
                                     String tanggal = jsonArrayJSONObject.getString("tanggal");
                                     String waktu = jsonArrayJSONObject.getString("waktu_keberangkatan");
                                     Double harga = jsonArrayJSONObject.getDouble("harga");
+                                    String jumlahPenumpang = jsonArrayJSONObject.getString("jumlah_penumpang");
                                     String status = jsonArrayJSONObject.getString("status");
                                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                                     Date ntanggal;
@@ -230,7 +235,7 @@ public class ApiServices {
                                         e.printStackTrace();
                                         continue;
                                     }
-                                    TiketData tiketData = new TiketData(id, asal, tujuan,ntanggal, waktu, harga, status);
+                                    TiketData tiketData = new TiketData(id, asal, tujuan,ntanggal, waktu, harga,jumlahPenumpang, status);
 
                                     tiketDataList.add(tiketData);
                                 }

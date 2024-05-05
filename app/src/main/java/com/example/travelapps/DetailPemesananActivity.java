@@ -1,10 +1,15 @@
 package com.example.travelapps;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
+import androidx.core.os.LocaleListCompat;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,20 +18,47 @@ import android.widget.Toast;
 
 import com.example.travelapps.Model.Pemesanan;
 import com.example.travelapps.Model.TransactionModel;
+import com.example.travelapps.Model.User;
 import com.example.travelapps.Services.ApiServices;
 import com.example.travelapps.Services.MidtransServices;
+import com.midtrans.sdk.corekit.core.PaymentMethod;
+import com.midtrans.sdk.uikit.api.model.Address;
+import com.midtrans.sdk.uikit.api.model.Authentication;
+import com.midtrans.sdk.uikit.api.model.BankType;
+import com.midtrans.sdk.uikit.api.model.CreditCard;
+import com.midtrans.sdk.uikit.api.model.CustomColorTheme;
+import com.midtrans.sdk.uikit.api.model.CustomerDetails;
+import com.midtrans.sdk.uikit.api.model.Expiry;
+import com.midtrans.sdk.uikit.api.model.ItemDetails;
+import com.midtrans.sdk.uikit.api.model.PaymentType;
+import com.midtrans.sdk.uikit.api.model.SnapTransactionDetail;
+import com.midtrans.sdk.uikit.api.model.TransactionResult;
+import com.midtrans.sdk.uikit.external.UiKitApi;
+import com.midtrans.sdk.uikit.internal.util.UiKitConstants;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.TimeZone;
 
 public class DetailPemesananActivity extends AppCompatActivity {
 
     TextView tvAsal, tvTujuan, tvDate, tvWaktu, tvPenumpang, tvStatus, tvJemput, tvATujuan;
     AppCompatButton btnBayar;
+    String orderId = "";
+    String idPerjalanan = "";
     Pemesanan.PemesananData pemesanan;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_pemesanan);
+        SharedPreferences preferences = DetailPemesananActivity.this.getSharedPreferences("myPrefs", MODE_PRIVATE);
+        String token = preferences.getString("token", "");
+
         onBindView();
         getIntentView();
         btnBayar.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +79,6 @@ public class DetailPemesananActivity extends AppCompatActivity {
         tvJemput = findViewById(R.id.tvAlamatJemput);
         tvATujuan = findViewById(R.id.tvAlamatTujuan);
         btnBayar = findViewById(R.id.bayarsekarang);
-//        btnBayar.setVisibility(View.GONE);
     }
 
     public void getIntentView(){
@@ -61,9 +92,11 @@ public class DetailPemesananActivity extends AppCompatActivity {
             String waktu = pemesanan.getWaktuKeberangkatan();
             String jemput = pemesanan.getAlamatJemput();
             String tujuanA = pemesanan.getAlamatTujuan();
-            String orderId = pemesanan.getOrderId();
+            orderId = pemesanan.getOrderId();
+            idPerjalanan = pemesanan.getIdPerjalanan();
             String qty = pemesanan.getQty();
             String status1 = pemesanan.getStatus();
+
 
             tvAsal.setText(asal);
             tvTujuan.setText(tujuan);
@@ -134,13 +167,11 @@ public class DetailPemesananActivity extends AppCompatActivity {
 
             } else if(Objects.equals(status1, "Menunggu")){
                 btnBayar.setVisibility(View.VISIBLE);
-//                btnBayar.setEnabled(true);
-//                btnBayar.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.color_30));
-
             } else {
                 btnBayar.setVisibility(View.GONE);
             }
 
         }
     }
+
 }

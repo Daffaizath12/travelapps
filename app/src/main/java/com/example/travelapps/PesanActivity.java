@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.travelapps.Model.TiketData;
 import com.example.travelapps.Model.User;
@@ -35,6 +36,7 @@ public class PesanActivity extends AppCompatActivity {
     String emailUser = "";
     String alamatUser = "";
     String notelpUser = "";
+    String jumlahPenumpang = "";
     String tanggalFormatted = "";
 
     TextView tvDate, tvAsal, tvWaktu, tvTujuan, tvNamaUser, tvEmailUser, tvNotelpUser, tvPenumpang;
@@ -92,6 +94,7 @@ public class PesanActivity extends AppCompatActivity {
             tujuan = tiketData.getTujuan();
             tanggal = tiketData.getTanggal();
             waktu = tiketData.getWaktu();
+            jumlahPenumpang = tiketData.getJumlahPenumpang();
             hargaDouble = tiketData.getHarga();
             String hargaString = String.format("Rp %.2f", tiketData.getHarga());
             harga = hargaString;
@@ -111,22 +114,27 @@ public class PesanActivity extends AppCompatActivity {
             selanjutnyaButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(PesanActivity.this, PaymentMidtransActivity.class);
-                    TiketData tiketData = new TiketData(id, asal, tujuan, tanggal,waktu, hargaDouble, status);
-                    intent.putExtra("tiket", tiketData);
-                    intent.putExtra("id_user", idUser);
-                    intent.putExtra("nama_user", namaUser);
-                    intent.putExtra("email_user", emailUser);
-                    intent.putExtra("telp_user", notelpUser);
-                    intent.putExtra("alamat_user", alamatUser);
-                    intent.putExtra("penumpang", penumpang);
-                    startActivity(intent);
+                    int jumlahPenumpangInt = Integer.parseInt(jumlahPenumpang);
+                    int penumpangInt = Integer.parseInt(penumpang);
+
+                    if (jumlahPenumpangInt < penumpangInt) {
+                        Toast.makeText(PesanActivity.this, "Jumlah penumpang tidak mencukupi", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent intent = new Intent(PesanActivity.this, PaymentMidtransActivity.class);
+                        TiketData tiketData = new TiketData(id, asal, tujuan, tanggal, waktu, hargaDouble, jumlahPenumpang, status);
+                        intent.putExtra("tiket", tiketData);
+                        intent.putExtra("id_user", idUser);
+                        intent.putExtra("nama_user", namaUser);
+                        intent.putExtra("email_user", emailUser);
+                        intent.putExtra("telp_user", notelpUser);
+                        intent.putExtra("alamat_user", alamatUser);
+                        intent.putExtra("penumpang", penumpang);
+                        startActivity(intent);
+                    }
                 }
             });
 
         }
-
-
 
     }
 }

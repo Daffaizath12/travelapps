@@ -14,20 +14,28 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.travelapps.Services.ApiServices;
+import com.example.travelapps.databinding.ActivityLoginSopirBinding;
+import com.example.travelapps.sopir.HomeSopirActivity;
+import com.example.travelapps.sopir.LoginSopirActivity;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     EditText etEmail, etPassword;
-    TextView tvDaftar;
+    TextView tvDaftar, tvLogin;
     Button btnLogin;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences preferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
         boolean isLogin = preferences.getBoolean("isLogin", false);
+        boolean isLoginSopir = preferences.getBoolean("isLoginSopir", false);
 
         if (isLogin) {
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        } else if(isLoginSopir){
+            Intent intent = new Intent(LoginActivity.this, HomeSopirActivity.class);
             startActivity(intent);
             finish();
         }
@@ -39,8 +47,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         etPassword = findViewById(R.id.et_password);
         tvDaftar = findViewById(R.id.tx_daftar);
         btnLogin = findViewById(R.id.buttonLogin);
+        tvLogin = findViewById(R.id.tv_login);
         tvDaftar.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
+        tvLogin.setOnClickListener(this);
     }
 
     @Override
@@ -74,6 +84,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         } else if (v == tvDaftar){
             Intent i = new Intent(this, DaftarActivity.class);
+            startActivity(i);
+        } else if (v == tvLogin) {
+            Intent i = new Intent(this, LoginSopirActivity.class);
             startActivity(i);
         }
     }
