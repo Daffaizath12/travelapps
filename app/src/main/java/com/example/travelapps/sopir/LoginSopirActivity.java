@@ -10,10 +10,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.travelapps.HomeActivity;
-import com.example.travelapps.LoginActivity;
 import com.example.travelapps.R;
 import com.example.travelapps.Services.ApiServices;
+import com.example.travelapps.LoginActivity;
 
 public class LoginSopirActivity extends AppCompatActivity implements View.OnClickListener {
 

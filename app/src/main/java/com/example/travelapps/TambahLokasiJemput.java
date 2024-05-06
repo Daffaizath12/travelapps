@@ -48,6 +48,7 @@ import com.midtrans.sdk.uikit.api.model.PaymentType;
 import com.midtrans.sdk.uikit.api.model.SnapTransactionDetail;
 import com.midtrans.sdk.uikit.external.UiKitApi;
 import com.midtrans.sdk.uikit.internal.util.UiKitConstants;
+import com.example.travelapps.R;
 
 
 import org.json.JSONObject;

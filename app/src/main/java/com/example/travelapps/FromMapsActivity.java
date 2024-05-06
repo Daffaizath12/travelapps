@@ -28,6 +28,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.example.travelapps.R;
 
 import java.io.IOException;
 import java.util.List;
@@ -130,6 +131,8 @@ public class FromMapsActivity extends AppCompatActivity implements OnMapReadyCal
             @Override
             public void onMapClick(LatLng latLng) {
                 newlatLng = latLng;
+                currentLocation.setLatitude(newlatLng.latitude);
+                currentLocation.setLongitude(newlatLng.longitude);
                 gMaps.clear();
                 gMaps.addMarker(new MarkerOptions().position(newlatLng).title("MyLocation"));
                 gMaps.animateCamera(CameraUpdateFactory.newLatLngZoom(newlatLng, 16.0f));

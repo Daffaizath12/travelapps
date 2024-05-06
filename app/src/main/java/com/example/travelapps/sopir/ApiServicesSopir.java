@@ -15,6 +15,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.travelapps.Model.PemesananSopir;
 import com.example.travelapps.Model.TiketData;
+import com.example.travelapps.Model.TiketSopir;
 import com.example.travelapps.Services.ApiServices;
 
 import org.json.JSONArray;
@@ -40,6 +41,17 @@ public class ApiServicesSopir {
         void onSuccess(List<TiketData> tiketDataList);
         void onError(String message);
     }
+    public interface TiketSopirResponseListener {
+        void onSuccess(List<TiketSopir> tiketDataList);
+        void onError(String message);
+    }
+
+
+    public interface UpdateStatusResponseListener {
+        void onSuccess(String message);
+        void onError(String message);
+    }
+
     public static void login(Context context, String username, String pass, ApiServices.LoginResponseListener listener) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ApiServices.getHOST() + "login_sopir.php", new Response.Listener<String>() {
             @Override
@@ -146,7 +158,7 @@ public class ApiServicesSopir {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
     }
-    public static void getPerjalananSopir(Context context, String idSopir, PerjalananResponseListener listener) {
+    public static void getPenumpangSopir(Context context, String idSopir,String id_perjalanan, PerjalananResponseListener listener) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ApiServices.getHOST() + "getperjalanansopir.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -206,6 +218,7 @@ public class ApiServicesSopir {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("id_sopir", idSopir);
+                params.put("id_perjalanan", id_perjalanan);
                 return params;
             }
         };
@@ -255,6 +268,87 @@ public class ApiServicesSopir {
                         listener.onError("Gagal mendapatkan data: " + error.getMessage());
                     }
                 });
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
+    public static void getTiketSopir(Context context, String idSopir, TiketSopirResponseListener listener) {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, ApiServices.getHOST() + "getstoryperjalanan.php?id_sopir=" + idSopir, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.e("Response", response);
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    List<TiketSopir> tiketDataList = new ArrayList<>();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String idPerjalanan = jsonObject.getString("id_perjalanan");
+                        String kotaAsal = jsonObject.getString("kota_asal");
+                        String kotaTujuan = jsonObject.getString("kota_tujuan");
+                        String tanggalPerjalanan = jsonObject.getString("tanggal");
+                        String waktuKeberangkatan = jsonObject.getString("waktu_keberangkatan");
+                        double harga = jsonObject.getDouble("harga");
+                        String status = jsonObject.getString("status");
+                        String jumlahPenumpang = jsonObject.getString("jumlah_penumpang");
+                        String totalPenumpang = jsonObject.getString("total_penumpang");
+                        Date ntanggal;
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+                        try {
+                            ntanggal = sdf.parse(tanggalPerjalanan);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                            continue;
+                        }
+                        TiketSopir tiketData = new TiketSopir(idPerjalanan, kotaAsal, kotaTujuan, ntanggal, waktuKeberangkatan, harga, jumlahPenumpang, status, totalPenumpang);
+                        tiketDataList.add(tiketData);
+                    }
+                    listener.onSuccess(tiketDataList);
+                } catch (JSONException e){
+                    e.printStackTrace();
+                    listener.onError("Gagal memproses data: " + e.getMessage());
+                }
+            }
+        },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        listener.onError("Gagal mendapatkan data: " + error.getMessage());
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
+    public static void updateStatus(Context context, String idSopir, String idPerjalanan, String status, UpdateStatusResponseListener listener) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ApiServices.getHOST() + "update_status_sopir.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            String message = jsonResponse.getString("message");
+                            listener.onSuccess(message);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            listener.onError("Gagal memproses response");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        listener.onError("Gagal mengirim request: " + error.getMessage());
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("id_sopir", idSopir);
+                params.put("id_perjalanan", idPerjalanan);
+                params.put("status", status);
+                return params;
+            }
+        };
+
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
     }

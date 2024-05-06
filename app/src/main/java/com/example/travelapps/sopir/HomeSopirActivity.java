@@ -12,6 +12,7 @@ import com.example.travelapps.Fragment.FragmentHome;
 import com.example.travelapps.Fragment.FragmentNotifications;
 import com.example.travelapps.Fragment.FragmentSettings;
 import com.example.travelapps.R;
+import com.example.travelapps.R;
 import com.example.travelapps.sopir.ui.dashboard.DashboardFragment;
 import com.example.travelapps.sopir.ui.home.HomeFragment;
 import com.example.travelapps.sopir.ui.notifications.NotificationsFragment;

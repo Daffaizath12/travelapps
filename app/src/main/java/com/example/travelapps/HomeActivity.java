@@ -12,6 +12,7 @@ import com.example.travelapps.Fragment.FragmentHome;
 import com.example.travelapps.Fragment.FragmentNotifications;
 import com.example.travelapps.Fragment.FragmentSettings;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.travelapps.R;
 
 public class HomeActivity extends AppCompatActivity {
 

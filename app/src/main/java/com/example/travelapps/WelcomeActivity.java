@@ -6,6 +6,8 @@ import android.os.Handler;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.travelapps.R;
+
 public class WelcomeActivity extends AppCompatActivity {
 
     @Override

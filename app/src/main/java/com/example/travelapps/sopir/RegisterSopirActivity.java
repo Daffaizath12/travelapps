@@ -13,8 +13,8 @@ import android.widget.Toast;
 
 import com.example.travelapps.DaftarActivity;
 import com.example.travelapps.LoginActivity;
-import com.example.travelapps.R;
 import com.example.travelapps.Services.ApiServices;
+import com.example.travelapps.R;
 
 public class RegisterSopirActivity extends AppCompatActivity implements View.OnClickListener {
 

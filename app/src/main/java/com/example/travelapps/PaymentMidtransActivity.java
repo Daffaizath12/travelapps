@@ -33,6 +33,7 @@ import com.midtrans.sdk.uikit.api.model.SnapTransactionDetail;
 import com.midtrans.sdk.uikit.api.model.TransactionResult;
 import com.midtrans.sdk.uikit.external.UiKitApi;
 import com.midtrans.sdk.uikit.internal.util.UiKitConstants;
+import com.example.travelapps.R;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
