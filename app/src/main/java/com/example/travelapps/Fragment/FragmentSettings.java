@@ -1,5 +1,9 @@
 package com.example.travelapps.Fragment;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,8 +11,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.example.travelapps.LoginActivity;
+import com.example.travelapps.Model.User;
+import com.example.travelapps.ProfileActivity;
 import com.example.travelapps.R;
+import com.example.travelapps.Services.ApiServices;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +72,47 @@ public class FragmentSettings extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        View view =  inflater.inflate(R.layout.fragment_settings, container, false);
+        SharedPreferences preferences = requireActivity().getSharedPreferences("myPrefs", MODE_PRIVATE);
+        String token = preferences.getString("token", "");
+        RelativeLayout relativeLayout = view.findViewById(R.id.profileSection);
+        relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+        LinearLayout logout = view.findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = getActivity().getSharedPreferences("myPrefs", MODE_PRIVATE).edit();
+                editor.remove("isLogin");
+                editor.remove("token");
+                editor.apply(); // Simpan perubahan pada SharedPreferences
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear activity stack
+                startActivity(intent);
+                requireActivity().finish();
+            }
+        });
+        ApiServices.getUserData(getContext(), token, new ApiServices.UserResponseListener() {
+            @Override
+            public void onSuccess(User user) {
+                TextView tvname = view.findViewById(R.id.userName);
+                tvname.setText(user.getNama());
+                TextView tvNickname = view.findViewById(R.id.profileImage);
+                String twoInitials = user.getNama().substring(0, 2);
+                twoInitials = twoInitials.toUpperCase();
+                tvNickname.setText(twoInitials);
+            }
+
+            @Override
+            public void onError(String message) {
+
+            }
+        });
+        return view;
     }
 }

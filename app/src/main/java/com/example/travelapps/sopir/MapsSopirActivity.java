@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
@@ -35,8 +36,11 @@ import com.codebyashish.googledirectionapi.ErrorHandling;
 import com.codebyashish.googledirectionapi.RouteDrawing;
 import com.codebyashish.googledirectionapi.RouteInfoModel;
 import com.codebyashish.googledirectionapi.RouteListener;
+import com.example.travelapps.Adapter.PenumpangAdapter;
+import com.example.travelapps.Adapter.PerjalananSopirAdapter;
 import com.example.travelapps.Model.PemesananSopir;
 import com.example.travelapps.Model.TiketData;
+import com.example.travelapps.Model.TiketSopir;
 import com.example.travelapps.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
@@ -78,6 +82,8 @@ public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCa
     FusedLocationProviderClient fusedLocationProviderClient;
     LatLng userLocation, destinationLocation;
     Polyline currentRoute;
+    private List<PemesananSopir> pemesananSopirList;
+    private PenumpangAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +91,11 @@ public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCa
         setContentView(R.layout.activity_maps_sopir);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
+        RecyclerView recyclerView = findViewById(R.id.rvUser);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        pemesananSopirList = new ArrayList<>();
+        adapter = new PenumpangAdapter(this, pemesananSopirList);
+        recyclerView.setAdapter(adapter);
         Intent i = getIntent();
         if (i.getExtras() != null) {
             TiketData tiketData = (TiketData) i.getSerializableExtra("tiket");
@@ -119,14 +130,34 @@ public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCa
             @Override
             public void onSuccess(List<PemesananSopir> pemesananSopir) {
                 List<LatLng> coordinates = new ArrayList<>();
+                double shortestDistance = Double.MAX_VALUE;
+                LatLng nearestMarkerLatLng = null;
+
                 for (PemesananSopir pemesanan : pemesananSopir) {
                     double latitude = Double.parseDouble(pemesanan.getLatitude());
                     double longitude = Double.parseDouble(pemesanan.getLongitude());
-                    LatLng userLatLng = new LatLng(latitude, longitude);
-                    coordinates.add(userLatLng);
+                    LatLng markerLatLng = new LatLng(latitude, longitude);
+                    coordinates.add(markerLatLng);
+
+                    float[] distanceResult = new float[1];
+                    Location.distanceBetween(userLocation.latitude, userLocation.longitude,
+                            latitude, longitude, distanceResult);
+                    double distance = distanceResult[0];
+
+                    if (distance < shortestDistance) {
+                        shortestDistance = distance;
+                        nearestMarkerLatLng = markerLatLng;
+                    }
                     String username = pemesanan.getNamaLengkap();
-                    gMaps.addMarker(new MarkerOptions().position(userLatLng).title(username));
+                    gMaps.addMarker(new MarkerOptions().position(markerLatLng).title(username));
                 }
+
+                if (nearestMarkerLatLng != null) {
+                    getRouteFromOSRM(userLocation, nearestMarkerLatLng);
+                }
+                pemesananSopirList.clear();
+                pemesananSopirList.addAll(pemesananSopir);
+                adapter.notifyDataSetChanged();
             }
 
             @Override

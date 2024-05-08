@@ -319,6 +319,47 @@ public class ApiServices {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
     }
+    public static void updateUser(Context context, String token, String nama_lengkap, String notelp, String email, String alamat, final UpdateUserResponseListener listener) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST + "update-user.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            boolean success = jsonObject.getBoolean("success");
+                            String message = jsonObject.getString("message");
+                            listener.onUpdateUserResponse(success, message);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            listener.onUpdateUserResponse(false, "Failed to parse response: " + e.getMessage());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        listener.onUpdateUserResponse(false, "Failed to update user: " + error.getMessage());
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("token", token);
+                params.put("nama_lengkap", nama_lengkap);
+                params.put("notelp", notelp);
+                params.put("email", email);
+                params.put("alamat", alamat);
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
+
+    public interface UpdateUserResponseListener {
+        void onUpdateUserResponse(boolean success, String message);
+    }
 
     public static void addLatlong(Context context, String token, double latitude, double longitude, AddLatlongResponseListener listener) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST + "addlatLng.php", new Response.Listener<String>() {

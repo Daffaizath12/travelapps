@@ -48,7 +48,7 @@ import java.util.TimeZone;
 
 public class DetailPemesananActivity extends AppCompatActivity {
 
-    TextView tvAsal, tvTujuan, tvDate, tvWaktu, tvPenumpang, tvStatus, tvJemput, tvATujuan;
+    TextView tvAsal, tvTujuan, tvDate, tvWaktu, tvPenumpang, tvStatus, tvJemput, tvATujuan, tvPembayaran, tvBank, tvVa;
     AppCompatButton btnBayar;
     String orderId = "";
     String idPerjalanan = "";
@@ -80,6 +80,9 @@ public class DetailPemesananActivity extends AppCompatActivity {
         tvJemput = findViewById(R.id.tvAlamatJemput);
         tvATujuan = findViewById(R.id.tvAlamatTujuan);
         btnBayar = findViewById(R.id.bayarsekarang);
+        tvPembayaran = findViewById(R.id.pembayaran);
+        tvBank = findViewById(R.id.bank);
+        tvVa = findViewById(R.id.va_number);
     }
 
     public void getIntentView(){
@@ -116,7 +119,8 @@ public class DetailPemesananActivity extends AppCompatActivity {
                         String status = transactionModel.getTransactionStatus();
                         String orderId = transactionModel.getOrderId();
                         String status1 = pemesanan.getStatus();
-
+                        String bank = transactionModel.getBankInfo().getBank();
+                        String va = transactionModel.getBankInfo().getVaNumber();
                         if (Objects.equals(status, "failure")) {
                             ApiServices.status(DetailPemesananActivity.this, orderId, "Gagal", new ApiServices.AddLatlongResponseListener() {
                                 @Override
@@ -141,6 +145,10 @@ public class DetailPemesananActivity extends AppCompatActivity {
                                     Log.e("statusPesan", message);
                                 }
                             });
+                            tvVa.setVisibility(View.VISIBLE);
+                            tvVa.setText("Va Number : " + va);
+                            tvBank.setVisibility(View.VISIBLE);
+                            tvBank.setText("Bank : " + bank);
                         } else if(Objects.equals(status, "settlement")){
                             ApiServices.status(DetailPemesananActivity.this, orderId, "Selesai", new ApiServices.AddLatlongResponseListener() {
                                 @Override
@@ -168,8 +176,14 @@ public class DetailPemesananActivity extends AppCompatActivity {
 
             } else if(Objects.equals(status1, "Menunggu")){
                 btnBayar.setVisibility(View.VISIBLE);
+                tvPembayaran.setVisibility(View.VISIBLE);
+                tvVa.setVisibility(View.VISIBLE);
+                tvBank.setVisibility(View.VISIBLE);
             } else {
                 btnBayar.setVisibility(View.GONE);
+                tvPembayaran.setVisibility(View.GONE);
+                tvVa.setVisibility(View.GONE);
+                tvBank.setVisibility(View.GONE);
             }
 
         }

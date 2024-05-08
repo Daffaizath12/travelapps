@@ -12,7 +12,7 @@ public class TransactionModel {
     private String fraudStatus;
     private String approvalCode;
     private String signatureKey;
-    private String bank;
+    private Bank bankInfo; // Objek bank yang berisi bank dan vaNumber
     private String grossAmount;
     private String channelResponseCode;
     private String channelResponseMessage;
@@ -22,7 +22,7 @@ public class TransactionModel {
     private String referenceId;
 
     // Constructor
-    public TransactionModel(String statusCode, String statusMessage, String transactionId, String maskedCard, String orderId, String paymentType, String transactionTime, String transactionStatus, String fraudStatus, String approvalCode, String signatureKey, String bank, String grossAmount, String channelResponseCode, String channelResponseMessage, String cardType, String paymentOptionType, String shopeepayReferenceNumber, String referenceId) {
+    public TransactionModel(String statusCode, String statusMessage, String transactionId, String maskedCard, String orderId, String paymentType, String transactionTime, String transactionStatus, String fraudStatus, String approvalCode, String signatureKey, Bank bankInfo, String grossAmount, String channelResponseCode, String channelResponseMessage, String cardType, String paymentOptionType, String shopeepayReferenceNumber, String referenceId) {
         this.statusCode = statusCode;
         this.statusMessage = statusMessage;
         this.transactionId = transactionId;
@@ -34,7 +34,7 @@ public class TransactionModel {
         this.fraudStatus = fraudStatus;
         this.approvalCode = approvalCode;
         this.signatureKey = signatureKey;
-        this.bank = bank;
+        this.bankInfo = bankInfo;
         this.grossAmount = grossAmount;
         this.channelResponseCode = channelResponseCode;
         this.channelResponseMessage = channelResponseMessage;
@@ -89,8 +89,8 @@ public class TransactionModel {
         return signatureKey;
     }
 
-    public String getBank() {
-        return bank;
+    public Bank getBankInfo() {
+        return bankInfo;
     }
 
     public String getGrossAmount() {

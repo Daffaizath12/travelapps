@@ -9,8 +9,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.travelapps.Model.Bank;
 import com.example.travelapps.Model.TransactionModel;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -90,6 +92,7 @@ public class MidtransServices {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+                            Log.e("response transaction", response.toString());
                             String statusCode = response.getString("status_code");
                             String statusMessage = response.getString("status_message");
                             String transactionId = response.getString("transaction_id");
@@ -100,12 +103,21 @@ public class MidtransServices {
                             String fraudStatus = response.getString("fraud_status");
                             String grossAmount = response.getString("gross_amount");
                             String approvalCode = response.optString("approval_code", "");
-                            String bank = response.optString("bank", "");
+                            JSONArray vaNumbersArray = response.getJSONArray("va_numbers");
+                            String bank = "";
+                            String va = "";
+
+                            if (vaNumbersArray.length() > 0) {
+                                JSONObject vaObject = vaNumbersArray.getJSONObject(0);
+                                bank = vaObject.getString("bank");
+                                va = vaObject.getString("va_number");
+                            }
+                            Bank bank2 = new Bank(bank,va);
 
                             TransactionModel transactionModel = new TransactionModel(
                                     statusCode, statusMessage, transactionId, null, orderId,
                                     paymentType, transactionTime, transactionStatus, fraudStatus,
-                                    approvalCode, null, bank, grossAmount, null,
+                                    approvalCode, null , bank2, grossAmount, null,
                                     null, null, null, null,null
                             );
 

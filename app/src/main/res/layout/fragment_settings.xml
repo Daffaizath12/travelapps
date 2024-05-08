@@ -103,47 +103,47 @@
         </LinearLayout>
 
         <!-- Menu Item: Transaction History -->
-        <LinearLayout
-            android:id="@+id/riwayat_transaksi"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:onClick="onTransactionHistoryClicked">
+<!--        <LinearLayout-->
+<!--            android:id="@+id/riwayat_transaksi"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:onClick="onTransactionHistoryClicked">-->
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_transaction_history"
-                android:layout_gravity="center_vertical"/>
+<!--&lt;!&ndash;            <ImageView&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:src="@drawable/ic_transaction_history"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_gravity="center_vertical"/>&ndash;&gt;-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Riwayat Transaksi"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:layout_marginStart="16dp"/>
+<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_gravity="center"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:text="Riwayat Transaksi"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:textColor="@color/black"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:textSize="16sp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_marginStart="16dp"/>&ndash;&gt;-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="center"
-                android:gravity="end">
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:gravity="end">-->
 
-                <!-- Icon Arrow to the right -->
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:foregroundGravity="right"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_arrow_right" />
+<!--                &lt;!&ndash; Icon Arrow to the right &ndash;&gt;-->
+<!--                <ImageButton-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:foregroundGravity="right"-->
+<!--                    android:background="@android:color/transparent"-->
+<!--                    android:src="@drawable/ic_arrow_right" />-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
 
         <!-- Menu Item: About TravelApps -->
         <LinearLayout
