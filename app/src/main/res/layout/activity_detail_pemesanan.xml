@@ -256,16 +256,16 @@
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/bayarsekarang"
-                style="@android:style/Widget.Button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_shape"
-                android:text="Bayar Sekarang"
-                android:fontFamily="@font/poppinssemibold"
-                android:textColor="@color/white"
-                android:layout_alignParentBottom="true"/>
+<!--            <androidx.appcompat.widget.AppCompatButton-->
+<!--                android:id="@+id/bayarsekarang"-->
+<!--                style="@android:style/Widget.Button"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@drawable/button_shape"-->
+<!--                android:text="Bayar Sekarang"-->
+<!--                android:fontFamily="@font/poppinssemibold"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:layout_alignParentBottom="true"/>-->
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

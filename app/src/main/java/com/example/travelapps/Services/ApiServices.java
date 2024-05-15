@@ -5,6 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -14,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.travelapps.Model.Kota;
+import com.example.travelapps.Model.Notifikasi;
 import com.example.travelapps.Model.Pemesanan;
 import com.example.travelapps.Model.Perjalanan;
 import com.example.travelapps.Model.TiketData;
@@ -32,6 +34,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class ApiServices {
     private static String HOST = "http://192.168.0.117/ProjectTA/api/";
@@ -79,6 +82,11 @@ public class ApiServices {
         void onError(String message);
     }
 
+    public interface NotifikasiResponseListener {
+        void onSuccess(List<Notifikasi> notifikasiList);
+        void onError(String message);
+    }
+
     public static void login(Context context, String email, String pass, LoginResponseListener listener) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST + "login.php", new Response.Listener<String>() {
             @Override
@@ -87,6 +95,7 @@ public class ApiServices {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     String message = jsonObject.getString("message");
+                    Boolean success = jsonObject.getBoolean("success");
                     if (message.equals("Berhasil Login")){
                         String token = jsonObject.getString("token");
                         SharedPreferences.Editor editor = context.getSharedPreferences("myPrefs", MODE_PRIVATE).edit();
@@ -94,6 +103,8 @@ public class ApiServices {
                         editor.putString("token", token);
                         editor.apply();
                         listener.onSuccess(message);
+                    } else if (success.equals(false)) {
+                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e){
                     e.printStackTrace();
@@ -202,7 +213,93 @@ public class ApiServices {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
     }
+    public static void notifikasi(Context context, String id_user, String title, String desc ,RegisterResponseListener listener) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST + "notifikasi-store.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String success = jsonObject.getString("success");
+                    if ("true".equals(success)) {
+                        listener.onSuccess("Berhasil store notifikasi");
+                    } else {
+                        listener.onError("Gagal mengirim notifikasi: ");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    listener.onError("Gagal: " + e.getMessage());
+                }
+            }
+        },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse == null) {
+                            listener.onError("Gagal mengirim notif: network response is null");
+                        }
+                    }
+                })
+        {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("id_user", id_user);
+                params.put("title", title);
+                params.put("desc", desc);
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
 
+    public static void getNotifikasi(Context context, String id_user, NotifikasiResponseListener listener) {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, HOST + "get-notifikasi.php?id_user=" + id_user,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("Response", response);
+                        try {
+                            JSONArray jsonArray = new JSONArray(response);
+                            List<Notifikasi> notifikasiList = new ArrayList<>();
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String title = jsonObject.getString("title");
+                                String desc = jsonObject.getString("desc");
+                                String createdAtString = jsonObject.getString("created_at");
+                                Date createdAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(createdAtString);
+                                Notifikasi notifikasi = new Notifikasi(title, desc, createdAt);
+                                notifikasiList.add(notifikasi);
+                            }
+                            listener.onSuccess(notifikasiList);
+                        } catch (JSONException | ParseException e) {
+                            e.printStackTrace();
+                            listener.onError("Failed to parse response: " + e.getMessage());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse != null && error.networkResponse.data != null) {
+                            try {
+                                String responseBody = new String(error.networkResponse.data, "utf-8");
+                                JSONObject jsonObject = new JSONObject(responseBody);
+                                String message = jsonObject.getString("message");
+                                listener.onError(message);
+                            } catch (JSONException | UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                                listener.onError("Failed to parse error response: " + e.getMessage());
+                            }
+                        } else {
+                            listener.onError("Network error: " + error.toString());
+                        }
+                    }
+                });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
     public static void showPerjalanan(Context context,String kotaAsal, String kotaTujuan, final PerjalananResponseListener listener) {
         String url = HOST + "schedule.php?kota_asal=" + kotaAsal + "&kota_tujuan=" + kotaTujuan ;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,

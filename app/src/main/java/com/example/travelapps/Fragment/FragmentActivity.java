@@ -78,18 +78,18 @@ public class FragmentActivity extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_activity, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         SharedPreferences preferences = requireActivity().getSharedPreferences("myPrefs", MODE_PRIVATE);
         String token = preferences.getString("token", "");
-        ApiServices.getUserData(requireContext(), token, new ApiServices.UserResponseListener() {
+        ApiServices.getUserData(getContext(), token, new ApiServices.UserResponseListener() {
             @Override
             public void onSuccess(User user) {
                 String idUser = user.getId();
-                ApiServices.showPemesanan(requireContext(), idUser, new ApiServices.ShowPemesananResponseListener() {
+                ApiServices.showPemesanan(getContext(), idUser, new ApiServices.ShowPemesananResponseListener() {
                     @Override
                     public void onSuccess(List<Pemesanan.PemesananData> pemesananDataList) {
-                        adapter = new PemesananAdapter(requireContext(), pemesananDataList);
+                        adapter = new PemesananAdapter(getContext(), pemesananDataList);
                         recyclerView.setAdapter(adapter);
                     }
 

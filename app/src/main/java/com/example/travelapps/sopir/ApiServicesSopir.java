@@ -14,8 +14,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.travelapps.Model.PemesananSopir;
+import com.example.travelapps.Model.Sopir;
 import com.example.travelapps.Model.TiketData;
 import com.example.travelapps.Model.TiketSopir;
+import com.example.travelapps.Model.User;
 import com.example.travelapps.Services.ApiServices;
 
 import org.json.JSONArray;
@@ -49,6 +51,11 @@ public class ApiServicesSopir {
 
     public interface UpdateStatusResponseListener {
         void onSuccess(String message);
+        void onError(String message);
+    }
+
+    public interface  SopirResponseListener{
+        void onSuccess(Sopir sopir);
         void onError(String message);
     }
 
@@ -352,4 +359,92 @@ public class ApiServicesSopir {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
     }
+    public static void getSopirData(Context context, String token, final SopirResponseListener listener) {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, ApiServices.getHOST() + "getsopirbyid.php?id=" + token,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            Log.e("sopir", response);
+                            JSONObject jsonObject = new JSONObject(response);
+                            String message = jsonObject.getString("message");
+                            if (message.equals("success")){
+                                JSONObject userObj = jsonObject.getJSONObject("sopir");
+                                String id = userObj.getString("id_sopir");
+                                String nama = userObj.getString("nama_lengkap");
+                                String notelp = userObj.getString("notelp");
+                                String alamat = userObj.getString("alamat");
+                                String username = userObj.getString("username");
+                                String noSim = userObj.getString("no_SIM");
+                                String active = userObj.getString("active");
+                                Sopir sopir = new Sopir(id, nama, username, noSim, notelp,alamat, active);
+                                listener.onSuccess(sopir);
+                            }
+                        } catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse != null && error.networkResponse.data != null) {
+                            try {
+                                String responseBody = new String(error.networkResponse.data, "utf-8");
+                                JSONObject jsonObject = new JSONObject(responseBody);
+                                String message = jsonObject.getString("message");
+                                listener.onError(message);
+                            } catch (JSONException | UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                                listener.onError("Gagal mendapatkan data sopir: " + e.getMessage());
+                            }
+                        } else {
+                            listener.onError("Gagal mendapatkan data sopir: network response is null");
+                        }
+                    }
+                }) {
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
+    public static void updateUser(Context context, String token, String nama_lengkap, String sim, String notelp, String username, String alamat, final ApiServices.UpdateUserResponseListener listener) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ApiServices.getHOST() + "update-sopir.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            boolean success = jsonObject.getBoolean("success");
+                            String message = jsonObject.getString("message");
+                            listener.onUpdateUserResponse(success, message);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            listener.onUpdateUserResponse(false, "Failed to parse response: " + e.getMessage());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        listener.onUpdateUserResponse(false, "Failed to update user: " + error.getMessage());
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("id", token);
+                params.put("nama_lengkap", nama_lengkap);
+                params.put("notelp", notelp);
+                params.put("username", username);
+                params.put("alamat", alamat);
+                params.put("no_SIM", sim);
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
+
 }

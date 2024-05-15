@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.travelapps.ForgotPasswordActivity;
 import com.example.travelapps.LoginActivity;
 import com.example.travelapps.Model.User;
 import com.example.travelapps.ProfileActivity;
@@ -90,11 +91,19 @@ public class FragmentSettings extends Fragment {
                 SharedPreferences.Editor editor = getActivity().getSharedPreferences("myPrefs", MODE_PRIVATE).edit();
                 editor.remove("isLogin");
                 editor.remove("token");
-                editor.apply(); // Simpan perubahan pada SharedPreferences
+                editor.apply();
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear activity stack
                 startActivity(intent);
                 requireActivity().finish();
+            }
+        });
+        LinearLayout lupaPassword = view.findViewById(R.id.ganti_password);
+        lupaPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), ForgotPasswordActivity.class);
+                startActivity(i);
             }
         });
         ApiServices.getUserData(getContext(), token, new ApiServices.UserResponseListener() {

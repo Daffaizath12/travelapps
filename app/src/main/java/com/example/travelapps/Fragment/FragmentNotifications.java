@@ -1,14 +1,26 @@
 package com.example.travelapps.Fragment;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.travelapps.Adapter.NotifikasiAdapter;
+import com.example.travelapps.Model.Notifikasi;
+import com.example.travelapps.Model.User;
 import com.example.travelapps.R;
+import com.example.travelapps.Services.ApiServices;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,11 +68,40 @@ public class FragmentNotifications extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+    NotifikasiAdapter notifikasiAdapter ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notifications, container, false);
+        View v =  inflater.inflate(R.layout.fragment_notifications, container, false);
+        RecyclerView recyclerView = v.findViewById(R.id.rv_notification);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        SharedPreferences preferences = requireActivity().getSharedPreferences("myPrefs", MODE_PRIVATE);
+        String token = preferences.getString("token", "");
+        ApiServices.getUserData(getContext(), token, new ApiServices.UserResponseListener() {
+            @Override
+            public void onSuccess(User user) {
+                String idUser = user.getId();
+                ApiServices.getNotifikasi(getContext(), idUser, new ApiServices.NotifikasiResponseListener() {
+                    @Override
+                    public void onSuccess(List<Notifikasi> notifikasiList) {
+                        notifikasiAdapter = new NotifikasiAdapter(getContext(), notifikasiList);
+                        recyclerView.setAdapter(notifikasiAdapter);
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        Log.e("notifications" , message);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String message) {
+
+            }
+        });
+        return v;
     }
 }

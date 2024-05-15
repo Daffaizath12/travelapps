@@ -49,7 +49,7 @@ import java.util.TimeZone;
 public class DetailPemesananActivity extends AppCompatActivity {
 
     TextView tvAsal, tvTujuan, tvDate, tvWaktu, tvPenumpang, tvStatus, tvJemput, tvATujuan, tvPembayaran, tvBank, tvVa;
-    AppCompatButton btnBayar;
+//    AppCompatButton btnBayar;
     String orderId = "";
     String idPerjalanan = "";
     Pemesanan.PemesananData pemesanan;
@@ -62,12 +62,12 @@ public class DetailPemesananActivity extends AppCompatActivity {
 
         onBindView();
         getIntentView();
-        btnBayar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(DetailPemesananActivity.this, "hahah", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        btnBayar.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(DetailPemesananActivity.this, "hahah", Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
     public void onBindView(){
@@ -79,7 +79,7 @@ public class DetailPemesananActivity extends AppCompatActivity {
         tvStatus = findViewById(R.id.tvStatus);
         tvJemput = findViewById(R.id.tvAlamatJemput);
         tvATujuan = findViewById(R.id.tvAlamatTujuan);
-        btnBayar = findViewById(R.id.bayarsekarang);
+//        btnBayar = findViewById(R.id.bayarsekarang);
         tvPembayaran = findViewById(R.id.pembayaran);
         tvBank = findViewById(R.id.bank);
         tvVa = findViewById(R.id.va_number);
@@ -100,7 +100,7 @@ public class DetailPemesananActivity extends AppCompatActivity {
             idPerjalanan = pemesanan.getIdPerjalanan();
             String qty = pemesanan.getQty();
             String status1 = pemesanan.getStatus();
-
+            String idUser = pemesanan.getIdUser();
 
             tvAsal.setText(asal);
             tvTujuan.setText(tujuan);
@@ -133,7 +133,42 @@ public class DetailPemesananActivity extends AppCompatActivity {
                                     Log.e("statusPesan", message);
                                 }
                             });
-                        } else if(Objects.equals(status, "pending")){
+                            ApiServices.notifikasi(DetailPemesananActivity.this, idUser, "Pemesanan Tiket", "Pembayaran anda Gagal, transaksi dibatalkan", new ApiServices.RegisterResponseListener() {
+                                @Override
+                                public void onSuccess(String message) {
+                                    Log.e("notifikasi", message);
+                                }
+
+                                @Override
+                                public void onError(String message) {
+                                    Log.e("notifikasi", message);
+                                }
+                            });
+                        } else if (Objects.equals(status, "expire")) {
+                            ApiServices.status(DetailPemesananActivity.this, orderId, "Gagal", new ApiServices.AddLatlongResponseListener() {
+                                @Override
+                                public void onSuccess(String message) {
+                                    Log.e("statusPesan", "berhasil update status gagal");
+                                }
+
+                                @Override
+                                public void onError(String message) {
+                                    Log.e("statusPesan", message);
+                                }
+                            });
+                            ApiServices.notifikasi(DetailPemesananActivity.this, idUser, "Pemesanan Tiket", "Pembayaran anda expired, silahkan lakukan transaksi ulang", new ApiServices.RegisterResponseListener() {
+                                @Override
+                                public void onSuccess(String message) {
+                                    Log.e("notifikasi", message);
+                                }
+
+                                @Override
+                                public void onError(String message) {
+                                    Log.e("notifikasi", message);
+                                }
+                            });
+                        }
+                        else if(Objects.equals(status, "pending")){
                             ApiServices.status(DetailPemesananActivity.this, orderId, "Menunggu", new ApiServices.AddLatlongResponseListener() {
                                 @Override
                                 public void onSuccess(String message) {
@@ -143,6 +178,17 @@ public class DetailPemesananActivity extends AppCompatActivity {
                                 @Override
                                 public void onError(String message) {
                                     Log.e("statusPesan", message);
+                                }
+                            });
+                            ApiServices.notifikasi(DetailPemesananActivity.this, idUser, "Pemesanan Tiket", "Pembayaran anda pending, silahkan lakukan pembayaran", new ApiServices.RegisterResponseListener() {
+                                @Override
+                                public void onSuccess(String message) {
+                                    Log.e("notifikasi", message);
+                                }
+
+                                @Override
+                                public void onError(String message) {
+                                    Log.e("notifikasi", message);
                                 }
                             });
                             tvVa.setVisibility(View.VISIBLE);
@@ -161,6 +207,17 @@ public class DetailPemesananActivity extends AppCompatActivity {
                                     Log.e("statusPesan", message);
                                 }
                             });
+                            ApiServices.notifikasi(DetailPemesananActivity.this, idUser, "Pemesanan Tiket", "Pembayaran anda Berhasil", new ApiServices.RegisterResponseListener() {
+                                @Override
+                                public void onSuccess(String message) {
+                                    Log.e("notifikasi", message);
+                                }
+
+                                @Override
+                                public void onError(String message) {
+                                    Log.e("notifikasi", message);
+                                }
+                            });
                         } else {
                             Log.e("statusPesan", status);
 
@@ -175,12 +232,12 @@ public class DetailPemesananActivity extends AppCompatActivity {
                 });
 
             } else if(Objects.equals(status1, "Menunggu")){
-                btnBayar.setVisibility(View.VISIBLE);
+//                btnBayar.setVisibility(View.VISIBLE);
                 tvPembayaran.setVisibility(View.VISIBLE);
                 tvVa.setVisibility(View.VISIBLE);
                 tvBank.setVisibility(View.VISIBLE);
             } else {
-                btnBayar.setVisibility(View.GONE);
+//                btnBayar.setVisibility(View.GONE);
                 tvPembayaran.setVisibility(View.GONE);
                 tvVa.setVisibility(View.GONE);
                 tvBank.setVisibility(View.GONE);

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.travelapps.Adapter.OnItemTiketClickListener;
 import com.example.travelapps.Adapter.TiketAdapter;
+import com.example.travelapps.Model.Sopir;
 import com.example.travelapps.Model.TiketData;
 import com.example.travelapps.PesanActivity;
 import com.example.travelapps.databinding.FragmentHome2Binding;
@@ -54,6 +55,20 @@ public class HomeFragment extends Fragment implements OnItemTiketClickListener {
         SharedPreferences preferences = getActivity().getSharedPreferences("myPrefs", MODE_PRIVATE);
         idSopir = preferences.getString("id", "");
         getPerjalananSopirFromApi(idSopir);
+        ApiServicesSopir.getSopirData(getContext(), idSopir, new ApiServicesSopir.SopirResponseListener() {
+            @Override
+            public void onSuccess(Sopir sopir) {
+                TextView tvNama = binding.tvNama;
+                tvNama.setText(sopir.getNamaLengkap());
+                TextView tvSim = binding.tvSim;
+                tvSim.setText(sopir.getNoSim());
+            }
+
+            @Override
+            public void onError(String message) {
+
+            }
+        });
         return root;
     }
 

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     tools:context=".Fragment.FragmentNotifications">
 
    <FrameLayout
@@ -20,5 +20,9 @@
            android:fontFamily="@font/poppinsbold"
            android:textColor="#ffffff"/>
    </FrameLayout>
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:id="@+id/rv_notification"
+        android:layout_height="match_parent"/>
 </LinearLayout>

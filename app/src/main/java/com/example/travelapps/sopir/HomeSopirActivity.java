@@ -47,7 +47,7 @@ public class HomeSopirActivity extends AppCompatActivity {
                             selectedFragment = new DashboardFragment();
                             break;
                         case R.id.navigation_notifications:
-                            selectedFragment = new FragmentSettings();
+                            selectedFragment = new NotificationsFragment();
                             break;
                     }
 

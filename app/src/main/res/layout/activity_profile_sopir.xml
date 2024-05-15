@@ -7,7 +7,7 @@
     android:background="@drawable/backgroud"
     android:padding="20dp"
     android:orientation="vertical"
-    tools:context=".ProfileActivity">
+    tools:context=".sopir.ProfileSopirActivity">
     <RelativeLayout
         android:id="@+id/profileSection"
         android:layout_width="match_parent"
@@ -74,21 +74,41 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Email"
+                android:text="Username"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppinsregular"
                 android:textSize="12sp"
                 android:textColor="@color/btn"
                 android:layout_marginBottom="8dp"/>
             <EditText
-                android:id="@+id/et_email"
+                android:id="@+id/et_username"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:paddingStart="8dp"
                 android:textColor="@color/black"
                 android:background="@drawable/custom_et"
                 android:fontFamily="@font/poppinsregular"
-                android:hint="  *****@gmail.com"
+                android:hint="  username"
+                android:padding="8dp"
+                android:textSize="12sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NO. SIM"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/poppinsregular"
+                android:textSize="12sp"
+                android:textColor="@color/btn"
+                android:layout_marginBottom="8dp"/>
+            <EditText
+                android:id="@+id/et_sim"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:paddingStart="8dp"
+                android:textColor="@color/black"
+                android:background="@drawable/custom_et"
+                android:fontFamily="@font/poppinsregular"
+                android:hint="  username"
                 android:padding="8dp"
                 android:textSize="12sp" />
             <TextView

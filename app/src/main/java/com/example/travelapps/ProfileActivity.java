@@ -17,7 +17,6 @@ import com.example.travelapps.Services.ApiServices;
 
 public class ProfileActivity extends AppCompatActivity {
 
-
     EditText etNama, etEmail, etTelp, etAlamat;
     AppCompatButton btnSimpan;
     @Override

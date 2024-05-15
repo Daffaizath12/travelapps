@@ -103,16 +103,21 @@ public class MidtransServices {
                             String fraudStatus = response.getString("fraud_status");
                             String grossAmount = response.getString("gross_amount");
                             String approvalCode = response.optString("approval_code", "");
-                            JSONArray vaNumbersArray = response.getJSONArray("va_numbers");
+//                            JSONArray vaNumbersArray = response.getJSONArray("va_numbers");
                             String bank = "";
                             String va = "";
 
-                            if (vaNumbersArray.length() > 0) {
-                                JSONObject vaObject = vaNumbersArray.getJSONObject(0);
-                                bank = vaObject.getString("bank");
-                                va = vaObject.getString("va_number");
+                            // Check if the key "va_numbers" exists and is not null
+                            if (response.has("va_numbers") && !response.isNull("va_numbers")) {
+                                JSONArray vaNumbersArray = response.getJSONArray("va_numbers");
+                                if (vaNumbersArray.length() > 0) {
+                                    JSONObject vaObject = vaNumbersArray.getJSONObject(0);
+                                    bank = vaObject.getString("bank");
+                                    va = vaObject.getString("va_number");
+                                }
                             }
-                            Bank bank2 = new Bank(bank,va);
+
+                            Bank bank2 = new Bank(bank, va);
 
                             TransactionModel transactionModel = new TransactionModel(
                                     statusCode, statusMessage, transactionId, null, orderId,
@@ -147,5 +152,45 @@ public class MidtransServices {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(request);
     }
+    public void getPaymentLink(final JSONObject requestBody, final PaymentLinkResponseListener listener) {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, "https://api.sandbox.midtrans.com/v1/payment-links", requestBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            String orderId = response.getString("order_id");
+                            String paymentUrl = response.getString("payment_url");
+                            listener.onSuccess(orderId, paymentUrl);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            listener.onError("Error parsing payment link response");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("GetPaymentLink", "Error: " + error.toString());
+                        listener.onError("Error getting payment link: " + error.toString());
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Accept", "application/json");
+                headers.put("Authorization", "Basic " + Base64.encodeToString("SB-Mid-server-yIQsPkGPeYXJDAM2voIw1mp_".getBytes(), Base64.NO_WRAP));
+                return headers;
+            }
+        };
 
+        // Adding request to the request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(request);
+    }
+
+    public interface PaymentLinkResponseListener {
+        void onSuccess(String orderId, String paymentUrl);
+        void onError(String message);
+    }
 }
