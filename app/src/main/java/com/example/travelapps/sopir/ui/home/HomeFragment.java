@@ -50,7 +50,7 @@ public class HomeFragment extends Fragment implements OnItemTiketClickListener {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         tiketDataList = new ArrayList<>();
-        adapter = new TiketAdapter(getContext(), tiketDataList, this);
+        adapter = new TiketAdapter(getContext(), tiketDataList, this, "");
         recyclerView.setAdapter(adapter);
         SharedPreferences preferences = getActivity().getSharedPreferences("myPrefs", MODE_PRIVATE);
         idSopir = preferences.getString("id", "");
@@ -86,7 +86,7 @@ public class HomeFragment extends Fragment implements OnItemTiketClickListener {
 
             @Override
             public void onError(String message) {
-                Toast.makeText(getContext(), "Error: " + message, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "Error: " + message, Toast.LENGTH_SHORT).show();
                 Log.e("HomeFragmentSopir", "Error: " + message);
             }
         });

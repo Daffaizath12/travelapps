@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.travelapps.AboutActivity;
 import com.example.travelapps.ForgotPasswordActivity;
 import com.example.travelapps.LoginActivity;
 import com.example.travelapps.Model.User;
@@ -81,6 +82,7 @@ public class FragmentSettings extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                intent.putExtra("role", "user");
                 startActivity(intent);
             }
         });
@@ -98,6 +100,15 @@ public class FragmentSettings extends Fragment {
                 requireActivity().finish();
             }
         });
+        LinearLayout about = view.findViewById(R.id.about);
+        about.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), AboutActivity.class);
+                startActivity(i);
+            }
+        });
+
         LinearLayout lupaPassword = view.findViewById(R.id.ganti_password);
         lupaPassword.setOnClickListener(new View.OnClickListener() {
             @Override

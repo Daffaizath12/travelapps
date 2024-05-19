@@ -44,6 +44,20 @@
                 android:textSize="14sp" />
 
             <!-- Profile Icon Button -->
+
+            <TextView
+                android:id="@+id/penumpang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginBottom="0dp"
+                android:fontFamily="@font/poppinsregular"
+                android:text="Sisa Tiket : "
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
             <ImageView
                 android:id="@+id/doublearrow"
                 android:layout_width="wrap_content"

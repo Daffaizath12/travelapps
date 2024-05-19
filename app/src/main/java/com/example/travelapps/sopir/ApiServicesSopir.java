@@ -5,6 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -67,6 +68,7 @@ public class ApiServicesSopir {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     String message = jsonObject.getString("message");
+                    Boolean success = jsonObject.getBoolean("success");
                     if (message.equals("Berhasil Login")){
                         JSONObject userObject = jsonObject.getJSONObject("user");
                         String id = userObject.getString("id_sopir");
@@ -75,6 +77,8 @@ public class ApiServicesSopir {
                         editor.putString("id", id);
                         editor.apply();
                         listener.onSuccess(message);
+                    } else if (success.equals(false)) {
+                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e){
                     e.printStackTrace();
@@ -376,7 +380,7 @@ public class ApiServicesSopir {
                                 String alamat = userObj.getString("alamat");
                                 String username = userObj.getString("username");
                                 String noSim = userObj.getString("no_SIM");
-                                String active = userObj.getString("active");
+                                String active = userObj.getString("status");
                                 Sopir sopir = new Sopir(id, nama, username, noSim, notelp,alamat, active);
                                 listener.onSuccess(sopir);
                             }
@@ -433,7 +437,7 @@ public class ApiServicesSopir {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("id", token);
+                params.put("id_sopir", token);
                 params.put("nama_lengkap", nama_lengkap);
                 params.put("notelp", notelp);
                 params.put("username", username);

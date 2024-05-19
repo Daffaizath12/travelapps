@@ -55,5 +55,9 @@ public class TiketData implements Serializable {
     public String getStatus() {
         return status;
     }
+
+    public int getJumlahPenumpangInt() {
+        return Integer.parseInt(jumlahPenumpang);
+    }
 }
 

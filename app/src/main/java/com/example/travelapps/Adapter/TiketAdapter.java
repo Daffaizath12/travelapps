@@ -22,11 +22,13 @@ public class TiketAdapter extends RecyclerView.Adapter<TiketAdapter.TiketViewHol
     private List<TiketData> tiketList;
     private Context context;
     private OnItemTiketClickListener itemClickListener;
+    private String jumlahPenumpang;
 
-    public TiketAdapter(Context context, List<TiketData> tiketList, OnItemTiketClickListener itemClickListener) {
+    public TiketAdapter(Context context, List<TiketData> tiketList, OnItemTiketClickListener itemClickListener, String jumlahPenumpang) {
         this.context = context;
         this.tiketList = tiketList;
         this.itemClickListener = itemClickListener;
+        this.jumlahPenumpang = jumlahPenumpang;
     }
 
     @NonNull
@@ -40,12 +42,20 @@ public class TiketAdapter extends RecyclerView.Adapter<TiketAdapter.TiketViewHol
     public void onBindViewHolder(@NonNull TiketViewHolder holder, int position) {
         TiketData tiket = tiketList.get(position);
         holder.bind(tiket);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        int penumpangRequired = Integer.parseInt(jumlahPenumpang);
+        int penumpangAvailable = tiket.getJumlahPenumpangInt();
+        if (penumpangAvailable < penumpangRequired || penumpangAvailable == 0) {
+            holder.itemView.setAlpha(0.5f);
+            holder.itemView.setOnClickListener(null);
+        } else {
+            holder.itemView.setAlpha(1.0f);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     itemClickListener.onItemClick(tiket);
-            }
-        });
+                }
+            });
+        }
     }
 
 
@@ -55,7 +65,7 @@ public class TiketAdapter extends RecyclerView.Adapter<TiketAdapter.TiketViewHol
     }
 
     class TiketViewHolder extends RecyclerView.ViewHolder {
-        TextView dateTextView, asalTextView, tujuanTextView, waktuTextView, hargaTextView, statusTextView;
+        TextView dateTextView, asalTextView, tujuanTextView, waktuTextView, hargaTextView, statusTextView, penumpangTextView;
 
         TiketViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,6 +75,7 @@ public class TiketAdapter extends RecyclerView.Adapter<TiketAdapter.TiketViewHol
             waktuTextView = itemView.findViewById(R.id.waktu);
             hargaTextView = itemView.findViewById(R.id.harga);
             statusTextView = itemView.findViewById(R.id.status);
+            penumpangTextView = itemView.findViewById(R.id.penumpang);
         }
 
         void bind(TiketData tiket) {
@@ -81,6 +92,7 @@ public class TiketAdapter extends RecyclerView.Adapter<TiketAdapter.TiketViewHol
             String hargaString = String.format("Rp %.2f", tiket.getHarga());
             hargaTextView.setText(hargaString);
             statusTextView.setText(tiket.getStatus());
+            penumpangTextView.setText("Sisa tiket : " + tiket.getJumlahPenumpang());
         }
     }
 }

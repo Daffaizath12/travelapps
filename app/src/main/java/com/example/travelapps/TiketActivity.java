@@ -55,7 +55,7 @@ public class TiketActivity extends AppCompatActivity implements OnItemTiketClick
                 if (tiketData.isEmpty()) {
                     tvNull.setText("Tidak ada tiket perjalanan");
                 }
-                adapter = new TiketAdapter(TiketActivity.this, tiketData, TiketActivity.this);
+                adapter = new TiketAdapter(TiketActivity.this, tiketData, TiketActivity.this, penumpang);
                 recyclerView.setAdapter(adapter);
             }
 

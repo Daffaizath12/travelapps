@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.travelapps.AboutActivity;
 import com.example.travelapps.LoginActivity;
 import com.example.travelapps.Model.Sopir;
 import com.example.travelapps.ProfileActivity;
@@ -36,6 +37,11 @@ public class NotificationsFragment extends Fragment {
 
         binding = FragmentNotifications2Binding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        LinearLayout about = binding.about;
+        about.setOnClickListener(view -> {
+            Intent i = new Intent(getActivity(), AboutActivity.class);
+            startActivity(i);
+        });
         LinearLayout logout = binding.logout;
         logout.setOnClickListener(
                 view -> {
@@ -49,11 +55,13 @@ public class NotificationsFragment extends Fragment {
                     requireActivity().finish();
                  }
         );
+
         RelativeLayout relativeLayout = binding.profileSection;
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                intent.putExtra("role", "sopir");
                 startActivity(intent);
             }
         });
