@@ -37,6 +37,7 @@ import com.codebyashish.googledirectionapi.RouteDrawing;
 import com.codebyashish.googledirectionapi.RouteInfoModel;
 import com.codebyashish.googledirectionapi.RouteListener;
 import com.example.travelapps.Adapter.PenumpangAdapter;
+import com.example.travelapps.Adapter.PenumpangAdapterActive;
 import com.example.travelapps.Adapter.PerjalananSopirAdapter;
 import com.example.travelapps.Model.PemesananSopir;
 import com.example.travelapps.Model.TiketData;
@@ -67,10 +68,12 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
-public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
+public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, PenumpangAdapterActive.OnStatusUpdateListener {
 
     private GoogleMap gMaps;
     final private int FINE_PERMISSION_CODE = 1;
@@ -83,7 +86,7 @@ public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCa
     LatLng userLocation, destinationLocation;
     Polyline currentRoute;
     private List<PemesananSopir> pemesananSopirList;
-    private PenumpangAdapter adapter;
+    private PenumpangAdapterActive adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +97,7 @@ public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCa
         RecyclerView recyclerView = findViewById(R.id.rvUser);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         pemesananSopirList = new ArrayList<>();
-        adapter = new PenumpangAdapter(this, pemesananSopirList);
+        adapter = new PenumpangAdapterActive(this, pemesananSopirList, this);
         recyclerView.setAdapter(adapter);
         Intent i = getIntent();
         if (i.getExtras() != null) {
@@ -125,8 +128,67 @@ public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCa
         });
     }
 
+    private void locationJemputTujuanUser() {
+        ApiServicesSopir.getPenumpangSopirActive(MapsSopirActivity.this, idSopir, idPerjalanan, new ApiServicesSopir.PerjalananResponseListener() {
+            @Override
+            public void onSuccess(List<PemesananSopir> pemesananSopir) {
+                gMaps.clear();
+
+                for (PemesananSopir pemesanan : pemesananSopir) {
+                    LatLng latLngJemput = new LatLng(
+                            Double.parseDouble(pemesanan.getLatitude()),
+                            Double.parseDouble(pemesanan.getLongitude())
+                    );
+                    double distance = calculateDistance(userLocation.latitude, userLocation.longitude, latLngJemput.latitude, latLngJemput.longitude);
+                    pemesanan.setDistance(distance);
+                }
+
+                Collections.sort(pemesananSopir, new Comparator<PemesananSopir>() {
+                    @Override
+                    public int compare(PemesananSopir p1, PemesananSopir p2) {
+                        return Double.compare(p1.getDistance(), p2.getDistance());
+                    }
+                });
+
+                for (PemesananSopir pemesanan : pemesananSopir) {
+                    String namaLengkap = pemesanan.getNamaLengkap();
+                    gMaps.addMarker(new MarkerOptions().position(userLocation).title("Lokasi anda"));
+                    LatLng latLngJemput = new LatLng(
+                            Double.parseDouble(pemesanan.getLatitude()),
+                            Double.parseDouble(pemesanan.getLongitude())
+                    );
+                    gMaps.addMarker(new MarkerOptions()
+                            .position(latLngJemput)
+                            .title("Penjemputan: " + namaLengkap)
+                            .snippet("Alamat Jemput: " + pemesanan.getAlamatJemput()));
+
+                    LatLng latLngTujuan = new LatLng(
+                            Double.parseDouble(pemesanan.getLatTujuan()),
+                            Double.parseDouble(pemesanan.getLngTujuan())
+                    );
+                    gMaps.addMarker(new MarkerOptions()
+                            .position(latLngTujuan)
+                            .title("Tujuan: " + namaLengkap)
+                            .snippet("Alamat Tujuan: " + pemesanan.getAlamatTujuan()));
+
+                    getRouteFromOSRM(userLocation, latLngJemput);
+
+                    getRouteFromOSRM(userLocation, latLngTujuan);
+                }
+
+                pemesananSopirList.clear();
+                pemesananSopirList.addAll(pemesananSopir);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(String message) {
+                Toast.makeText(MapsSopirActivity.this, "Error: " + message, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
     private void locationUser() {
-        ApiServicesSopir.getPenumpangSopir(MapsSopirActivity.this, idSopir, idPerjalanan, new ApiServicesSopir.PerjalananResponseListener() {
+        ApiServicesSopir.getPenumpangSopirActive(MapsSopirActivity.this, idSopir, idPerjalanan, new ApiServicesSopir.PerjalananResponseListener() {
             @Override
             public void onSuccess(List<PemesananSopir> pemesananSopir) {
                 List<LatLng> coordinates = new ArrayList<>();
@@ -153,6 +215,9 @@ public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCa
                 }
 
                 if (nearestMarkerLatLng != null) {
+                    if (currentRoute != null) {
+                        currentRoute.remove();
+                    }
                     getRouteFromOSRM(userLocation, nearestMarkerLatLng);
                 }
                 pemesananSopirList.clear();
@@ -170,25 +235,12 @@ public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCa
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         gMaps = googleMap;
-        gMaps.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(@NonNull Marker marker) {
-                if (currentRoute != null) {
-                    currentRoute.remove();
-                }
-                dialog.setMessage("Rute sedang dimuat , mohon tunggu sebentar");
-                dialog.show();
-                LatLng destinationLatLng = marker.getPosition();
-                getRouteFromOSRM(userLocation, destinationLatLng);
-                return false;
-            }
-        });
-        locationUser();
         LatLng sydney = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         gMaps.addMarker(new MarkerOptions().position(sydney).title("Lokasi Anda"));
         float zoomLevel = 14.0f;
         CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(zoomLevel).build();
         gMaps.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        locationJemputTujuanUser();
     }
 
 
@@ -204,6 +256,17 @@ public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
+    public static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        final int R = 6371;
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c;
+        return distance;
+    }
 
     private void getRouteFromOSRM(LatLng origin, LatLng destination) {
         String url = "http://router.project-osrm.org/route/v1/driving/" +
@@ -263,5 +326,10 @@ public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCa
         if (gMaps != null) {
             gMaps.animateCamera(CameraUpdateFactory.newLatLng(userLocation));
         }
+    }
+
+    @Override
+    public void onStatusUpdated() {
+        locationUser();
     }
 }

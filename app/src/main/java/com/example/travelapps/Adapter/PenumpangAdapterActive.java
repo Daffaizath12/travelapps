@@ -18,20 +18,22 @@ import com.example.travelapps.sopir.ApiServicesSopir;
 
 import java.util.List;
 
-public class PenumpangAdapter extends RecyclerView.Adapter<PenumpangAdapter.PenumpangViewHolder> {
+public class PenumpangAdapterActive extends RecyclerView.Adapter<PenumpangAdapterActive.PenumpangViewHolder> {
 
     private List<PemesananSopir> penumpangList;
     private Context context;
+    private OnStatusUpdateListener onStatusUpdateListener;
 
-    public PenumpangAdapter(Context context, List<PemesananSopir> penumpangList) {
+    public PenumpangAdapterActive(Context context, List<PemesananSopir> penumpangList, OnStatusUpdateListener onStatusUpdateListener) {
         this.context = context;
         this.penumpangList = penumpangList;
+        this.onStatusUpdateListener = onStatusUpdateListener;
     }
 
     @NonNull
     @Override
     public PenumpangViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.penumpang_list_active, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.penumpang_list, parent, false);
         return new PenumpangViewHolder(view);
     }
 
@@ -42,22 +44,47 @@ public class PenumpangAdapter extends RecyclerView.Adapter<PenumpangAdapter.Penu
         holder.txtAlamat.setText(penumpang.getAlamatJemput());
         holder.txtJumlah.setText(penumpang.getQty());
         holder.txtTelp.setText(penumpang.getNotelp());
+        holder.txtUrutan.setText("Penjemputan ke-" + (position + 1));
+//        holder.btnSelesai.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ApiServicesSopir.updateStatus(context, penumpang.getIdPemesanan(), new ApiServicesSopir.UpdateStatusResponseListener() {
+//                    @Override
+//                    public void onSuccess(String message) {
+//                        Toast.makeText(context, "Berhasil update status penjemputan", Toast.LENGTH_SHORT).show();
+//                        if (onStatusUpdateListener != null) {
+//                            onStatusUpdateListener.onStatusUpdated();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onError(String message) {
+//                        Log.e("update-status" , message);
+//                    }
+//                });
+//            }
+//        });
     }
 
     @Override
     public int getItemCount() {
         return penumpangList.size();
     }
-
+    public interface OnStatusUpdateListener {
+        void onStatusUpdated();
+    }
     public class PenumpangViewHolder extends RecyclerView.ViewHolder {
-        TextView txtName, txtAlamat, txtJumlah, txtTelp;
+        TextView txtName, txtAlamat, txtJumlah, txtTelp, txtUrutan;
+//        AppCompatButton btnSelesai;
 
         public PenumpangViewHolder(@NonNull View itemView) {
             super(itemView);
             txtName = itemView.findViewById(R.id.name);
             txtJumlah = itemView.findViewById(R.id.jumlah);
             txtAlamat = itemView.findViewById(R.id.address);
+            txtUrutan = itemView.findViewById(R.id.urutan);
             txtTelp = itemView.findViewById(R.id.telp);
+//            btnSelesai = itemView.findViewById(R.id.btn_selesai);
         }
     }
 }

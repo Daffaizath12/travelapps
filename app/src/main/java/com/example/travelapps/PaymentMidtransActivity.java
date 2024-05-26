@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.os.LocaleListCompat;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Geocoder;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +49,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 import java.util.UUID;
 
@@ -54,7 +57,8 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
     
     TextView tvAsal, tvTujuan, tvWaktu, tvTanggal, tvNama, tvPenumpang, tvTotal;
     EditText etAlamatTujuan;
-    AppCompatButton btnLokasi, btnLokasiMaps, btnBayar;
+    AppCompatButton btnLokasi, btnLokasiMaps, btnBayar, btnMapsTujuan;
+    ImageView btnBack;
     TiketData tiketData;
     String idPerjalanan = "";
     String asal = "";
@@ -71,7 +75,10 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
     double hargaDouble;
     double totalHarga;
     String idOrder = "";
-
+    String lat_jemput = "";
+    String lng_jemput = "";
+    String lat_tujuan="";
+    String lng_tujuan="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,132 +89,58 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
         btnLokasi.setOnClickListener(this);
         btnLokasiMaps.setOnClickListener(this);
         btnBayar.setOnClickListener(this);
+        btnBack.setOnClickListener(this);
+//        btnMapsTujuan.setOnClickListener(this);
         buildUiKit();
     }
 
     @Override
     public void onClick(View view) {
         if (view == btnLokasi) {
-            Intent i = new Intent(PaymentMidtransActivity.this, CurrentLocationActivity.class);
-            startActivity(i);
-        } else if (view == btnLokasiMaps) {
             Intent i = new Intent(PaymentMidtransActivity.this, FromMapsActivity.class);
+            i.putExtra("tiket", tiketData);
+            i.putExtra("id_user", idUser);
+            i.putExtra("nama_user", namaUser);
+            i.putExtra("email_user", emailUser);
+            i.putExtra("telp_user", telpUser);
+            i.putExtra("alamat_user", alamatUser);
+            i.putExtra("penumpang", penumpang);
             startActivity(i);
-        } else {
+        } else if(view == btnBack) {
+            onBackPressed();
+        }
+//        else if (view == btnLokasiMaps) {
+//            Intent i = new Intent(PaymentMidtransActivity.this, FromMapsActivity.class);
+//            i.putExtra("tiket", tiketData);
+//            i.putExtra("id_user", idUser);
+//            i.putExtra("nama_user", namaUser);
+//            i.putExtra("email_user", emailUser);
+//            i.putExtra("telp_user", telpUser);
+//            i.putExtra("alamat_user", alamatUser);
+//            i.putExtra("penumpang", penumpang);
+//            startActivity(i);
+//        }
+        else if (view == btnLokasiMaps){
+            Intent i = new Intent(PaymentMidtransActivity.this, MapsTujuanActivity.class);
+            i.putExtra("tiket", tiketData);
+            i.putExtra("id_user", idUser);
+            i.putExtra("nama_user", namaUser);
+            i.putExtra("email_user", emailUser);
+            i.putExtra("telp_user", telpUser);
+            i.putExtra("alamat_user", alamatUser);
+            i.putExtra("penumpang", penumpang);
+            startActivity(i);
+        }
+        else {
             if (etAlamatTujuan.getText().toString().trim().isEmpty()) {
                 etAlamatTujuan.setText("silahkan isi detail alamat tujuan");
             } else {
-            startPayment();
-//                pembayaran();
+                if (Objects.equals(lat_tujuan, "") && Objects.equals(lng_tujuan, "")){
+                    Toast.makeText(this, "LatLngTujuan tidak ditemukan", Toast.LENGTH_SHORT).show();
+                } else {
+                    startPayment(lat_tujuan, lng_tujuan);
+                }
             }
-        }
-    }
-
-    private void pembayaran() {
-        MidtransServices midtransServices = new MidtransServices(PaymentMidtransActivity.this);
-        idOrder = "PETTA-Express-" + UUID.randomUUID().toString();
-        JSONObject requestBody = new JSONObject();
-        JSONObject transactionDetails = new JSONObject();
-        JSONObject expiry = new JSONObject();
-        JSONObject customerDetails = new JSONObject();
-        JSONArray enabledPaymentsArray = new JSONArray();
-        JSONArray itemDetailsArray = new JSONArray();
-        try {
-            // Transaction details
-            transactionDetails.put("order_id", idOrder );
-            transactionDetails.put("gross_amount", 100000);
-
-            // Expiry details
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm Z", Locale.getDefault());
-            String startTime = sdf.format(new Date());
-            expiry.put("start_time", startTime);
-            expiry.put("duration", 1);
-            expiry.put("unit", "days");
-
-            // Customer details
-            customerDetails.put("first_name", namaUser);
-            customerDetails.put("last_name", namaUser);
-            customerDetails.put("email", emailUser);
-            customerDetails.put("phone", telpUser);
-            customerDetails.put("notes", "Thank you for your purchase. Please follow the instructions to pay.");
-            JSONArray requiredFieldsArray = new JSONArray();
-            requiredFieldsArray.put("first_name");
-            requiredFieldsArray.put("phone");
-            requiredFieldsArray.put("email");
-            customerDetails.put("customer_details_required_fields", requiredFieldsArray);
-
-            // Enabled payments
-            enabledPaymentsArray.put("bca_va");
-            enabledPaymentsArray.put("indomaret");
-            enabledPaymentsArray.put("gopay");
-            enabledPaymentsArray.put("bni_va");
-            enabledPaymentsArray.put("bri_va");
-            enabledPaymentsArray.put("shopeepay");
-            enabledPaymentsArray.put("permata_va");
-
-            // Item details
-            JSONObject itemDetails = new JSONObject();
-            itemDetails.put("id", idPerjalanan);
-            itemDetails.put("name", asal + tujuan);
-            itemDetails.put("price", hargaDouble);
-            itemDetails.put("quantity", Integer.parseInt(penumpang));
-            itemDetails.put("brand", "PETTA Express");
-            itemDetails.put("category", "Furniture");
-            itemDetails.put("merchant_name", "Tour and Travel");
-            itemDetailsArray.put(itemDetails);
-
-            requestBody.put("transaction_details", transactionDetails);
-            requestBody.put("customer_required", false);
-            requestBody.put("usage_limit", 1);
-            requestBody.put("expiry", expiry);
-            requestBody.put("enabled_payments", enabledPaymentsArray);
-            requestBody.put("item_details", itemDetailsArray);
-            requestBody.put("customer_details", customerDetails);
-            requestBody.put("title", "Pembayaran Tiket");
-            requestBody.put("payment_link_type", "FIXED_AMOUNT");
-            SharedPreferences preferences = PaymentMidtransActivity.this.getSharedPreferences("myPrefs", MODE_PRIVATE);
-            String token = preferences.getString("token", "");
-            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-            String tanggalFormatted = sdf1.format(tanggal);
-            ApiServices.checkLatlong(PaymentMidtransActivity.this, token, new ApiServices.CheckLatlongResponseListener() {
-                @Override
-                public void onResult(boolean success, double latitude, double longitude) {
-                    String alamatJemput = getAddressFromLocation(latitude, longitude);
-                    String alamatTujuan = etAlamatTujuan.getText().toString().trim();
-                    ApiServices.pemesanan(PaymentMidtransActivity.this, idUser, idPerjalanan, penumpang, idOrder, alamatJemput, alamatTujuan, waktu, "Menunggu", tanggalFormatted, String.valueOf(totalHarga), new ApiServices.PemesananResponseListener() {
-                        @Override
-                        public void onSuccess(String message) {
-                            midtransServices.getPaymentLink(requestBody, new MidtransServices.PaymentLinkResponseListener() {
-                                @Override
-                                public void onSuccess(String orderId, String paymentUrl) {
-                                    Intent intent = new Intent(PaymentMidtransActivity.this, PaymentMidtransWebView.class);
-                                    intent.putExtra("payment_url", paymentUrl);
-                                    startActivity(intent);
-                                }
-
-                                @Override
-                                public void onError(String message) {
-                                    // Handle error
-                                    Toast.makeText(PaymentMidtransActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onError(String message) {
-                            Toast.makeText(PaymentMidtransActivity.this, "Gagal melakukan pemesanan" + message, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                }
-
-                @Override
-                public void onError(String message) {
-                    Log.e("Error", "Gagal mendapatkan alamat, " + message);
-                }
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 
@@ -223,6 +156,8 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
         btnLokasi = findViewById(R.id.btnCurrentLoc);
         btnLokasiMaps = findViewById(R.id.maps);
         btnBayar = findViewById(R.id.bayarsekarang);
+        btnBack = findViewById(R.id.backtodetailpemesanan);
+//        btnMapsTujuan = findViewById(R.id.mapsTujuan);
     }
     private void getIntentData(Intent intent){
         if (intent.getExtras() != null) {
@@ -253,6 +188,30 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
             tvTotal.setText(String.valueOf(totalHarga));
             tvNama.setText(namaUser);
             tvPenumpang.setText(penumpang);
+
+//            String latJemputCurrent = intent.getStringExtra("lat_jemput_f");
+//            String lngJemputCurrent = intent.getStringExtra("lng_jemput_f");
+            String latJemputMaps = intent.getStringExtra("lat_tujuan");
+            String lngJemputMaps = intent.getStringExtra("lng_tujuan");
+//            if (latJemputCurrent != null && lngJemputCurrent != null ) {
+//                lat_jemput = latJemputCurrent;
+//                lng_jemput = lngJemputCurrent;
+//                Log.e("latJemput:" , latJemputCurrent);
+//                Log.e("lngJemput:" , lngJemputCurrent);
+//            } else {
+//                Log.e("ltlngJemput:" , "gada");
+//            }
+            if (latJemputMaps != null && lngJemputMaps != null ) {
+                lat_tujuan = latJemputMaps;
+                lng_tujuan = lngJemputMaps;
+                Log.e("latTujuan:" , latJemputMaps);
+                Log.e("lngTUjuan:" , lngJemputMaps);
+            } else {
+                Log.e("ltlngTujuan:" , "gada");
+            }
+
+//            lat_tujuan = intent.getStringExtra("lat_tujuan");
+//            lng_tujuan = intent.getStringExtra("lng_tujuan");
         }
     }
 
@@ -448,7 +407,7 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
         return null;
     }
 
-    private void startPayment(){
+    private void startPayment(String latTujuan, String lngTujuan){
         idOrder = "PETTA-Express-" + UUID.randomUUID().toString();
         SharedPreferences preferences = PaymentMidtransActivity.this.getSharedPreferences("myPrefs", MODE_PRIVATE);
         String token = preferences.getString("token", "");
@@ -459,38 +418,38 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
             public void onResult(boolean success, double latitude, double longitude) {
                 String alamatJemput = getAddressFromLocation(latitude, longitude);
                 String alamatTujuan = etAlamatTujuan.getText().toString().trim();
-                        ApiServices.pemesanan(PaymentMidtransActivity.this, idUser, idPerjalanan, penumpang, idOrder, alamatJemput, alamatTujuan, waktu, "Menunggu", tanggalFormatted, String.valueOf(totalHarga), new ApiServices.PemesananResponseListener() {
-                            @Override
-                            public void onSuccess(String message) {
-                                UiKitApi.Companion.getDefaultInstance().startPaymentUiFlow(
-                                        PaymentMidtransActivity.this,
-                                        launcher,
-                                        initTransactionDetails(),
-                                        initCustomerDetails(),
-                                        initItemDetails(),
-                                        initCreditCard(),
-                                        idUser,
-                                        null,
-                                        null,
-                                        null,
-                                        initExpiry(),
-                                        null,
-                                        Arrays.asList(PaymentType.CREDIT_CARD, PaymentType.BANK_TRANSFER, PaymentType.GOPAY, PaymentType.SHOPEEPAY, PaymentType.UOB_EZPAY),
-                                        null,
-                                        null,
-                                        null,
-                                        null,
-                                        "Cash1",
-                                        "Debit2",
-                                        "Credit3"
-                                );
-                            }
+                ApiServices.pemesanan(PaymentMidtransActivity.this, idUser, idPerjalanan, penumpang, idOrder, alamatJemput, alamatTujuan, waktu, "Menunggu", tanggalFormatted, String.valueOf(totalHarga), latTujuan,lngTujuan, new ApiServices.PemesananResponseListener() {
+                    @Override
+                    public void onSuccess(String message) {
+                        UiKitApi.Companion.getDefaultInstance().startPaymentUiFlow(
+                                PaymentMidtransActivity.this,
+                                launcher,
+                                initTransactionDetails(),
+                                initCustomerDetails(),
+                                initItemDetails(),
+                                initCreditCard(),
+                                idUser,
+                                null,
+                                null,
+                                null,
+                                initExpiry(),
+                                PaymentMethod.BANK_TRANSFER,
+                                Arrays.asList(PaymentType.CREDIT_CARD, PaymentType.BANK_TRANSFER, PaymentType.GOPAY, PaymentType.SHOPEEPAY, PaymentType.UOB_EZPAY),
+                                null,
+                                null,
+                                null,
+                                null,
+                                "Cash1",
+                                "Debit2",
+                                "Credit3"
+                        );
+                    }
 
-                            @Override
-                            public void onError(String message) {
-                                Toast.makeText(PaymentMidtransActivity.this, "Gagal melakukan pemesanan" + message, Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                    @Override
+                    public void onError(String message) {
+                        Toast.makeText(PaymentMidtransActivity.this, "Gagal melakukan pemesanan" + message, Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
 
@@ -502,5 +461,4 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
 
 
     }
-
 }

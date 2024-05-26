@@ -50,7 +50,7 @@ public class HomeFragment extends Fragment implements OnItemTiketClickListener {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         tiketDataList = new ArrayList<>();
-        adapter = new TiketAdapter(getContext(), tiketDataList, this, "");
+        adapter = new TiketAdapter(getContext(), tiketDataList, this, "0");
         recyclerView.setAdapter(adapter);
         SharedPreferences preferences = getActivity().getSharedPreferences("myPrefs", MODE_PRIVATE);
         idSopir = preferences.getString("id", "");
@@ -76,7 +76,7 @@ public class HomeFragment extends Fragment implements OnItemTiketClickListener {
         Date currentDate = Calendar.getInstance().getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String currentDateStr = sdf.format(currentDate);
-        ApiServicesSopir.getPerjalananSopirNow(getContext(), idSopir, currentDateStr, new ApiServicesSopir.PerjalananNowResponseListener() {
+        ApiServicesSopir.getPerjalananSopirNow(getContext(), idSopir, new ApiServicesSopir.PerjalananNowResponseListener() {
             @Override
             public void onSuccess(List<TiketData> tiketDataListResponse) {
                 tiketDataList.clear();

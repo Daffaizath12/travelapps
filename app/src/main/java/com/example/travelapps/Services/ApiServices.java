@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ApiServices {
-    private static String HOST = "http://192.168.0.117/ProjectTA/api/";
+    private static String HOST = "http://192.168.120.87/ProjectTA/api/";
 
     public static String getHOST() {
         return HOST;
@@ -86,7 +86,49 @@ public class ApiServices {
         void onSuccess(List<Notifikasi> notifikasiList);
         void onError(String message);
     }
-
+    public interface GetCityResponseListener {
+        void onSuccess(JSONObject response);
+        void onError(String message);
+    }
+    public static void getCity(Context context, GetCityResponseListener listener) {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, HOST + "getcity.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    Boolean success = jsonObject.getBoolean("success");
+                    if (success) {
+                        listener.onSuccess(jsonObject);
+                    } else {
+                        listener.onError("Failed to retrieve city list");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    listener.onError("Failed to parse response: " + e.getMessage());
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse != null && error.networkResponse.data != null) {
+                            try {
+                                String responseBody = new String(error.networkResponse.data, "utf-8");
+                                JSONObject jsonObject = new JSONObject(responseBody);
+                                String message = jsonObject.getString("message");
+                                listener.onError("Error: " + message);
+                            } catch (UnsupportedEncodingException | JSONException e) {
+                                e.printStackTrace();
+                                listener.onError("Failed to parse error response: " + e.getMessage());
+                            }
+                        } else {
+                            listener.onError("Network error: response is null");
+                        }
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
     public static void login(Context context, String email, String pass, LoginResponseListener listener) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST + "login.php", new Response.Listener<String>() {
             @Override
@@ -537,7 +579,7 @@ public class ApiServices {
         requestQueue.add(stringRequest);
     }
 
-    public static void pemesanan(Context context, String id_user, String id_perjalanan, String qty, String order_id, String alamat_jemput, String alamat_tujuan, String waktu_jemput,String status, String tglBerangkat, String harga , PemesananResponseListener listener) {
+    public static void pemesanan(Context context, String id_user, String id_perjalanan, String qty, String order_id, String alamat_jemput, String alamat_tujuan, String waktu_jemput,String status, String tglBerangkat, String harga , String lattujuan, String lngtujuan, PemesananResponseListener listener) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST + "pesanan.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -595,6 +637,8 @@ public class ApiServices {
                 params.put("qty", qty);
                 params.put("tanggal_berangkat", tglBerangkat);
                 params.put("harga", harga);
+                params.put("lat_tujuan", lattujuan);
+                params.put("lng_tujuan", lngtujuan);
                 return params;
             }
         };

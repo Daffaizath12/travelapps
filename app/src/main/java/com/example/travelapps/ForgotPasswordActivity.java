@@ -36,12 +36,21 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_forgot_password);
         etEmail = findViewById(R.id.et_email);
         btnSend = findViewById(R.id.btn_send);
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendResetPasswordRequest();
-            }
-        });
+        String email = etEmail.getText().toString().trim();
+
+            btnSend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (email.isEmpty()) {
+                        Toast.makeText(ForgotPasswordActivity.this, "Silahkan masukkan email anda", Toast.LENGTH_SHORT);
+                    } else {
+                    Intent intent = new Intent(ForgotPasswordActivity.this, NewPasswordActivity.class);
+                    intent.putExtra("email", email);
+                    startActivity(intent);
+                }
+                }
+            });
+
     }
     private void sendResetPasswordRequest() {
         String email = etEmail.getText().toString().trim();

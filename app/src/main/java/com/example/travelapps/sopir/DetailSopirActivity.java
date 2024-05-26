@@ -46,7 +46,7 @@ public class DetailSopirActivity extends AppCompatActivity {
             idSopir = i.getStringExtra("id");
         }
 
-        ApiServicesSopir.getPenumpangSopir(this, idSopir, idPerjalanan, new ApiServicesSopir.PerjalananResponseListener() {
+        ApiServicesSopir.getPenumpangSopirActive(this, idSopir, idPerjalanan, new ApiServicesSopir.PerjalananResponseListener() {
             @Override
             public void onSuccess(List<PemesananSopir> pemesananSopir) {
                 pemesananSopirList.clear();

@@ -169,8 +169,76 @@ public class ApiServicesSopir {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
     }
-    public static void getPenumpangSopir(Context context, String idSopir,String id_perjalanan, PerjalananResponseListener listener) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, ApiServices.getHOST() + "getperjalanansopir.php", new Response.Listener<String>() {
+//    public static void getPenumpangSopir(Context context, String idSopir,String id_perjalanan, PerjalananResponseListener listener) {
+//        StringRequest stringRequest = new StringRequest(Request.Method.POST, ApiServices.getHOST() + "getperjalanansopir.php", new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                Log.e("Response", response);
+//                try {
+//                    JSONArray jsonArray = new JSONArray(response);
+//                    List<PemesananSopir> pemesananSopirList = new ArrayList<>();
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+//                        String idPemesanan = jsonObject.getString("id_pemesanan");
+//                        String idUser = jsonObject.getString("id_user");
+//                        String idPerjalanan = jsonObject.getString("id_perjalanan");
+//                        String orderId = jsonObject.getString("order_id");
+//                        String alamatJemput = jsonObject.getString("alamat_jemput");
+//                        String alamatTujuan = jsonObject.getString("alamat_tujuan");
+//                        String waktuJemput = jsonObject.getString("waktu_jemput");
+//                        String status = jsonObject.getString("status");
+//                        String tanggalPesan = jsonObject.getString("tanggal_pesan");
+//                        String tanggalBerangkat = jsonObject.getString("tanggal_berangkat");
+//                        String qty = jsonObject.getString("qty");
+//                        String harga = jsonObject.getString("harga");
+//                        String namaLengkap = jsonObject.getString("nama_lengkap");
+//                        String username = jsonObject.getString("username");
+//                        String notelp = jsonObject.getString("notelp");
+//                        String email = jsonObject.getString("email");
+//                        String alamat = jsonObject.getString("alamat");
+//                        String idRole = jsonObject.getString("id_role");
+//                        String password = jsonObject.getString("password");
+//                        String latitude = jsonObject.getString("latitude");
+//                        String longitude = jsonObject.getString("longitude");
+//                        String token = jsonObject.getString("token");
+//                        String kotaAsal = jsonObject.getString("kota_asal");
+//                        String kotaTujuan = jsonObject.getString("kota_tujuan");
+//                        String tanggal = jsonObject.getString("tanggal");
+//                        String waktuKeberangkatan = jsonObject.getString("waktu_keberangkatan");
+//                        String jumlahPenumpang = jsonObject.getString("jumlah_penumpang");
+//                        String idSopir = jsonObject.getString("id_sopir");
+//
+//                        PemesananSopir pemesananSopir = new PemesananSopir(idPemesanan, idUser, idPerjalanan, orderId, alamatJemput, alamatTujuan, waktuJemput, status, tanggalPesan, tanggalBerangkat, qty, harga, namaLengkap, username, notelp, email, alamat, idRole, password, latitude, longitude, token, kotaAsal, kotaTujuan, tanggal, waktuKeberangkatan, jumlahPenumpang, idSopir);
+//                        pemesananSopirList.add(pemesananSopir);
+//                    }
+//                    listener.onSuccess(pemesananSopirList);
+//                } catch (JSONException e){
+//                    e.printStackTrace();
+//                    listener.onError("Failed to parse response: " + e.getMessage());
+//                }
+//            }
+//        },
+//                new Response.ErrorListener(){
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        listener.onError("Failed to retrieve data: " + error.getMessage());
+//                    }
+//                })
+//        {
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<>();
+//                params.put("id_sopir", idSopir);
+//                params.put("id_perjalanan", id_perjalanan);
+//                return params;
+//            }
+//        };
+//        RequestQueue requestQueue = Volley.newRequestQueue(context);
+//        requestQueue.add(stringRequest);
+//    }
+//
+    public static void getPenumpangSopirActive(Context context, String idSopir,String id_perjalanan, PerjalananResponseListener listener) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ApiServices.getHOST() + "getperjalanansopiractive.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.e("Response", response);
@@ -207,8 +275,12 @@ public class ApiServicesSopir {
                         String waktuKeberangkatan = jsonObject.getString("waktu_keberangkatan");
                         String jumlahPenumpang = jsonObject.getString("jumlah_penumpang");
                         String idSopir = jsonObject.getString("id_sopir");
+                        String idmobil = jsonObject.getString("mobil_id");
+                        String latTujuan = jsonObject.getString("lat_tujuan");
+                        String lngTujuan = jsonObject.getString("lng_tujuan");
 
-                        PemesananSopir pemesananSopir = new PemesananSopir(idPemesanan, idUser, idPerjalanan, orderId, alamatJemput, alamatTujuan, waktuJemput, status, tanggalPesan, tanggalBerangkat, qty, harga, namaLengkap, username, notelp, email, alamat, idRole, password, latitude, longitude, token, kotaAsal, kotaTujuan, tanggal, waktuKeberangkatan, jumlahPenumpang, idSopir);
+
+                        PemesananSopir pemesananSopir = new PemesananSopir(idPemesanan, idUser, idPerjalanan, orderId, alamatJemput, alamatTujuan, waktuJemput, status, tanggalPesan, tanggalBerangkat, qty, harga, namaLengkap, username, notelp, email, alamat, idRole, password, latitude, longitude, token, kotaAsal, kotaTujuan, tanggal, waktuKeberangkatan, jumlahPenumpang, idSopir, idmobil, latTujuan, lngTujuan);
                         pemesananSopirList.add(pemesananSopir);
                     }
                     listener.onSuccess(pemesananSopirList);
@@ -236,8 +308,9 @@ public class ApiServicesSopir {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
     }
-    public static void getPerjalananSopirNow(Context context, String idSopir, String tanggal, PerjalananNowResponseListener listener) {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, ApiServices.getHOST() + "getdaftar.php?id_sopir=" + idSopir + "&tanggal=" + tanggal, new Response.Listener<String>() {
+
+    public static void getPerjalananSopirNow(Context context, String idSopir, PerjalananNowResponseListener listener) {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, ApiServices.getHOST() + "getdaftar.php?id_sopir=" + idSopir, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.e("Response", response);
@@ -258,7 +331,7 @@ public class ApiServicesSopir {
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
                         try {
-                            ntanggal = sdf.parse(tanggal);
+                            ntanggal = sdf.parse(tanggalPerjalanan);
                         } catch (ParseException e) {
                             e.printStackTrace();
                             continue;
@@ -329,8 +402,8 @@ public class ApiServicesSopir {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
     }
-    public static void updateStatus(Context context, String idSopir, String idPerjalanan, String status, UpdateStatusResponseListener listener) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, ApiServices.getHOST() + "update_status_sopir.php",
+    public static void updateStatus(Context context, String idPemesanan, UpdateStatusResponseListener listener) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ApiServices.getHOST() + "update-status-penjemputan.php",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -353,9 +426,7 @@ public class ApiServicesSopir {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("id_sopir", idSopir);
-                params.put("id_perjalanan", idPerjalanan);
-                params.put("status", status);
+                params.put("id_pemesanan", idPemesanan);
                 return params;
             }
         };

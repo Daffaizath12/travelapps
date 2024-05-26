@@ -3,6 +3,7 @@ package com.example.travelapps;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -27,14 +28,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class NewPasswordActivity extends AppCompatActivity {
-    EditText etPassword;
+    EditText etPassword, etPasswordConfirm, etPasswordOld;
     AppCompatButton btnUpdate;
     RequestQueue requestQueue;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_password);
         etPassword = findViewById(R.id.et_password);
+        etPasswordOld = findViewById(R.id.et_password_old);
+        etPasswordConfirm = findViewById(R.id.et_password_confirm);
         btnUpdate = findViewById(R.id.btn_update);
         requestQueue = Volley.newRequestQueue(this);
         Intent i = getIntent();
@@ -43,15 +47,19 @@ public class NewPasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String password = etPassword.getText().toString().trim();
+                String confirm = etPassword.getText().toString().trim();
                 if (password.isEmpty()) {
-                    Toast.makeText(NewPasswordActivity.this, "Please enter NewPassword", Toast.LENGTH_SHORT).show();
-                } else {
-                newPassword(email, etPassword.getText().toString().trim());
+                    Toast.makeText(NewPasswordActivity.this, "Silahkan masukkan password baru", Toast.LENGTH_SHORT).show();
+                } else if(!password.equals(confirm)){
+                    Toast.makeText(NewPasswordActivity.this, "Password harus sama", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                newPassword(email, password, etPasswordOld.getText().toString().trim());
             }}
         });
     }
 
-    private void newPassword(final String email, final String new_password){
+    private void newPassword(final String email, final String new_password, String oldPassword){
         String url = ApiServices.getHOST() + "new-password.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -87,6 +95,7 @@ public class NewPasswordActivity extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("email", email);
+                params.put("old_password", oldPassword);
                 params.put("new_password", new_password);
                 return params;
             }

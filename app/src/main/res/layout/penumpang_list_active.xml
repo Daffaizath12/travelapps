@@ -37,23 +37,23 @@
                     android:textSize="13sp"
                     android:text=" x "/>
                 <TextView
-                android:id="@+id/jumlah"
+                    android:id="@+id/jumlah"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/poppinsbold"
+                    android:textSize="13sp"
+                    android:text="1"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:fontFamily="@font/poppinsbold"
-                android:textSize="13sp"
-                android:text="1"/>
-            </LinearLayout>
-
-        <TextView
-            android:id="@+id/address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:fontFamily="@font/poppinsregular"
-            android:textSize="12sp"
-            android:text="Alamat User"/>
+                android:fontFamily="@font/poppinsregular"
+                android:textSize="12sp"
+                android:text="Alamat User"/>
             <TextView
                 android:id="@+id/telp"
                 android:layout_width="wrap_content"
@@ -62,14 +62,6 @@
                 android:fontFamily="@font/poppinsregular"
                 android:textSize="12sp"
                 android:text="Telp User"/>
-            <TextView
-                android:id="@+id/urutan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:fontFamily="@font/poppinsregular"
-                android:textSize="12sp"
-                android:text="Tujuan User"/>
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

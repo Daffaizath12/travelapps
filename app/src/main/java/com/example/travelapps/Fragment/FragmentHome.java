@@ -14,12 +14,21 @@ import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.travelapps.Adapter.InfoAdapter;
+import com.example.travelapps.Adapter.KotaAdapter;
 import com.example.travelapps.R;
+import com.example.travelapps.Services.ApiServices;
 import com.example.travelapps.TiketActivity;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,44 +88,114 @@ public class FragmentHome extends Fragment {
         }
     }
 
-    EditText etPenumpang, etAsal, etTujuan;
+    EditText etPenumpang;
     Button btnPesan;
+    private Spinner spinnerKotaAsal;
+    private Spinner spinnerKotaTujuan;
+    private KotaAdapter kotaAsalAdapter;
+    private KotaAdapter kotaTujuanAdapter;
+
+    String selectedKotaAsal = "";
+    String selectedKotaTujuan = "";
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-//        recyclerView = view.findViewById(R.id.recyclerView);
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-//        recyclerView.setLayoutManager(layoutManager);
-//        adapter = new InfoAdapter(getContext(), itemList);
-//        recyclerView.setAdapter(adapter);
-//        startAutoScroll();
-        etAsal = view.findViewById(R.id.etAsal);
-        etTujuan = view.findViewById(R.id.etTujuan);
+
         etPenumpang = view.findViewById(R.id.etPenumpang);
         etPenumpang.setFilters(new InputFilter[]{new InputFilterMinMax("1", "10")});
+        spinnerKotaAsal = view.findViewById(R.id.spinner_asal);
+        spinnerKotaTujuan = view.findViewById(R.id.spinner_tujuan);
+
+        // Inisialisasi adapter dengan list kosong
+        kotaAsalAdapter = new KotaAdapter(getContext(), new ArrayList<>());
+        kotaTujuanAdapter = new KotaAdapter(getContext(), new ArrayList<>());
+
+        // Set adapter ke spinner
+        spinnerKotaAsal.setAdapter(kotaAsalAdapter);
+        spinnerKotaTujuan.setAdapter(kotaTujuanAdapter);
+        ApiServices.getCity(getContext(), new ApiServices.GetCityResponseListener() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    JSONArray kotaAsalArray = response.getJSONArray("kota_asal");
+                    JSONArray kotaTujuanArray = response.getJSONArray("kota_tujuan");
+
+                    List<String> kotaAsalList = new ArrayList<>();
+                    List<String> kotaTujuanList = new ArrayList<>();
+
+                    for (int i = 0; i < kotaAsalArray.length(); i++) {
+                        kotaAsalList.add(kotaAsalArray.getString(i));
+                    }
+
+                    for (int i = 0; i < kotaTujuanArray.length(); i++) {
+                        kotaTujuanList.add(kotaTujuanArray.getString(i));
+                    }
+
+                    // Update adapter dengan data baru
+                    kotaAsalAdapter.clear();
+                    kotaAsalAdapter.addAll(kotaAsalList);
+                    kotaAsalAdapter.notifyDataSetChanged();
+
+                    kotaTujuanAdapter.clear();
+                    kotaTujuanAdapter.addAll(kotaTujuanList);
+                    kotaTujuanAdapter.notifyDataSetChanged();
+
+                    spinnerKotaAsal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            selectedKotaAsal = (String) adapterView.getItemAtPosition(i);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+                            // Do nothing
+                        }
+                    });
+
+                    spinnerKotaTujuan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            selectedKotaTujuan = (String) adapterView.getItemAtPosition(i);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+                            // Do nothing
+                        }
+                    });
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(String message) {
+                // Handle error
+            }
+        });
 
         btnPesan = view.findViewById(R.id.buttonPesanSekarang);
         btnPesan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String asal = etAsal.getText().toString().trim();
-                String tujuan = etTujuan.getText().toString().trim();
                 String penumpang = etPenumpang.getText().toString().trim();
 
-                if (asal.isEmpty()) {
-                    etAsal.setError("Silahkan isi asal kota anda");
-                } else if (tujuan.isEmpty()){
-                    etTujuan.setError("Silakan isi tujuan kota anda");
-                } else if (asal.equals(tujuan)) {
-                    etTujuan.setError("Tujuan tidak boleh sama dengan asal");
+
+                if (selectedKotaAsal.isEmpty()) {
+                    Toast.makeText(getContext(), "Silahkan isi asal kota anda", Toast.LENGTH_SHORT).show();
+                } else if (selectedKotaTujuan.isEmpty()){
+                    Toast.makeText(getContext(), "Silahkan isi tujuan kota anda", Toast.LENGTH_SHORT).show();
+                } else if (selectedKotaAsal.equals(selectedKotaTujuan)) {
+                    Toast.makeText(getContext(), "Tujuan tidak boleh sama dengan asal", Toast.LENGTH_SHORT).show();
                 } else if (penumpang.isEmpty()) {
                     etPenumpang.setError("Silakan isi jumlah penumpang");
                 } else {
                     Intent intent = new Intent(getActivity(), TiketActivity.class);
-                    intent.putExtra("asal", asal);
-                    intent.putExtra("tujuan", tujuan);
+                    intent.putExtra("asal", selectedKotaAsal);
+                    intent.putExtra("tujuan", selectedKotaTujuan);
                     intent.putExtra("penumpang", penumpang);
                     startActivity(intent);
                 }
@@ -124,25 +203,6 @@ public class FragmentHome extends Fragment {
         });
 
         return view;
-    }
-
-    private void startAutoScroll() {
-        final int scrollSpeed = 10000; // Durasi antara setiap perpindahan item (dalam milidetik)
-        final Handler handler = new Handler();
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                int currentPosition = layoutManager.findFirstVisibleItemPosition();
-                int nextPosition = currentPosition + 1;
-                if (nextPosition >= adapter.getItemCount()) {
-                    nextPosition = 0;
-                }
-                recyclerView.smoothScrollToPosition(nextPosition);
-                handler.postDelayed(this, scrollSpeed);
-            }
-        };
-        handler.postDelayed(runnable, scrollSpeed);
     }
 
     public class InputFilterMinMax implements InputFilter {
@@ -174,4 +234,5 @@ public class FragmentHome extends Fragment {
             return b > a ? c >= a && c <= b : c >= b && c <= a;
         }
     }
+
 }

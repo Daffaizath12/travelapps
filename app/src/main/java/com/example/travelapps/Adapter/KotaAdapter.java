@@ -5,9 +5,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.travelapps.Model.Kota;
@@ -15,60 +17,40 @@ import com.example.travelapps.R;
 
 import java.util.List;
 
-public class KotaAdapter extends RecyclerView.Adapter<KotaAdapter.KotaViewHolder> {
+public class KotaAdapter extends ArrayAdapter<String> {
 
-    private Context mContext;
-    private List<Kota> mKotaList;
-    private String kotaTerpilih;
+    private Context context;
+    private List<String> kotaList;
 
-    public KotaAdapter(Context context, List<Kota> kotaList) {
-        mContext = context;
-        mKotaList = kotaList;
-        kotaTerpilih = "";
+    public KotaAdapter(@NonNull Context context, @NonNull List<String> kotaList) {
+        super(context, 0, kotaList);
+        this.context = context;
+        this.kotaList = kotaList;
     }
 
     @NonNull
     @Override
-    public KotaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_kota, parent, false);
-        return new KotaViewHolder(view);
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        return initView(position, convertView, parent);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull KotaViewHolder holder, int position) {
-        Kota kota = mKotaList.get(position);
-        holder.namaKota.setText(kota.getNama());
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                kotaTerpilih = mKotaList.get(holder.getAdapterPosition()).getNama();
-                Log.e("kotaterpilih", kotaTerpilih);
-            }
-        });
+    public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        return initView(position, convertView, parent);
     }
 
-
-    @Override
-    public int getItemCount() {
-        return mKotaList.size();
-    }
-
-    public String getKotaTerpilih() {
-        return kotaTerpilih;
-    }
-
-    public void updateData(List<Kota> newData) {
-        mKotaList.clear();
-        mKotaList.addAll(newData);
-        notifyDataSetChanged();
-    }
-    public static class KotaViewHolder extends RecyclerView.ViewHolder {
-        TextView namaKota;
-
-        public KotaViewHolder(@NonNull View itemView) {
-            super(itemView);
-            namaKota = itemView.findViewById(R.id.nama_kota);
+    private View initView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.spiner_item, parent, false);
         }
+
+        TextView textViewName = convertView.findViewById(R.id.names);
+        String currentKota = getItem(position);
+
+        if (currentKota != null) {
+            textViewName.setText(currentKota);
+        }
+
+        return convertView;
     }
 }

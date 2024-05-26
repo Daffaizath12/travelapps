@@ -29,8 +29,12 @@ public class PemesananSopir {
     private String waktuKeberangkatan;
     private String jumlahPenumpang;
     private String idSopir;
+    private String mobilId;
+    private String latTujuan;
+    private String lngTujuan;
+    private double distance;
 
-    public PemesananSopir(String idPemesanan, String idUser, String idPerjalanan, String orderId, String alamatJemput, String alamatTujuan, String waktuJemput, String status, String tanggalPesan, String tanggalBerangkat, String qty, String harga, String namaLengkap, String username, String notelp, String email, String alamat, String idRole, String password, String latitude, String longitude, String token, String kotaAsal, String kotaTujuan, String tanggal, String waktuKeberangkatan, String jumlahPenumpang, String idSopir) {
+    public PemesananSopir(String idPemesanan, String idUser, String idPerjalanan, String orderId, String alamatJemput, String alamatTujuan, String waktuJemput, String status, String tanggalPesan, String tanggalBerangkat, String qty, String harga, String namaLengkap, String username, String notelp, String email, String alamat, String idRole, String password, String latitude, String longitude, String token, String kotaAsal, String kotaTujuan, String tanggal, String waktuKeberangkatan, String jumlahPenumpang, String idSopir, String mobilId, String latTujuan, String lngTujuan) {
         this.idPemesanan = idPemesanan;
         this.idUser = idUser;
         this.idPerjalanan = idPerjalanan;
@@ -59,9 +63,10 @@ public class PemesananSopir {
         this.waktuKeberangkatan = waktuKeberangkatan;
         this.jumlahPenumpang = jumlahPenumpang;
         this.idSopir = idSopir;
+        this.mobilId = mobilId;
+        this.latTujuan = latTujuan;
+        this.lngTujuan = lngTujuan;
     }
-
-    // Getter methods
 
     public String getIdPemesanan() {
         return idPemesanan;
@@ -173,6 +178,27 @@ public class PemesananSopir {
 
     public String getIdSopir() {
         return idSopir;
+    }
+
+    public String getMobilId() {
+        return mobilId;
+    }
+
+
+    public String getLatTujuan() {
+        return latTujuan;
+    }
+
+    public String getLngTujuan() {
+        return lngTujuan;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 }
 
