@@ -13,8 +13,14 @@
         app:cardElevation="0dp"
         android:layout_height="wrap_content">
         <LinearLayout
-            android:layout_margin="15dp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:layout_width="225dp"
             android:orientation="vertical"
             android:layout_height="wrap_content">
             <LinearLayout
@@ -71,6 +77,18 @@
                 android:textSize="12sp"
                 android:text="Tujuan User"/>
         </LinearLayout>
-
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_weight="1"
+                android:id="@+id/btn_selesai"
+                style="@android:style/Widget.Button"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:background="@drawable/button_shape"
+                android:fontFamily="@font/poppinssemibold"
+                android:text="Selesai"
+                android:layout_gravity="end|bottom"
+                android:textColor="@color/main" />
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

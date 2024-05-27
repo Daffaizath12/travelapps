@@ -342,8 +342,8 @@ public class ApiServices {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
     }
-    public static void showPerjalanan(Context context,String kotaAsal, String kotaTujuan, final PerjalananResponseListener listener) {
-        String url = HOST + "schedule.php?kota_asal=" + kotaAsal + "&kota_tujuan=" + kotaTujuan ;
+    public static void showPerjalanan(Context context,String kotaAsal, String kotaTujuan, String tanggal, final PerjalananResponseListener listener) {
+        String url = HOST + "schedule.php?kota_asal=" + kotaAsal + "&kota_tujuan=" + kotaTujuan + "&tanggal=" +tanggal ;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override

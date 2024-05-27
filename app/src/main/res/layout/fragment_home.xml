@@ -156,6 +156,33 @@
                     android:paddingStart="10dp"
                     android:inputType="number"
                     android:hint="Jumlah Penumpang" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tanggal Berangkat"
+                    android:layout_marginStart="5dp"
+                    android:layout_gravity="start"
+                    android:fontFamily="@font/poppinsregular"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="8dp"
+                    android:textColor="@color/btn"
+                    android:layout_marginTop="8dp"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:id="@+id/et_tanggal"
+                    android:background="@drawable/custom_et"
+                    android:drawableLeft="@drawable/ic_baseline_date_range_24"
+                    android:drawablePadding="8dp"
+                    android:hint="Klik untuk mengatur tanggal keberangkatan"
+                    android:padding="8dp"
+                    android:fontFamily="@font/poppinsregular"
+                    android:textSize="12sp"
+                    android:inputType="none"
+                    android:textColor="@color/black"
+                    android:textColorHighlight="@color/cardview_dark_background"
+                    android:clickable="false"
+                    android:focusable="false"/>
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/buttonPesanSekarang"
                     android:layout_width="match_parent"

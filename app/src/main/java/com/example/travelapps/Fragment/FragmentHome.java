@@ -1,6 +1,7 @@
 package com.example.travelapps.Fragment;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -30,8 +32,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -88,7 +93,7 @@ public class FragmentHome extends Fragment {
         }
     }
 
-    EditText etPenumpang;
+    EditText etPenumpang, etTanggal;
     Button btnPesan;
     private Spinner spinnerKotaAsal;
     private Spinner spinnerKotaTujuan;
@@ -96,7 +101,9 @@ public class FragmentHome extends Fragment {
     private KotaAdapter kotaTujuanAdapter;
 
     String selectedKotaAsal = "";
+    String formattedDate = "";
     String selectedKotaTujuan = "";
+    private DatePickerDialog.OnDateSetListener mDate;
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -104,6 +111,7 @@ public class FragmentHome extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         etPenumpang = view.findViewById(R.id.etPenumpang);
+        etTanggal = view.findViewById(R.id.et_tanggal);
         etPenumpang.setFilters(new InputFilter[]{new InputFilterMinMax("1", "10")});
         spinnerKotaAsal = view.findViewById(R.id.spinner_asal);
         spinnerKotaTujuan = view.findViewById(R.id.spinner_tujuan);
@@ -111,7 +119,19 @@ public class FragmentHome extends Fragment {
         // Inisialisasi adapter dengan list kosong
         kotaAsalAdapter = new KotaAdapter(getContext(), new ArrayList<>());
         kotaTujuanAdapter = new KotaAdapter(getContext(), new ArrayList<>());
+        mDate = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
+                Calendar selectedDate = Calendar.getInstance();
+                selectedDate.set(year, month, dayOfMonth);
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                formattedDate = dateFormat.format(selectedDate.getTime());
+
+                etTanggal.setText(formattedDate);
+            }
+        };
         // Set adapter ke spinner
         spinnerKotaAsal.setAdapter(kotaAsalAdapter);
         spinnerKotaTujuan.setAdapter(kotaTujuanAdapter);
@@ -196,6 +216,7 @@ public class FragmentHome extends Fragment {
                     Intent intent = new Intent(getActivity(), TiketActivity.class);
                     intent.putExtra("asal", selectedKotaAsal);
                     intent.putExtra("tujuan", selectedKotaTujuan);
+                    intent.putExtra("tanggal", formattedDate);
                     intent.putExtra("penumpang", penumpang);
                     startActivity(intent);
                 }

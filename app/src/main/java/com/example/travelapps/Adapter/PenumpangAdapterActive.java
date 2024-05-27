@@ -45,25 +45,25 @@ public class PenumpangAdapterActive extends RecyclerView.Adapter<PenumpangAdapte
         holder.txtJumlah.setText(penumpang.getQty());
         holder.txtTelp.setText(penumpang.getNotelp());
         holder.txtUrutan.setText("Penjemputan ke-" + (position + 1));
-//        holder.btnSelesai.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ApiServicesSopir.updateStatus(context, penumpang.getIdPemesanan(), new ApiServicesSopir.UpdateStatusResponseListener() {
-//                    @Override
-//                    public void onSuccess(String message) {
-//                        Toast.makeText(context, "Berhasil update status penjemputan", Toast.LENGTH_SHORT).show();
-//                        if (onStatusUpdateListener != null) {
-//                            onStatusUpdateListener.onStatusUpdated();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onError(String message) {
-//                        Log.e("update-status" , message);
-//                    }
-//                });
-//            }
-//        });
+        holder.btnSelesai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ApiServicesSopir.updateStatus(context, penumpang.getIdPemesanan(), new ApiServicesSopir.UpdateStatusResponseListener() {
+                    @Override
+                    public void onSuccess(String message) {
+                        Toast.makeText(context, "Berhasil update status penjemputan", Toast.LENGTH_SHORT).show();
+                        if (onStatusUpdateListener != null) {
+                            onStatusUpdateListener.onStatusUpdated();
+                        }
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        Log.e("update-status" , message);
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -75,7 +75,7 @@ public class PenumpangAdapterActive extends RecyclerView.Adapter<PenumpangAdapte
     }
     public class PenumpangViewHolder extends RecyclerView.ViewHolder {
         TextView txtName, txtAlamat, txtJumlah, txtTelp, txtUrutan;
-//        AppCompatButton btnSelesai;
+        AppCompatButton btnSelesai;
 
         public PenumpangViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,7 +84,7 @@ public class PenumpangAdapterActive extends RecyclerView.Adapter<PenumpangAdapte
             txtAlamat = itemView.findViewById(R.id.address);
             txtUrutan = itemView.findViewById(R.id.urutan);
             txtTelp = itemView.findViewById(R.id.telp);
-//            btnSelesai = itemView.findViewById(R.id.btn_selesai);
+            btnSelesai = itemView.findViewById(R.id.btn_selesai);
         }
     }
 }

@@ -330,6 +330,6 @@ public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCa
 
     @Override
     public void onStatusUpdated() {
-        locationUser();
+        locationJemputTujuanUser();
     }
 }

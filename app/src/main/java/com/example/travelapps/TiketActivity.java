@@ -27,6 +27,7 @@ public class TiketActivity extends AppCompatActivity implements OnItemTiketClick
     String kotaAsal;
     String kotaTujuan;
     String penumpang;
+    String tanggal;
     Perjalanan perjalanan;
     TextView tvNull;
     ImageView ivBack;
@@ -45,11 +46,12 @@ public class TiketActivity extends AppCompatActivity implements OnItemTiketClick
            kotaAsal = intent.getStringExtra("asal");
            kotaTujuan = intent.getStringExtra("tujuan");
            penumpang = intent.getStringExtra("penumpang");
+           tanggal = intent.getStringExtra("tanggal");
 
            Log.e("intent", kotaAsal + kotaTujuan + penumpang);
         }
 
-        ApiServices.showPerjalanan(this, kotaAsal, kotaTujuan, new ApiServices.PerjalananResponseListener() {
+        ApiServices.showPerjalanan(this, kotaAsal, kotaTujuan, tanggal, new ApiServices.PerjalananResponseListener() {
             @Override
             public void onSuccess(List<TiketData> tiketData) {
                 if (tiketData.isEmpty()) {
