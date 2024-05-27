@@ -3,6 +3,8 @@ package com.example.travelapps.Fragment;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -115,7 +117,21 @@ public class FragmentHome extends Fragment {
         etPenumpang.setFilters(new InputFilter[]{new InputFilterMinMax("1", "10")});
         spinnerKotaAsal = view.findViewById(R.id.spinner_asal);
         spinnerKotaTujuan = view.findViewById(R.id.spinner_tujuan);
+        etTanggal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
 
+                DatePickerDialog dialog = new DatePickerDialog(getContext(),
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        mDate, year,month,day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
         // Inisialisasi adapter dengan list kosong
         kotaAsalAdapter = new KotaAdapter(getContext(), new ArrayList<>());
         kotaTujuanAdapter = new KotaAdapter(getContext(), new ArrayList<>());
