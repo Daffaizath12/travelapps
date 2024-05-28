@@ -179,48 +179,11 @@ public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCa
                 pemesananSopirList.clear();
                 pemesananSopirList.addAll(pemesananSopir);
                 adapter.notifyDataSetChanged();
-
             }
 
             @Override
             public void onError(String message) {
-                if (message.equals("Data tidak ditemukan")) {
-                    destinationLocation();
-                } else {
                 Toast.makeText(MapsSopirActivity.this, "Error: " + message, Toast.LENGTH_LONG).show();
-            }
-            }
-        });
-    }
-    private void destinationLocation(){
-        ApiServicesSopir.getPenumpangSopir(MapsSopirActivity.this, idSopir, idPerjalanan, new ApiServicesSopir.PerjalananResponseListener() {
-            @Override
-            public void onSuccess(List<PemesananSopir> pemesananSopir) {
-                gMaps.clear();
-                for (PemesananSopir pemesanan : pemesananSopir) {
-                    String namaLengkap = pemesanan.getNamaLengkap();
-                    gMaps.addMarker(new MarkerOptions().position(userLocation).title("Lokasi anda"));
-
-                    LatLng latLngTujuan = new LatLng(
-                            Double.parseDouble(pemesanan.getLatTujuan()),
-                            Double.parseDouble(pemesanan.getLngTujuan())
-                    );
-                    gMaps.addMarker(new MarkerOptions()
-                            .position(latLngTujuan)
-                            .title("Tujuan: " + namaLengkap)
-                            .snippet("Alamat Tujuan: " + pemesanan.getAlamatTujuan()));
-                    
-                    getRouteFromOSRM(userLocation, latLngTujuan);
-                    pemesananSopirList.clear();
-                    pemesananSopirList.addAll(pemesananSopir);
-                    adapter.notifyDataSetChanged();
-                }
-
-            }
-
-            @Override
-            public void onError(String message) {
-
             }
         });
     }
