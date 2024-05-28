@@ -23,11 +23,16 @@ public class PenumpangAdapterActive extends RecyclerView.Adapter<PenumpangAdapte
     private List<PemesananSopir> penumpangList;
     private Context context;
     private OnStatusUpdateListener onStatusUpdateListener;
+    private boolean isDestinationLocation = false;
 
     public PenumpangAdapterActive(Context context, List<PemesananSopir> penumpangList, OnStatusUpdateListener onStatusUpdateListener) {
         this.context = context;
         this.penumpangList = penumpangList;
         this.onStatusUpdateListener = onStatusUpdateListener;
+    }
+
+    public void setDestinationLocation(boolean isDestinationLocation) {
+        this.isDestinationLocation = isDestinationLocation;
     }
 
     @NonNull
@@ -44,6 +49,7 @@ public class PenumpangAdapterActive extends RecyclerView.Adapter<PenumpangAdapte
         holder.txtAlamat.setText(penumpang.getAlamatJemput());
         holder.txtJumlah.setText(penumpang.getQty());
         holder.txtTelp.setText(penumpang.getNotelp());
+<<<<<<< Updated upstream
         holder.txtUrutan.setText("Penjemputan ke-" + (position + 1));
 //        holder.btnSelesai.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -64,6 +70,36 @@ public class PenumpangAdapterActive extends RecyclerView.Adapter<PenumpangAdapte
 //                });
 //            }
 //        });
+=======
+
+        if (isDestinationLocation) {
+            holder.btnSelesai.setVisibility(View.GONE);
+            holder.txtUrutan.setVisibility(View.GONE);
+        } else {
+            holder.txtUrutan.setVisibility(View.VISIBLE);
+            holder.txtUrutan.setText("Penjemputan ke-" + (position + 1));
+            holder.btnSelesai.setVisibility(View.VISIBLE);
+            holder.btnSelesai.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ApiServicesSopir.updateStatus(context, penumpang.getIdPemesanan(), new ApiServicesSopir.UpdateStatusResponseListener() {
+                        @Override
+                        public void onSuccess(String message) {
+                            Toast.makeText(context, "Berhasil update status penjemputan", Toast.LENGTH_SHORT).show();
+                            if (onStatusUpdateListener != null) {
+                                onStatusUpdateListener.onStatusUpdated();
+                            }
+                        }
+
+                        @Override
+                        public void onError(String message) {
+                            Log.e("update-status" , message);
+                        }
+                    });
+                }
+            });
+        }
+>>>>>>> Stashed changes
     }
 
     @Override
