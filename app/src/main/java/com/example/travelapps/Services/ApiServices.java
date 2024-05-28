@@ -196,7 +196,7 @@ public class ApiServices {
         requestQueue.add(stringRequest);
     }
 
-    public static void register(Context context, String nama, String notelp, String email, String alamat, String password, RegisterResponseListener listener) {
+    public static void register(Context context, String nama, String notelp, String email, String alamat, String password, String nik, RegisterResponseListener listener) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST + "register.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -249,6 +249,7 @@ public class ApiServices {
                 params.put("password", password);
                 params.put("alamat", alamat);
                 params.put("notelp", notelp);
+                params.put("nik", nik);
                 return params;
             }
         };
@@ -429,7 +430,8 @@ public class ApiServices {
                                 String email = userObj.getString("email");
                                 String longitude = userObj.getString("longitude");
                                 String latitude = userObj.getString("latitude");
-                                User user = new User(id, nama,notelp,email,alamat,latitude, longitude);
+                                String nik = userObj.getString("nik");
+                                User user = new User(id, nama,notelp,email,alamat,latitude, longitude, nik);
                                 listener.onSuccess(user);
                             }
                         } catch (JSONException e){
@@ -460,7 +462,7 @@ public class ApiServices {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
     }
-    public static void updateUser(Context context, String token, String nama_lengkap, String notelp, String email, String alamat, final UpdateUserResponseListener listener) {
+    public static void updateUser(Context context, String token, String nama_lengkap, String notelp, String email, String alamat, String nik, final UpdateUserResponseListener listener) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST + "update-user.php",
                 new Response.Listener<String>() {
                     @Override
@@ -490,6 +492,7 @@ public class ApiServices {
                 params.put("notelp", notelp);
                 params.put("email", email);
                 params.put("alamat", alamat);
+                params.put("nik", nik);
                 return params;
             }
         };

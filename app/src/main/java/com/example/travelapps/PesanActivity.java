@@ -33,6 +33,7 @@ public class PesanActivity extends AppCompatActivity {
     Double hargaDouble;
     String penumpang = "";
     String idUser = "";
+    String nik = "";
     String namaUser = "";
     String emailUser = "";
     String alamatUser = "";
@@ -40,7 +41,7 @@ public class PesanActivity extends AppCompatActivity {
     String jumlahPenumpang = "";
     String tanggalFormatted = "";
 
-    TextView tvDate, tvAsal, tvWaktu, tvTujuan, tvNamaUser, tvEmailUser, tvNotelpUser, tvPenumpang;
+    TextView tvDate, tvAsal, tvWaktu, tvTujuan, tvNamaUser, tvEmailUser, tvNotelpUser, tvPenumpang, tvNik;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +67,12 @@ public class PesanActivity extends AppCompatActivity {
                 notelpUser = user.getNotelp();
                 emailUser = user.getEmail();
                 alamatUser = user.getAlamat();
+                nik = user.getNik();
 
                 tvNamaUser.setText(namaUser);
                 tvNotelpUser.setText(notelpUser);
                 tvEmailUser.setText(emailUser);
+                tvNik.setText(nik);
             }
 
             @Override
@@ -86,6 +89,7 @@ public class PesanActivity extends AppCompatActivity {
         tvNamaUser = findViewById(R.id.txtNama);
         tvEmailUser = findViewById(R.id.txtEmail);
         tvNotelpUser = findViewById(R.id.txtNoTelp);
+        tvNik = findViewById(R.id.txtNik);
 
         Intent intent = getIntent();
         if (intent.getExtras() != null){
@@ -126,6 +130,7 @@ public class PesanActivity extends AppCompatActivity {
                         intent.putExtra("tiket", tiketData);
                         intent.putExtra("id_user", idUser);
                         intent.putExtra("nama_user", namaUser);
+                        intent.putExtra("nik_user", nik);
                         intent.putExtra("email_user", emailUser);
                         intent.putExtra("telp_user", notelpUser);
                         intent.putExtra("alamat_user", alamatUser);

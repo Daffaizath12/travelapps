@@ -184,11 +184,31 @@
                         android:textColor="@color/black"
                         android:textSize="14sp" />
                     <TextView
-                        android:id="@+id/telp"
+                        android:id="@+id/nik"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/txtEmail"
+                        android:text="NIK"
+                        android:fontFamily="@font/poppinsregular"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:id="@+id/txtNik"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/nik"
+                        android:layout_alignParentStart="true"
+                        android:text=""
+                        android:fontFamily="@font/poppinsbold"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/telp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/txtNik"
                         android:text="No. Telp"
                         android:fontFamily="@font/poppinsregular"
                         android:textColor="@color/black"

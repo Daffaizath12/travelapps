@@ -96,6 +96,26 @@
                     android:padding="8dp"
                     android:textSize="12sp" />
                 <TextView
+                    android:id="@+id/tv_nik"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nik"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/poppinsregular"
+                    android:textSize="12sp"
+                    android:textColor="@color/btn"
+                    android:layout_marginBottom="8dp"/>
+                <EditText
+                    android:id="@+id/et_nik"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:paddingStart="8dp"
+                    android:textColor="@color/black"
+                    android:background="@drawable/custom_et"
+                    android:fontFamily="@font/poppinsregular"
+                    android:padding="8dp"
+                    android:textSize="12sp" />
+                <TextView
                     android:id="@+id/tv_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

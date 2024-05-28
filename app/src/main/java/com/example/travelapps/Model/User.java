@@ -8,8 +8,9 @@ public class User {
     private String alamat;
     private String latitude;
     private String longitude;
+    private String nik;
 
-    public User(String id, String nama, String notelp, String email, String alamat, String latitude, String longitude) {
+    public User(String id, String nama, String notelp, String email, String alamat, String latitude, String longitude, String nik) {
         this.id = id;
         this.nama = nama;
         this.notelp = notelp;
@@ -17,6 +18,7 @@ public class User {
         this.alamat = alamat;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.nik = nik;
     }
 
     public String getId() {
@@ -45,5 +47,8 @@ public class User {
 
     public String getLongitude() {
         return longitude;
+    }
+    public String getNik() {
+        return nik;
     }
 }

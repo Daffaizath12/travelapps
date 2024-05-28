@@ -20,7 +20,7 @@ public class DaftarActivity extends AppCompatActivity implements View.OnClickLis
 
     Button btnDaftar;
     TextView tvLogin;
-    EditText etEmail, etNama, etNotelp, etAlamat, etPassword;
+    EditText etEmail, etNama, etNotelp, etAlamat, etPassword, etNik;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -35,6 +35,8 @@ public class DaftarActivity extends AppCompatActivity implements View.OnClickLis
         etNotelp = findViewById(R.id.et_telp);
         etAlamat = findViewById(R.id.et_alamat);
         etPassword = findViewById(R.id.et_password);
+        etNik = findViewById(R.id.et_nik);
+
 
         btnDaftar.setOnClickListener(this);
         tvLogin.setOnClickListener(this);
@@ -51,6 +53,7 @@ public class DaftarActivity extends AppCompatActivity implements View.OnClickLis
             String notelp = etNotelp.getText().toString().trim();
             String nama = etNama.getText().toString().trim();
             String alamat = etAlamat.getText().toString().trim();
+            String nik = etNik.getText().toString().trim();
 
             if (email.isEmpty()) {
                 etEmail.setError("Email tidak boleh kosong");
@@ -62,12 +65,16 @@ public class DaftarActivity extends AppCompatActivity implements View.OnClickLis
                 etNotelp.setError("No. Telepon tidak boleh lebih dari 13 angka");
             } else if(alamat.isEmpty()){
                 etAlamat.setError("Alamat tidak boleh kosong");
+            }else if (nik.isEmpty()) {
+                etNik.setError("Nik tidak boleh kosong");
+            }else if (nik.length() > 16) {
+                etNik.setError("Nik tidak boleh lebih dari 16 angka");
             } else if (password.isEmpty()){
                 etPassword.setError("Password tidak boleh kosong");
             } else if (password.length() < 8) {
                 etPassword.setError("Panjang password harus minimal 8 karakter");
             } else {
-                ApiServices.register(DaftarActivity.this, nama, notelp, email, alamat, password, new ApiServices.RegisterResponseListener() {
+                ApiServices.register(DaftarActivity.this, nama, notelp, email, alamat, password, nik, new ApiServices.RegisterResponseListener() {
                     @Override
                     public void onSuccess(String message) {
                         Toast.makeText(DaftarActivity.this, "Berhasil Daftar Akun", Toast.LENGTH_LONG).show();

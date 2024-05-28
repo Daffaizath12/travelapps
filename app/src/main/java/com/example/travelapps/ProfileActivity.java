@@ -20,9 +20,9 @@ import com.example.travelapps.sopir.HomeSopirActivity;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    EditText etNama, etEmail, etTelp, etAlamat, etUsername, etSim;
+    EditText etNama, etEmail, etTelp, etAlamat, etUsername, etSim, etNik;
     AppCompatButton btnSimpan;
-    TextView tvUsername, tvEmail, tvSim;
+    TextView tvUsername, tvEmail, tvSim, tvNik;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +37,8 @@ public class ProfileActivity extends AppCompatActivity {
         if (role.equals("sopir")) {
             tvEmail.setVisibility(View.GONE);
             etEmail.setVisibility(View.GONE);
+            tvNik.setVisibility(View.GONE);
+            etNik.setVisibility(View.GONE);
             ApiServicesSopir.getSopirData(this, id, new ApiServicesSopir.SopirResponseListener() {
                 @Override
                 public void onSuccess(Sopir sopir) {
@@ -96,6 +98,7 @@ public class ProfileActivity extends AppCompatActivity {
                 etEmail.setText(user.getEmail());
                 etTelp.setText(user.getNotelp());
                 etAlamat.setText(user.getAlamat());
+                etNik.setText(user.getNik());
             }
 
             @Override
@@ -106,7 +109,7 @@ public class ProfileActivity extends AppCompatActivity {
         btnSimpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ApiServices.updateUser(ProfileActivity.this, token, etNama.getText().toString().trim(), etTelp.getText().toString().trim(), etEmail.getText().toString().trim(), etAlamat.getText().toString().trim(), new ApiServices.UpdateUserResponseListener() {
+                ApiServices.updateUser(ProfileActivity.this, token, etNama.getText().toString().trim(), etTelp.getText().toString().trim(), etEmail.getText().toString().trim(), etAlamat.getText().toString().trim(), etNik.getText().toString().trim(), new ApiServices.UpdateUserResponseListener() {
                     @Override
                     public void onUpdateUserResponse(boolean success, String message) {
                         Intent intent = new Intent(ProfileActivity.this, HomeActivity.class);
@@ -128,7 +131,7 @@ public class ProfileActivity extends AppCompatActivity {
         etAlamat = findViewById(R.id.et_alamat);
         etUsername = findViewById(R.id.et_username);
         etSim = findViewById(R.id.et_sim);
-
+        etNik = findViewById(R.id.et_nik);
         tvEmail = findViewById(R.id.tv_email);
         tvSim = findViewById(R.id.tv_sim);
         tvUsername = findViewById(R.id.tv_username);

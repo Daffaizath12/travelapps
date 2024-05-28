@@ -121,6 +121,29 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="NIK"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="start"
+            android:fontFamily="@font/poppinsregular"
+            android:textSize="12sp"
+            android:textColor="@color/btn"
+            android:layout_marginBottom="8dp"/>
+        <EditText
+            android:id="@+id/et_nik"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingStart="8dp"
+            android:textColor="@color/black"
+            android:background="@drawable/custom_et"
+            android:fontFamily="@font/poppinsregular"
+            android:hint="  Masukan NIK Anda"
+            android:padding="8dp"
+            android:inputType="number"
+            android:maxLength="16"
+            android:textSize="12sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Password"
             android:layout_marginTop="10dp"
             android:layout_gravity="start"
