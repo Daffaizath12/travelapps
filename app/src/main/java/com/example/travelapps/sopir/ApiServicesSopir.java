@@ -315,47 +315,54 @@ public class ApiServicesSopir {
             public void onResponse(String response) {
                 Log.e("Response", response);
                 try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    List<PemesananSopir> pemesananSopirList = new ArrayList<>();
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String idPemesanan = jsonObject.getString("id_pemesanan");
-                        String idUser = jsonObject.getString("id_user");
-                        String idPerjalanan = jsonObject.getString("id_perjalanan");
-                        String orderId = jsonObject.getString("order_id");
-                        String alamatJemput = jsonObject.getString("alamat_jemput");
-                        String alamatTujuan = jsonObject.getString("alamat_tujuan");
-                        String waktuJemput = jsonObject.getString("waktu_jemput");
-                        String status = jsonObject.getString("status");
-                        String tanggalPesan = jsonObject.getString("tanggal_pesan");
-                        String tanggalBerangkat = jsonObject.getString("tanggal_berangkat");
-                        String qty = jsonObject.getString("qty");
-                        String harga = jsonObject.getString("harga");
-                        String namaLengkap = jsonObject.getString("nama_lengkap");
-                        String username = jsonObject.getString("username");
-                        String notelp = jsonObject.getString("notelp");
-                        String email = jsonObject.getString("email");
-                        String alamat = jsonObject.getString("alamat");
-                        String idRole = jsonObject.getString("id_role");
-                        String password = jsonObject.getString("password");
-                        String latitude = jsonObject.getString("latitude");
-                        String longitude = jsonObject.getString("longitude");
-                        String token = jsonObject.getString("token");
-                        String kotaAsal = jsonObject.getString("kota_asal");
-                        String kotaTujuan = jsonObject.getString("kota_tujuan");
-                        String tanggal = jsonObject.getString("tanggal");
-                        String waktuKeberangkatan = jsonObject.getString("waktu_keberangkatan");
-                        String jumlahPenumpang = jsonObject.getString("jumlah_penumpang");
-                        String idSopir = jsonObject.getString("id_sopir");
-                        String idmobil = jsonObject.getString("mobil_id");
-                        String latTujuan = jsonObject.getString("lat_tujuan");
-                        String lngTujuan = jsonObject.getString("lng_tujuan");
+                    JSONObject jsonResponse = new JSONObject(response);
+                    String message = jsonResponse.getString("message");
+                    if (message.equals("ok")) {
+                        JSONArray jsonArray = jsonResponse.getJSONArray("data");
+                        List<PemesananSopir> pemesananSopirList = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            String idPemesanan = jsonObject.getString("id_pemesanan");
+                            String idUser = jsonObject.getString("id_user");
+                            String idPerjalanan = jsonObject.getString("id_perjalanan");
+                            String orderId = jsonObject.getString("order_id");
+                            String alamatJemput = jsonObject.getString("alamat_jemput");
+                            String alamatTujuan = jsonObject.getString("alamat_tujuan");
+                            String waktuJemput = jsonObject.getString("waktu_jemput");
+                            String status = jsonObject.getString("status");
+                            String tanggalPesan = jsonObject.getString("tanggal_pesan");
+                            String tanggalBerangkat = jsonObject.getString("tanggal_berangkat");
+                            String qty = jsonObject.getString("qty");
+                            String harga = jsonObject.getString("harga");
+                            String namaLengkap = jsonObject.getString("nama_lengkap");
+                            String username = jsonObject.getString("username");
+                            String notelp = jsonObject.getString("notelp");
+                            String email = jsonObject.getString("email");
+                            String alamat = jsonObject.getString("alamat");
+                            String idRole = jsonObject.getString("id_role");
+                            String password = jsonObject.getString("password");
+                            String latitude = jsonObject.getString("latitude");
+                            String longitude = jsonObject.getString("longitude");
+                            String token = jsonObject.getString("token");
+                            String kotaAsal = jsonObject.getString("kota_asal");
+                            String kotaTujuan = jsonObject.getString("kota_tujuan");
+                            String tanggal = jsonObject.getString("tanggal");
+                            String waktuKeberangkatan = jsonObject.getString("waktu_keberangkatan");
+                            String jumlahPenumpang = jsonObject.getString("jumlah_penumpang");
+                            String idSopir = jsonObject.getString("id_sopir");
+                            String idmobil = jsonObject.getString("mobil_id");
+                            String latTujuan = jsonObject.getString("lat_tujuan");
+                            String lngTujuan = jsonObject.getString("lng_tujuan");
 
 
-                        PemesananSopir pemesananSopir = new PemesananSopir(idPemesanan, idUser, idPerjalanan, orderId, alamatJemput, alamatTujuan, waktuJemput, status, tanggalPesan, tanggalBerangkat, qty, harga, namaLengkap, username, notelp, email, alamat, idRole, password, latitude, longitude, token, kotaAsal, kotaTujuan, tanggal, waktuKeberangkatan, jumlahPenumpang, idSopir, idmobil, latTujuan, lngTujuan);
-                        pemesananSopirList.add(pemesananSopir);
+
+                            PemesananSopir pemesananSopir = new PemesananSopir(idPemesanan, idUser, idPerjalanan, orderId, alamatJemput, alamatTujuan, waktuJemput, status, tanggalPesan, tanggalBerangkat, qty, harga, namaLengkap, username, notelp, email, alamat, idRole, password, latitude, longitude, token, kotaAsal, kotaTujuan, tanggal, waktuKeberangkatan, jumlahPenumpang, idSopir, idmobil, latTujuan, lngTujuan);
+                            pemesananSopirList.add(pemesananSopir);
+                        }
+                        listener.onSuccess(pemesananSopirList);
+                    } else if(message.equals("Data tidak ditemukan")) {
+                        listener.onError("Data tidak ditemukan");
                     }
-                    listener.onSuccess(pemesananSopirList);
                 } catch (JSONException e){
                     e.printStackTrace();
                     listener.onError("Failed to parse response: " + e.getMessage());

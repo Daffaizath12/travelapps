@@ -33,6 +33,7 @@ public class PemesananSopir {
     private String latTujuan;
     private String lngTujuan;
     private double distance;
+    private double distanceTujuan;
 
     public PemesananSopir(String idPemesanan, String idUser, String idPerjalanan, String orderId, String alamatJemput, String alamatTujuan, String waktuJemput, String status, String tanggalPesan, String tanggalBerangkat, String qty, String harga, String namaLengkap, String username, String notelp, String email, String alamat, String idRole, String password, String latitude, String longitude, String token, String kotaAsal, String kotaTujuan, String tanggal, String waktuKeberangkatan, String jumlahPenumpang, String idSopir, String mobilId, String latTujuan, String lngTujuan) {
         this.idPemesanan = idPemesanan;
@@ -199,6 +200,14 @@ public class PemesananSopir {
 
     public void setDistance(double distance) {
         this.distance = distance;
+    }
+
+    public double getDistanceTujuan() {
+        return distanceTujuan;
+    }
+
+    public void setDistanceTujuan(double distanceTujuan) {
+        this.distanceTujuan = distanceTujuan;
     }
 }
 
