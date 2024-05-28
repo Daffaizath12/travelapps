@@ -63,6 +63,9 @@ public class TiketActivity extends AppCompatActivity implements OnItemTiketClick
 
             @Override
             public void onError(String message) {
+                if (message.equals("Tidak ada tiket perjalanan")) {
+                    tvNull.setText("Tidak ada tiket perjalanan");
+                }
                 Log.e("Gagal mendapatkan data", message);
             }
         });

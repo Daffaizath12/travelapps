@@ -379,6 +379,8 @@ public class ApiServices {
                                     tiketDataList.add(tiketData);
                                 }
                                 listener.onSuccess(tiketDataList);
+                            } else {
+                                listener.onError("Tidak ada tiket perjalanan");
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
