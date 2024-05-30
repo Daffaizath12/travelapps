@@ -17,7 +17,7 @@
         <RelativeLayout
             android:id="@+id/TiketSection"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="120dp"
             android:background="@drawable/card_border"
             android:padding="16dp">
 

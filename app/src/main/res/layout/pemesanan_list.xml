@@ -17,7 +17,7 @@
         <RelativeLayout
             android:id="@+id/TiketSection"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="150dp"
             android:background="@drawable/card_border"
             android:padding="16dp">
 
@@ -25,11 +25,9 @@
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/doublearrow"
                 android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
+                android:layout_alignParentBottom="true"
                 android:layout_marginStart="0dp"
-                android:layout_marginBottom="-45dp"
                 android:fontFamily="@font/poppinsmedium"
                 android:text="Mon, 12 Aug 2024"
                 android:textColor="@color/black"

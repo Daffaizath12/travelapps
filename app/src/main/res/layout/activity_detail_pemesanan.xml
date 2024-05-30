@@ -247,7 +247,7 @@
                         android:id="@+id/va_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Va number"
+                        android:text="Virtual Account"
                         android:layout_below="@id/bank"
                         android:fontFamily="@font/poppinsbold"
                         android:textColor="@color/black"

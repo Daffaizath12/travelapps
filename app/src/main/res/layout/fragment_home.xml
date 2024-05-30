@@ -86,7 +86,7 @@
                         android:id="@+id/spinner_asal"
                         android:layout_gravity="center"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="45dp"
                         android:spinnerMode="dropdown"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"/>
                 </FrameLayout>
@@ -102,19 +102,6 @@
                     android:textColor="@color/btn"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"/>
-
-<!--                <EditText-->
-<!--                    android:id="@+id/etTujuan"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="50dp"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:background="@drawable/custom_et"-->
-<!--                    android:fontFamily="@font/poppinsregular"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textSize="12sp"-->
-<!--                    android:paddingStart="10dp"-->
-<!--                    android:inputType="text"-->
-<!--                    android:hint="Tujuan perjalanan" />-->
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_marginTop="0dp"
@@ -128,7 +115,7 @@
                         android:id="@+id/spinner_tujuan"
                         android:layout_gravity="center"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="45dp"
                         android:spinnerMode="dropdown"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"/>
                 </FrameLayout>
