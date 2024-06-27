@@ -1,12 +1,6 @@
-package com.example.travelapps;
+package com.example.travelapps.pelanggan;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.content.ContextCompat;
-import androidx.core.os.LocaleListCompat;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,37 +8,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.travelapps.Model.Pemesanan;
 import com.example.travelapps.Model.TransactionModel;
-import com.example.travelapps.Model.User;
 import com.example.travelapps.Services.ApiServices;
 import com.example.travelapps.Services.MidtransServices;
-import com.midtrans.sdk.corekit.core.PaymentMethod;
-import com.midtrans.sdk.uikit.api.model.Address;
-import com.midtrans.sdk.uikit.api.model.Authentication;
-import com.midtrans.sdk.uikit.api.model.BankType;
-import com.midtrans.sdk.uikit.api.model.CreditCard;
-import com.midtrans.sdk.uikit.api.model.CustomColorTheme;
-import com.midtrans.sdk.uikit.api.model.CustomerDetails;
-import com.midtrans.sdk.uikit.api.model.Expiry;
-import com.midtrans.sdk.uikit.api.model.ItemDetails;
-import com.midtrans.sdk.uikit.api.model.PaymentType;
-import com.midtrans.sdk.uikit.api.model.SnapTransactionDetail;
-import com.midtrans.sdk.uikit.api.model.TransactionResult;
-import com.midtrans.sdk.uikit.external.UiKitApi;
-import com.midtrans.sdk.uikit.internal.util.UiKitConstants;
 import com.example.travelapps.R;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
-import java.util.TimeZone;
 
 public class DetailPemesananActivity extends AppCompatActivity {
 

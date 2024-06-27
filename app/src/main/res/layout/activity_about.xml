@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:background="@drawable/backgroud"
     android:layout_margin="20dp"
-    tools:context=".AboutActivity">
+    tools:context=".pelanggan.AboutActivity">
 
     <ImageView
         android:layout_width="200dp"

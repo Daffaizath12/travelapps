@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ApiServices {
-    private static String HOST = "http://192.168.18.68/ProjectTA/api/";
+    private static String HOST = "http://172.20.10.4/TugasAkhir/api/";
 
     public static String getHOST() {
         return HOST;

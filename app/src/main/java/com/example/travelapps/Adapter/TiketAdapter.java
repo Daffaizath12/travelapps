@@ -1,7 +1,6 @@
 package com.example.travelapps.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.travelapps.Model.TiketData;
-import com.example.travelapps.PesanActivity;
 import com.example.travelapps.R;
-import com.example.travelapps.TiketActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.List;

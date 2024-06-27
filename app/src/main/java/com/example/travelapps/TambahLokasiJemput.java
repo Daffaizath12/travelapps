@@ -1,65 +1,39 @@
 package com.example.travelapps;
 
-import static com.midtrans.sdk.corekit.core.PaymentMethod.BANK_TRANSFER;
-import static com.midtrans.sdk.corekit.core.PaymentMethod.CREDIT_CARD;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.os.LocaleListCompat;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.travelapps.Model.TiketData;
-import com.midtrans.sdk.corekit.api.model.Expiry;
+import com.example.travelapps.pelanggan.CurrentLocationActivity;
+import com.example.travelapps.pelanggan.FromMapsActivity;
 import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback;
 import com.midtrans.sdk.corekit.core.MidtransSDK;
 import com.midtrans.sdk.corekit.core.PaymentMethod;
 import com.midtrans.sdk.corekit.core.TransactionRequest;
 import com.midtrans.sdk.corekit.core.UIKitCustomSetting;
 import com.midtrans.sdk.corekit.core.themes.CustomColorTheme;
-import com.midtrans.sdk.corekit.models.BillingAddress;
 import com.midtrans.sdk.corekit.models.CustomerDetails;
 import com.midtrans.sdk.corekit.models.ItemDetails;
-import com.midtrans.sdk.corekit.models.ShippingAddress;
 import com.midtrans.sdk.corekit.models.snap.TransactionResult;
 import com.midtrans.sdk.uikit.SdkUIFlowBuilder;
 import com.midtrans.sdk.uikit.api.model.Address;
-import com.midtrans.sdk.uikit.api.model.Authentication;
-import com.midtrans.sdk.uikit.api.model.BankTransferRequest;
-import com.midtrans.sdk.uikit.api.model.BankType;
-import com.midtrans.sdk.uikit.api.model.CreditCard;
-import com.midtrans.sdk.uikit.api.model.PaymentType;
-import com.midtrans.sdk.uikit.api.model.SnapTransactionDetail;
 import com.midtrans.sdk.uikit.external.UiKitApi;
 import com.midtrans.sdk.uikit.internal.util.UiKitConstants;
-import com.example.travelapps.R;
 
-
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 import java.util.UUID;
 
 public class TambahLokasiJemput extends AppCompatActivity {

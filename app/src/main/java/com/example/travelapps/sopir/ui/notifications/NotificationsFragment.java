@@ -16,13 +16,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.travelapps.AboutActivity;
+import com.example.travelapps.pelanggan.AboutActivity;
 import com.example.travelapps.LoginActivity;
 import com.example.travelapps.Model.Sopir;
-import com.example.travelapps.ProfileActivity;
-import com.example.travelapps.R;
+import com.example.travelapps.pelanggan.ProfileActivity;
 import com.example.travelapps.databinding.FragmentNotifications2Binding;
-import com.example.travelapps.databinding.FragmentSettingsBinding;
 import com.example.travelapps.sopir.ApiServicesSopir;
 
 

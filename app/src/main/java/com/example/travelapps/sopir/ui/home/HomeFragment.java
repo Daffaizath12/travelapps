@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -22,7 +21,6 @@ import com.example.travelapps.Adapter.OnItemTiketClickListener;
 import com.example.travelapps.Adapter.TiketAdapter;
 import com.example.travelapps.Model.Sopir;
 import com.example.travelapps.Model.TiketData;
-import com.example.travelapps.PesanActivity;
 import com.example.travelapps.databinding.FragmentHome2Binding;
 import com.example.travelapps.sopir.ApiServicesSopir;
 import com.example.travelapps.sopir.MapsSopirActivity;

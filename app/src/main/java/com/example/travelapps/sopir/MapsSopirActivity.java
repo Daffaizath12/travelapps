@@ -45,6 +45,7 @@ import com.example.travelapps.Adapter.PerjalananSopirAdapter;
 import com.example.travelapps.Model.PemesananSopir;
 import com.example.travelapps.Model.TiketData;
 import com.example.travelapps.Model.TiketSopir;
+import com.example.travelapps.Model.Tujuan;
 import com.example.travelapps.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
@@ -75,6 +76,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, PenumpangAdapterActive.OnStatusUpdateListener {
 
@@ -131,28 +133,128 @@ public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCa
         });
     }
 
+//    private void locationJemputTujuanUser() {
+//        ApiServicesSopir.getPenumpangSopirActive(MapsSopirActivity.this, idSopir, idPerjalanan, new ApiServicesSopir.PerjalananResponseListener() {
+//            @Override
+//            public void onSuccess(List<PemesananSopir> pemesananSopir) {
+//                gMaps.clear();
+//
+//                for (PemesananSopir pemesanan : pemesananSopir) {
+//                    LatLng latLngJemput = new LatLng(
+//                            Double.parseDouble(pemesanan.getLatitude()),
+//                            Double.parseDouble(pemesanan.getLongitude())
+//                    );
+//                    double distanceJemput = calculateDistance(userLocation.latitude, userLocation.longitude, latLngJemput.latitude, latLngJemput.longitude);
+//                    pemesanan.setDistance(distanceJemput);
+//
+//                    LatLng latLngTujuan = new LatLng(
+//                            Double.parseDouble(pemesanan.getLatTujuan()),
+//                            Double.parseDouble(pemesanan.getLngTujuan())
+//                    );
+//                    double distanceTujuan = calculateDistance(userLocation.latitude, userLocation.longitude, latLngTujuan.latitude, latLngTujuan.longitude);
+//                    pemesanan.setDistanceTujuan(distanceTujuan);
+//                }
+//
+//                Collections.sort(pemesananSopir, new Comparator<PemesananSopir>() {
+//                    @Override
+//                    public int compare(PemesananSopir p1, PemesananSopir p2) {
+//                        return Double.compare(p1.getDistance(), p2.getDistance());
+//                    }
+//                });
+//
+//                gMaps.addMarker(new MarkerOptions().position(userLocation).icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(MapsSopirActivity.this, "Lokasi Anda"))));
+//
+//                for (int i = 0; i < pemesananSopir.size(); i++) {
+//                    PemesananSopir pemesanan = pemesananSopir.get(i);
+//                    String formattedDistanceJemput = String.format("%.1f", pemesanan.getDistance());
+//                    String labelJemput = "Penjemputan ke-" + (i + 1) + ": " + pemesanan.getNamaLengkap() + " (" + formattedDistanceJemput + " km)";
+//                    LatLng latLngJemput = new LatLng(
+//                            Double.parseDouble(pemesanan.getLatitude()),
+//                            Double.parseDouble(pemesanan.getLongitude())
+//                    );
+//                    LatLng latLngTujuan = new LatLng(
+//                            Double.parseDouble(pemesanan.getLatTujuan()),
+//                            Double.parseDouble(pemesanan.getLngTujuan())
+//                    );
+//
+//                    // Add custom markers with labels
+//                    gMaps.addMarker(new MarkerOptions()
+//                            .position(latLngJemput)
+//                            .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(MapsSopirActivity.this, labelJemput))));
+//
+//                    String formattedDistanceTujuan = String.format("%.1f", pemesanan.getDistanceTujuan());
+//                    String labelTujuan = "Tujuan: " + pemesanan.getNamaLengkap() + " (" + formattedDistanceTujuan + " km)";
+//                    gMaps.addMarker(new MarkerOptions()
+//                            .position(latLngTujuan)
+//                            .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(MapsSopirActivity.this, labelTujuan))));
+//
+//                    // Draw routes
+//                    getRouteFromOSRM(userLocation, latLngJemput);
+//                    getRouteFromOSRM(userLocation, latLngTujuan);
+//                }
+//
+//                // Update RecyclerView
+//                pemesananSopirList.clear();
+//                pemesananSopirList.addAll(pemesananSopir);
+//                adapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onError(String message) {
+//                if (message.equals("Data tidak ditemukan")) {
+//                    destinationLocation();
+//                } else {
+//                    Toast.makeText(MapsSopirActivity.this, "Error: " + message, Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
+//    }
     private void locationJemputTujuanUser() {
         ApiServicesSopir.getPenumpangSopirActive(MapsSopirActivity.this, idSopir, idPerjalanan, new ApiServicesSopir.PerjalananResponseListener() {
             @Override
             public void onSuccess(List<PemesananSopir> pemesananSopir) {
                 gMaps.clear();
+                Graph graph = new Graph();
+
+                // Tambahkan lokasi pengguna sebagai simpul awal
+                graph.addVertex("userLocation");
+
+                // Tambahkan semua lokasi penjemputan dan tujuan ke graf
+                for (PemesananSopir pemesanan : pemesananSopir) {
+                    String jemputLabel = pemesanan.getIdPemesanan() + "_jemput";
+                    String tujuanLabel = pemesanan.getIdPemesanan() + "_tujuan";
+
+                    graph.addVertex(jemputLabel);
+                    graph.addVertex(tujuanLabel);
+
+                    // Tambahkan edge dengan bobot sesuai jarak atau waktu
+                    double jarakJemput = calculateDistance(userLocation.latitude, userLocation.longitude, Double.parseDouble(pemesanan.getLatitude()), Double.parseDouble(pemesanan.getLongitude()));
+                    graph.addEdge("userLocation", jemputLabel, (int) jarakJemput);
+
+                    double jarakTujuan = calculateDistance(userLocation.latitude, userLocation.longitude, Double.parseDouble(pemesanan.getLatTujuan()), Double.parseDouble(pemesanan.getLngTujuan()));
+                    graph.addEdge("userLocation", tujuanLabel, (int) jarakTujuan);
+
+                    // Tambahkan edge antar lokasi jemput dan tujuan
+                    double jarakAntarLokasi = calculateDistance(Double.parseDouble(pemesanan.getLatitude()), Double.parseDouble(pemesanan.getLongitude()), Double.parseDouble(pemesanan.getLatTujuan()), Double.parseDouble(pemesanan.getLngTujuan()));
+                    graph.addEdge(jemputLabel, tujuanLabel, (int) jarakAntarLokasi);
+                }
+
+                // Hitung jalur terpendek dari lokasi pengguna ke semua lokasi jemput dan tujuan
+                Map<String, Integer> distances = graph.dijkstra("userLocation");
 
                 for (PemesananSopir pemesanan : pemesananSopir) {
-                    LatLng latLngJemput = new LatLng(
-                            Double.parseDouble(pemesanan.getLatitude()),
-                            Double.parseDouble(pemesanan.getLongitude())
-                    );
-                    double distanceJemput = calculateDistance(userLocation.latitude, userLocation.longitude, latLngJemput.latitude, latLngJemput.longitude);
+                    String jemputLabel = pemesanan.getIdPemesanan() + "_jemput";
+                    String tujuanLabel = pemesanan.getIdPemesanan() + "_tujuan";
+
+                    // Set jarak dari lokasi pengguna ke lokasi jemput dan tujuan
+                    double distanceJemput = distances.get(jemputLabel);
                     pemesanan.setDistance(distanceJemput);
 
-                    LatLng latLngTujuan = new LatLng(
-                            Double.parseDouble(pemesanan.getLatTujuan()),
-                            Double.parseDouble(pemesanan.getLngTujuan())
-                    );
-                    double distanceTujuan = calculateDistance(userLocation.latitude, userLocation.longitude, latLngTujuan.latitude, latLngTujuan.longitude);
+                    double distanceTujuan = distances.get(tujuanLabel);
                     pemesanan.setDistanceTujuan(distanceTujuan);
                 }
 
+                // Lakukan sorting berdasarkan jarak
                 Collections.sort(pemesananSopir, new Comparator<PemesananSopir>() {
                     @Override
                     public int compare(PemesananSopir p1, PemesananSopir p2) {
@@ -161,6 +263,8 @@ public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCa
                 });
 
                 gMaps.addMarker(new MarkerOptions().position(userLocation).icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(MapsSopirActivity.this, "Lokasi Anda"))));
+
+                ArrayList<Tujuan> tujuanList = new ArrayList<>();
 
                 for (int i = 0; i < pemesananSopir.size(); i++) {
                     PemesananSopir pemesanan = pemesananSopir.get(i);
@@ -175,20 +279,25 @@ public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCa
                             Double.parseDouble(pemesanan.getLngTujuan())
                     );
 
-                    // Add custom markers with labels
+                    // Tambahkan marker custom dengan label
                     gMaps.addMarker(new MarkerOptions()
                             .position(latLngJemput)
                             .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(MapsSopirActivity.this, labelJemput))));
 
-                    String formattedDistanceTujuan = String.format("%.1f", pemesanan.getDistanceTujuan());
-                    String labelTujuan = "Tujuan: " + pemesanan.getNamaLengkap() + " (" + formattedDistanceTujuan + " km)";
-                    gMaps.addMarker(new MarkerOptions()
-                            .position(latLngTujuan)
-                            .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(MapsSopirActivity.this, labelTujuan))));
+                    Tujuan tujuan = new Tujuan(latLngTujuan, pemesanan.getDistanceTujuan(), pemesanan.getNamaLengkap());
+                    tujuanList.add(tujuan);
 
-                    // Draw routes
+//                    String formattedDistanceTujuan = String.format("%.1f", pemesanan.getDistanceTujuan());
+//                    String labelTujuan = "Tujuan: " + pemesanan.getNamaLengkap() + " (" + formattedDistanceTujuan + " km)";
+//
+//                    gMaps.addMarker(new MarkerOptions()
+//                            .position(latLngTujuan)
+//                            .icon(BitmapDescriptorFactory.fromBitmap(createCustomMarker(MapsSopirActivity.this, labelTujuan))));
+
+
+                    // Gambar rute
                     getRouteFromOSRM(userLocation, latLngJemput);
-                    getRouteFromOSRM(userLocation, latLngTujuan);
+//                    getRouteFromOSRM(userLocation, latLngTujuan);
                 }
 
                 // Update RecyclerView
@@ -207,6 +316,7 @@ public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCa
             }
         });
     }
+
 
     private Bitmap createCustomMarker(Context context, String label) {
         View marker = LayoutInflater.from(context).inflate(R.layout.custom_marker, null);
@@ -282,7 +392,11 @@ public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCa
 
             @Override
             public void onError(String message) {
-                // Handle error
+                gMaps.clear();
+                gMaps.addMarker(new MarkerOptions().position(userLocation).title("Lokasi anda"));
+                pemesananSopirList.clear();
+                adapter.setDestinationLocation(true);
+                adapter.notifyDataSetChanged();
             }
         });
     }
@@ -373,7 +487,6 @@ public class MapsSopirActivity extends AppCompatActivity implements OnMapReadyCa
                 origin.longitude + "," + origin.latitude + ";" +
                 destination.longitude + "," + destination.latitude +
                 "?steps=true&annotations=true&overview=full&geometries=geojson";
-
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {

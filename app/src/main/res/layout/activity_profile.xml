@@ -7,7 +7,7 @@
     android:background="@drawable/backgroud"
     android:padding="20dp"
     android:orientation="vertical"
-    tools:context=".ProfileActivity">
+    tools:context=".pelanggan.ProfileActivity">
     <RelativeLayout
         android:id="@+id/profileSection"
         android:layout_width="match_parent"

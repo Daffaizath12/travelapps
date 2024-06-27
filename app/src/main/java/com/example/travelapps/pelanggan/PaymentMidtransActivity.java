@@ -1,4 +1,6 @@
-package com.example.travelapps;
+package com.example.travelapps.pelanggan;
+
+import static com.midtrans.sdk.corekit.core.PaymentMethod.BANK_TRANSFER;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -7,7 +9,6 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.os.LocaleListCompat;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Geocoder;
@@ -21,7 +22,6 @@ import android.widget.Toast;
 
 import com.example.travelapps.Model.TiketData;
 import com.example.travelapps.Services.ApiServices;
-import com.example.travelapps.Services.MidtransServices;
 import com.midtrans.sdk.corekit.core.PaymentMethod;
 import com.midtrans.sdk.uikit.api.model.Address;
 import com.midtrans.sdk.uikit.api.model.Authentication;
@@ -38,10 +38,6 @@ import com.midtrans.sdk.uikit.external.UiKitApi;
 import com.midtrans.sdk.uikit.internal.util.UiKitConstants;
 import com.example.travelapps.R;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,6 +52,7 @@ import java.util.UUID;
 public class PaymentMidtransActivity extends AppCompatActivity implements View.OnClickListener {
     
     TextView tvAsal, tvTujuan, tvWaktu, tvTanggal, tvNama, tvPenumpang, tvTotal;
+    EditText et_alamat;
     EditText etAlamatTujuan;
     AppCompatButton btnLokasi, btnLokasiMaps, btnBayar, btnMapsTujuan;
     ImageView btnBack;
@@ -79,6 +76,7 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
     String lng_jemput = "";
     String lat_tujuan="";
     String lng_tujuan="";
+    String alamat_tujuan="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,6 +155,7 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
         btnLokasiMaps = findViewById(R.id.maps);
         btnBayar = findViewById(R.id.bayarsekarang);
         btnBack = findViewById(R.id.backtodetailpemesanan);
+        et_alamat = findViewById(R.id.et_alamat);
 //        btnMapsTujuan = findViewById(R.id.mapsTujuan);
     }
     private void getIntentData(Intent intent){
@@ -175,6 +174,7 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
             telpUser = intent.getStringExtra("telp_user");
             alamatUser = intent.getStringExtra("alamat_user");
             penumpang = intent.getStringExtra("penumpang");
+            alamat_tujuan = intent.getStringExtra("alamat_tujuan");
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy");
 
@@ -188,6 +188,7 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
             tvTotal.setText(String.valueOf(totalHarga));
             tvNama.setText(namaUser);
             tvPenumpang.setText(penumpang);
+            et_alamat.setText(alamat_tujuan);
 
 //            String latJemputCurrent = intent.getStringExtra("lat_jemput_f");
 //            String lngJemputCurrent = intent.getStringExtra("lng_jemput_f");
@@ -434,7 +435,7 @@ public class PaymentMidtransActivity extends AppCompatActivity implements View.O
                                 null,
                                 initExpiry(),
                                 PaymentMethod.BANK_TRANSFER,
-                                Arrays.asList(PaymentType.CREDIT_CARD, PaymentType.BANK_TRANSFER, PaymentType.GOPAY, PaymentType.SHOPEEPAY, PaymentType.UOB_EZPAY),
+                                Arrays.asList(PaymentType.BANK_TRANSFER),
                                 null,
                                 null,
                                 null,

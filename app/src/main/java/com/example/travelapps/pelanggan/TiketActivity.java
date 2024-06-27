@@ -1,4 +1,4 @@
-package com.example.travelapps;
+package com.example.travelapps.pelanggan;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,7 +18,6 @@ import com.example.travelapps.Model.TiketData;
 import com.example.travelapps.Services.ApiServices;
 import com.example.travelapps.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TiketActivity extends AppCompatActivity implements OnItemTiketClickListener {

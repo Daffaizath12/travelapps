@@ -1,4 +1,4 @@
-package com.example.travelapps;
+package com.example.travelapps.pelanggan;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +17,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.travelapps.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -94,6 +95,7 @@ public class MapsTujuanActivity extends AppCompatActivity  implements OnMapReady
                 i.putExtra("penumpang", getIntent().getStringExtra("penumpang"));
                 i.putExtra("lat_tujuan", String.valueOf(currentLocation.getLatitude()));
                 i.putExtra("lng_tujuan", String.valueOf(currentLocation.getLongitude()));
+                i.putExtra("alamat_tujuan", String.valueOf(tvAlamat.getText()));
                 startActivity(i);
 
             }

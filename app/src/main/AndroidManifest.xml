@@ -12,7 +12,7 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -21,14 +21,14 @@
         tools:replace="android:allowBackup"
         tools:targetApi="31">
         <activity
-            android:name=".MapsTujuanActivity"
+            android:name=".pelanggan.MapsTujuanActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".AboutActivity"
+            android:name=".pelanggan.AboutActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -49,21 +49,21 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".NewPasswordActivity"
+            android:name=".pelanggan.NewPasswordActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".OtpActivity"
+            android:name=".pelanggan.OtpActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".ForgotPasswordActivity"
+            android:name=".pelanggan.ForgotPasswordActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -77,7 +77,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ProfileActivity"
+            android:name=".pelanggan.ProfileActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -112,28 +112,28 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".DetailPemesananActivity"
+            android:name=".pelanggan.DetailPemesananActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".PaymentMidtransActivity"
+            android:name=".pelanggan.PaymentMidtransActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".FromMapsActivity"
+            android:name=".pelanggan.FromMapsActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".CurrentLocationActivity"
+            android:name=".pelanggan.CurrentLocationActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -154,21 +154,21 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".PesanActivity"
+            android:name=".pelanggan.PesanActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".TiketActivity"
+            android:name=".pelanggan.TiketActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".HomeActivity"
+            android:name=".pelanggan.HomeActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
@@ -183,7 +183,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".pelanggan.MainActivity"
             android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"

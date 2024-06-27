@@ -51,8 +51,34 @@ public class PenumpangAdapterActive extends RecyclerView.Adapter<PenumpangAdapte
         holder.txtJumlah.setText(penumpang.getQty());
         holder.txtTelp.setText(penumpang.getNotelp());
         if (isDestinationLocation) {
-            holder.btnSelesai.setVisibility(View.GONE);
+            holder.txtAlamat.setText(penumpang.getAlamatTujuan());
             holder.txtUrutan.setVisibility(View.GONE);
+            if (penumpang.getAntar().equalsIgnoreCase("active")) {
+                holder.btnSelesai.setVisibility(View.VISIBLE);
+                holder.btnSelesai.setText("antar");
+                holder.btnSelesai.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ApiServicesSopir.tujuanStatus(context, penumpang.getIdPemesanan(), new ApiServicesSopir.UpdateStatusResponseListener() {
+                            @Override
+                            public void onSuccess(String message) {
+                                Toast.makeText(context, "Berhasil update status pengantaran", Toast.LENGTH_SHORT).show();
+                                if (onStatusUpdateListener != null) {
+                                    onStatusUpdateListener.onStatusUpdated();
+                                }
+                            }
+
+                            @Override
+                            public void onError(String message) {
+                                Log.e("update-status" , message);
+                            }
+                        });
+                    }
+                });
+            }else {
+                holder.btnSelesai.setVisibility(View.GONE);
+            }
+
         } else {
             holder.txtUrutan.setVisibility(View.VISIBLE);
             holder.txtUrutan.setText("Penjemputan ke-" + (position + 1));

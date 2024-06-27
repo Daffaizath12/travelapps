@@ -15,11 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.travelapps.AboutActivity;
-import com.example.travelapps.ForgotPasswordActivity;
+import com.example.travelapps.pelanggan.AboutActivity;
 import com.example.travelapps.LoginActivity;
 import com.example.travelapps.Model.User;
-import com.example.travelapps.ProfileActivity;
+import com.example.travelapps.pelanggan.ProfileActivity;
 import com.example.travelapps.R;
 import com.example.travelapps.Services.ApiServices;
 
@@ -109,14 +108,14 @@ public class FragmentSettings extends Fragment {
             }
         });
 
-        LinearLayout lupaPassword = view.findViewById(R.id.ganti_password);
-        lupaPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getActivity(), ForgotPasswordActivity.class);
-                startActivity(i);
-            }
-        });
+//        LinearLayout lupaPassword = view.findViewById(R.id.ganti_password);
+//        lupaPassword.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent i = new Intent(getActivity(), ForgotPasswordActivity.class);
+//                startActivity(i);
+//            }
+//        });
         ApiServices.getUserData(getContext(), token, new ApiServices.UserResponseListener() {
             @Override
             public void onSuccess(User user) {

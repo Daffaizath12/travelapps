@@ -1,4 +1,4 @@
-package com.example.travelapps;
+package com.example.travelapps.pelanggan;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.travelapps.Model.Sopir;
 import com.example.travelapps.Model.User;
+import com.example.travelapps.R;
 import com.example.travelapps.Services.ApiServices;
 import com.example.travelapps.sopir.ApiServicesSopir;
 import com.example.travelapps.sopir.HomeSopirActivity;
@@ -131,6 +132,7 @@ public class ProfileActivity extends AppCompatActivity {
         etAlamat = findViewById(R.id.et_alamat);
         etUsername = findViewById(R.id.et_username);
         etSim = findViewById(R.id.et_sim);
+        tvNik = findViewById(R.id.tv_nik);
         etNik = findViewById(R.id.et_nik);
         tvEmail = findViewById(R.id.tv_email);
         tvSim = findViewById(R.id.tv_sim);

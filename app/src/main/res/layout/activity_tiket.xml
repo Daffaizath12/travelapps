@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/backgroud"
-    tools:context=".TiketActivity">
+    tools:context=".pelanggan.TiketActivity">
 
     <RelativeLayout
         android:id="@+id/topbar"

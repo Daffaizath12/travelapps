@@ -8,10 +8,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.view.LayoutInflater;
@@ -28,7 +26,7 @@ import com.example.travelapps.Adapter.InfoAdapter;
 import com.example.travelapps.Adapter.KotaAdapter;
 import com.example.travelapps.R;
 import com.example.travelapps.Services.ApiServices;
-import com.example.travelapps.TiketActivity;
+import com.example.travelapps.pelanggan.TiketActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -179,10 +177,26 @@ public class FragmentHome extends Fragment {
                     kotaTujuanAdapter.addAll(kotaTujuanList);
                     kotaTujuanAdapter.notifyDataSetChanged();
 
+                    final String[] selectedValue = {kotaAsalList.get(0)};
+
                     spinnerKotaAsal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                             selectedKotaAsal = (String) adapterView.getItemAtPosition(i);
+                            Toast.makeText(getContext(), selectedKotaAsal+" -> "+selectedValue[0], Toast.LENGTH_SHORT).show();
+                            if (kotaTujuanList.contains(selectedKotaAsal)) {
+                                kotaTujuanList.remove(selectedKotaAsal);
+                            }
+
+                            if (!selectedValue[0].equalsIgnoreCase(selectedKotaAsal)) {
+                                kotaTujuanList.add(selectedValue[0]);
+                            }
+
+                            kotaTujuanAdapter.clear();
+                            kotaTujuanAdapter.addAll(kotaTujuanList);
+                            kotaTujuanAdapter.notifyDataSetChanged();
+
+                            selectedValue[0] = selectedKotaAsal;
                         }
 
                         @Override

@@ -9,10 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.travelapps.Model.TiketData;
 import com.example.travelapps.Model.TiketSopir;
 import com.example.travelapps.R;
-import com.example.travelapps.TiketActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.List;

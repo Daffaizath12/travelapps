@@ -10,11 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.travelapps.DetailPemesananActivity;
+import com.example.travelapps.pelanggan.DetailPemesananActivity;
 import com.example.travelapps.Model.Pemesanan;
-import com.example.travelapps.PesanActivity;
 import com.example.travelapps.R;
-import com.example.travelapps.TiketActivity;
 
 import java.util.List;
 

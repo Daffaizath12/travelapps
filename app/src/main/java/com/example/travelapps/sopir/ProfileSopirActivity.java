@@ -12,9 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.travelapps.HomeActivity;
+import com.example.travelapps.pelanggan.HomeActivity;
 import com.example.travelapps.Model.Sopir;
-import com.example.travelapps.ProfileActivity;
 import com.example.travelapps.R;
 import com.example.travelapps.Services.ApiServices;
 

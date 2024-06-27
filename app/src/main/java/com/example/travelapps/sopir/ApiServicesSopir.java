@@ -210,9 +210,10 @@ public class ApiServicesSopir {
                         String idmobil = jsonObject.getString("mobil_id");
                         String latTujuan = jsonObject.getString("lat_tujuan");
                         String lngTujuan = jsonObject.getString("lng_tujuan");
+                        String jemput = jsonObject.getString("status_penjemputan");
+                        String antar = jsonObject.getString("status_antar");
 
-
-                        PemesananSopir pemesananSopir = new PemesananSopir(idPemesanan, idUser, idPerjalanan, orderId, alamatJemput, alamatTujuan, waktuJemput, status, tanggalPesan, tanggalBerangkat, qty, harga, namaLengkap, username, notelp, email, alamat, idRole, password, latitude, longitude, token, kotaAsal, kotaTujuan, tanggal, waktuKeberangkatan, jumlahPenumpang, idSopir, idmobil, latTujuan, lngTujuan);
+                        PemesananSopir pemesananSopir = new PemesananSopir(idPemesanan, idUser, idPerjalanan, orderId, alamatJemput, alamatTujuan, waktuJemput, status, tanggalPesan, tanggalBerangkat, qty, harga, namaLengkap, username, notelp, email, alamat, idRole, password, latitude, longitude, token, kotaAsal, kotaTujuan, tanggal, waktuKeberangkatan, jumlahPenumpang, idSopir, idmobil, latTujuan, lngTujuan, jemput, antar);
                         pemesananSopirList.add(pemesananSopir);
                     }
                     listener.onSuccess(pemesananSopirList);
@@ -284,10 +285,12 @@ public class ApiServicesSopir {
                             String idmobil = jsonObject.getString("mobil_id");
                             String latTujuan = jsonObject.getString("lat_tujuan");
                             String lngTujuan = jsonObject.getString("lng_tujuan");
+                            String jemput = jsonObject.getString("status_penjemputan");
+                            String antar = jsonObject.getString("status_antar");
 
 
 
-                            PemesananSopir pemesananSopir = new PemesananSopir(idPemesanan, idUser, idPerjalanan, orderId, alamatJemput, alamatTujuan, waktuJemput, status, tanggalPesan, tanggalBerangkat, qty, harga, namaLengkap, username, notelp, email, alamat, idRole, password, latitude, longitude, token, kotaAsal, kotaTujuan, tanggal, waktuKeberangkatan, jumlahPenumpang, idSopir, idmobil, latTujuan, lngTujuan);
+                            PemesananSopir pemesananSopir = new PemesananSopir(idPemesanan, idUser, idPerjalanan, orderId, alamatJemput, alamatTujuan, waktuJemput, status, tanggalPesan, tanggalBerangkat, qty, harga, namaLengkap, username, notelp, email, alamat, idRole, password, latitude, longitude, token, kotaAsal, kotaTujuan, tanggal, waktuKeberangkatan, jumlahPenumpang, idSopir, idmobil, latTujuan, lngTujuan, jemput, antar);
                             pemesananSopirList.add(pemesananSopir);
                         }
                         listener.onSuccess(pemesananSopirList);
@@ -443,6 +446,40 @@ public class ApiServicesSopir {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
     }
+
+    public static void tujuanStatus(Context context, String idPemesanan, UpdateStatusResponseListener listener) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ApiServices.getHOST() + "status-antar-sopir.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            String message = jsonResponse.getString("message");
+                            listener.onSuccess(message);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            listener.onError("Gagal memproses response");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        listener.onError("Gagal mengirim request: " + error.getMessage());
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("id_pemesanan", idPemesanan);
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+    }
+
     public static void getSopirData(Context context, String token, final SopirResponseListener listener) {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, ApiServices.getHOST() + "getsopirbyid.php?id=" + token,
                 new Response.Listener<String>() {
